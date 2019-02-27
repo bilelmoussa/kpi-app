@@ -1,0 +1,51 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration-color: none;
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+}
+
+body{
+    background-color: #101010;
+	overflow-x: auto
+}
+
+.App{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#content{
+    height: 100%;
+    width: 100%;
+}
+
+.forms{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+	background-image: url('./static/military_3d_printers-wallpaper-1920x1200.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+#login{
+    height: 100vh;
+    min-height: 600px;
+
+}
+#register{
+	height: 100vh;
+    min-height: 750px;
+}
+
