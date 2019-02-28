@@ -18,12 +18,11 @@ const theme = createMuiTheme({
   typography: { useNextVariants: true },
 });
 
-const data = ['aa', 'bb']
 
 
 function TabContainer(props) {
   return (
-    <Card component="div" style={{ margin: 8 * 2 }}>
+    <Card component="div" style={{overflow: 'auto', margin: '16px auto', width: '98vw'  }}>
       {props.children}
     </Card>
   );
@@ -96,7 +95,7 @@ class table extends Component {
 						<Tab label="N2 Plus 50" />
 					</Tabs>
 				</AppBar>
-					{value === 0 && <TabContainer><N2 data={data}/></TabContainer>}
+					{value === 0 && <TabContainer><N2 /></TabContainer>}
 					{value === 1 && <TabContainer><N2Plus150 /></TabContainer>}
 					{value === 2 && <TabContainer><N2Plus50 /></TabContainer>}
 			    </div>
