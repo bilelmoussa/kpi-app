@@ -3,14 +3,15 @@ const Joi = require('joi');
 
 
 let options = Joi.object({
-    name: Joi.string().required(),
-    working_hours: Joi.number().required(),
-    starting_date: Joi.date().required(),
-    finishing_date: Joi.date().required(),
-    date: Joi.date().required(),
-    failure_coef: Joi.number().min(0).max(1).required(),
-    actual_wh: Joi.number().required(),
-    remarks: Joi.string(),
+    printedPart: Joi.string().required(),
+    workingHours: Joi.string().required(),
+    timeAndDate: Joi.date().required(),
+    finishingTime: Joi.date().required(),
+    dayNumber: Joi.number().required(),
+    failureCoef: Joi.number().min(0).max(1).required(),
+    actualWh: Joi.string().required(),
+    Remarks: Joi.string(),
+	Date: Joi.date().required(),
     created_at: Joi.date().default(Date.now()).required(),
     update_at: Joi.date().default(Date.now()).required()
 })

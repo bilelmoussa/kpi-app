@@ -22,7 +22,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
-
+import { post_N2 } from '../../../../../actions/authentication';
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
 
 const styles = theme =>({
@@ -317,6 +317,7 @@ class AddTable extends Component{
 				}else{
 					console.log(this.props.machine)
 					console.log(data);
+					this.props.post_N2(data);
 				}
 				rows = [
 					...rows,
@@ -488,6 +489,7 @@ class AddTable extends Component{
 AddTable.propTypes = {
 	auth: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
+	post_N2: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -495,6 +497,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default  connect(mapStateToProps)(withStyles(styles)(AddTable));
+export default  connect(mapStateToProps, { post_N2 } )(withStyles(styles)(AddTable));
 
 

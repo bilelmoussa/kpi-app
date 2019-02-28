@@ -16,9 +16,11 @@ const delete_auth = require('../options/delete_auth');
 
 //get all parts worked with n2
 router.get('/findparts', (req, res, next)=>{
+	
   passport.authenticate('jwt', {session: false}, function(err, user){
     auth(req, res, next,err,user,N2_Part);
   })(req, res, next)
+  
 });
 
 //create new part to n2

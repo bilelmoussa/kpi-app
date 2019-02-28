@@ -9,6 +9,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import AddCircle from '@material-ui/icons/AddCircle';
 import Card from '@material-ui/core/Card';
 import AddTable from './actions/AddTable';
+import ViewTable from './actions/ViewTable';
 
 const styles = theme => ({
 	root: {
@@ -60,7 +61,7 @@ class N2 extends Component{
 						<Tab icon={<AddCircle />} />
 					</Tabs>
 				</AppBar>
-					{value === 0 && <TabContainer>View Table</TabContainer>}
+					{value === 0 && <TabContainer><ViewTable machine="N2"/></TabContainer>}
 					{value === 1 && <TabContainer><AddTable machine="N2" /></TabContainer>}
 			</div>		
 		)
