@@ -22,8 +22,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
-import { post_N2 } from '../../../../../actions/authentication';
+import { post_N2, put_N2, post_N2_plus_150, post_N2_plus_50, put_N2_plus_150, put_N2_plus_50 } from '../../../../../actions/authentication';
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
+import { isChanged } from '../../../../../is-empty';
 
 const styles = theme =>({
 	lookupEditCell: {
@@ -171,18 +172,6 @@ function validate_cell(data){
 	
 }
 
-function NOW(date_input) {
-	let date = new Date(date_input);
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	var ampm = hours >= 12 ? 'PM ' : 'AM ';
-	hours = hours % 12;
-	hours = hours ? hours : 12; // the hour '0' should be '12'
-	minutes = minutes < 10 ? '0'+minutes : minutes;
-	var strTime = hours + ':' + minutes + ' ' + ampm;
-	return  strTime + " " + ` ${date.getMonth()+1}` + "-" + date.getDate() + "-" + date.getFullYear(); 
-}
-
 
 const Cell = (props) => {
   return <Table.Cell {...props} />;
@@ -192,7 +181,8 @@ const EditCell = (props) => {
   return <TableEditRow.Cell {...props} />;
 };
 
-const DateTimeFormatter = ({ value }) => NOW(value);
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3');
+const DateTimeFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/, '$1/$2/$3  $4:$5');
 
 const DateEditor = ({ value, onValueChange }) => (
 	 <TextField
@@ -222,6 +212,7 @@ const DateTime = ({ value, onValueChange }) => (
 const DateTypeProvider = props => (
   <DataTypeProvider
     editorComponent={DateEditor}
+	formatterComponent={DateFormatter}
     {...props}
   />)
 
@@ -289,35 +280,40 @@ class AddTable extends Component{
 		
 		this.changeEditingRowIds = editingRowIds => this.setState({ editingRowIds });
 
-		this.changeAddedRows = addedRows => this.setState({
-				addedRows: addedRows.map(row => (Object.keys(row).length ? row : {
-				printedPart: '',
-				workingHours: '',
-				timeAndDate: '',
-				finishingTime: '',
-				dayNumber: '',
-				failureCoef: '',
-				actualWh: '',
-				Remarks: '',
-				Date: '',
-			})),
-		});
+		this.changeAddedRows = addedrow =>{
+			let default_row = addedrow.map(row => (Object.keys(row).length ? row : {
+					printedPart: '',
+					workingHours: '',
+					timeAndDate: '',
+					finishingTime: '',
+					dayNumber: '',
+					failureCoef: '',
+					actualWh: '',
+					Remarks: '',
+					Date: ''
+				}));
+			this.setState({ addedRows: default_row });
+		};
 
 		this.changeRowChanges = rowChanges => this.setState({ rowChanges });
 
 		this.commitChanges = ({ added, changed, deleted }) => {
 			let { rows } = this.state;
+			const { machine } = this.props;
 			
 			if (added) {
-			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;	
-				let data = added[0];
-				if(validate_cell(data)){
-					this.setState({empty_row: Object.values(data)});
-					this.changeAddedRows(added);
+				const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+				if(validate_cell(added[0])){
+					this.setState({empty_row: Object.values(added)});
 				}else{
-					console.log(this.props.machine)
-					console.log(data);
-					this.props.post_N2(data);
+					if(machine === "N2"){
+						this.props.post_N2(added[0]);
+					}else if(machine === "N2_plus_150"){
+						this.props.post_N2_plus_150(added[0]);
+				
+					}else if(machine === "N2_plus_50"){
+						this.props.post_N2_plus_50(added[0]);
+					}
 				}
 				rows = [
 					...rows,
@@ -325,12 +321,37 @@ class AddTable extends Component{
 					id: startingAddedId + index,
 					...row,
 					}))
-					];
-					
-				
+					];	
 			}
 			if (changed) {
+				let keys = Object.keys(changed);
+				let row_id; 
+				for (const key of keys) {
+					row_id = key;
+				}
 				rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+				const vale = rows[row_id];
+				
+			
+				if(!isChanged(changed)){
+					if(validate_cell(vale)){
+						this.setState({empty_row: Object.values(changed)});
+					}else{
+						let query = {id: {_id: vale._id}, query: changed[row_id]};
+						if(machine === "N2"){
+							this.props.put_N2(query);
+						}else if(machine === "N2_plus_150"){
+							this.props.put_N2_plus_150(query);
+						}else if(machine === "N2_plus_50"){
+							this.props.put_N2_plus_50(query);
+						}	
+					}
+				}
+				else if(validate_cell(vale)){
+					this.setState({empty_row: Object.values(changed)});
+				}
+				
+				
 			}
 			
 			this.setState({ rows, deletingRows: deleted || getStateDeletingRows() });
@@ -385,13 +406,13 @@ class AddTable extends Component{
 			>
 			
 			<EditingState
-					 editingRowIds={editingRowIds}
-					 onEditingRowIdsChange={this.changeEditingRowIds}
-					 rowChanges={rowChanges}
-					 onRowChangesChange={this.changeRowChanges}
-					 addedRows={addedRows}
-					 onAddedRowsChange={this.changeAddedRows}
-					 onCommitChanges={this.commitChanges}
+					editingRowIds={editingRowIds}
+					onEditingRowIdsChange={this.changeEditingRowIds}
+					rowChanges={rowChanges}
+					onRowChangesChange={this.changeRowChanges}
+					addedRows={addedRows}
+					onAddedRowsChange={this.changeAddedRows}
+					onCommitChanges={this.commitChanges}
 			/>
 			<DateTypeProvider
             for={dateColumns}
@@ -490,6 +511,12 @@ AddTable.propTypes = {
 	auth: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 	post_N2: PropTypes.func.isRequired,
+	put_N2: PropTypes.func.isRequired,
+	post_N2_plus_150: PropTypes.func.isRequired,
+	post_N2_plus_50: PropTypes.func.isRequired,
+	put_N2_plus_150: PropTypes.func.isRequired,
+	put_N2_plus_50: PropTypes.func.isRequired,
+
 };
 
 const mapStateToProps = (state) => ({
@@ -497,6 +524,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default  connect(mapStateToProps, { post_N2 } )(withStyles(styles)(AddTable));
+export default  connect(mapStateToProps, { post_N2, put_N2, post_N2_plus_150, post_N2_plus_50, put_N2_plus_150, put_N2_plus_50 } )(withStyles(styles)(AddTable));
 
 

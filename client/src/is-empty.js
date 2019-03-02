@@ -18,3 +18,18 @@ export const  isObEmpty = (obj) => {
     }
     return true;
 }
+
+export const isChanged = (obj) => {
+	const keys = Object.values(obj)
+	for (const key of keys) {
+		if(key === undefined){
+			return true;
+		}else{
+			return false;
+		}
+	}
+}
+
+			
+
+

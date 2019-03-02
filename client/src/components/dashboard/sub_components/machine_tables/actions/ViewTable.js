@@ -2,7 +2,7 @@ import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { EditingState } from '@devexpress/dx-react-grid';
+import { EditingState, SortingState, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, TableEditRow, TableEditColumn, TableFixedColumns } from '@devexpress/dx-react-grid-material-ui';
 import Paper from '@material-ui/core/Paper';
 import Dialog from '@material-ui/core/Dialog';
@@ -22,8 +22,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
-import { get_N2 } from '../../../../../actions/authentication';
+import { get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50   } from '../../../../../actions/authentication';
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
+import { isChanged } from '../../../../../is-empty';
 
 const styles = theme =>({
 	lookupEditCell: {
@@ -160,42 +161,9 @@ function validate_cell(data){
 	
 }
 
-function validated_chnaged(data){
-	if(data.Date){
-		if(empty(data.Date)) return true;
-	}else if(data.printedPart){
-		if(empty(data.printedPart)) return true;
-	}else if(data.workingHours){
-		if(empty(data.workingHours)) return true;
-	}else if(data.timeAndDate){
-		if(empty(data.timeAndDate)) return true;
-	}else if(data.finishingTime){
-		if(empty(data.finishingTime)) return true;
-	}else if(data.failureCoef){
-		if(empty(data.failureCoef)) return true;
-	}else if(data.dayNumber){
-		if(empty(data.dayNumber)) return true;
-	}else{
-		return false;
-	}
-}
 
-function NOW(date_input) {
-	let date = new Date(date_input);
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	var ampm = hours >= 12 ? 'PM ' : 'AM ';
-	hours = hours % 12;
-	hours = hours ? hours : 12; // the hour '0' should be '12'
-	minutes = minutes < 10 ? '0'+minutes : minutes;
-	var strTime = hours + ':' + minutes + ' ' + ampm;
-	return  strTime + " " + ` ${date.getMonth()+1}` + "-" + date.getDate() + "-" + date.getFullYear(); 
-}
 
-function to_date(date_input){
-	let date = new Date(date_input);
-	return `${date.getMonth()+1}` + "-" + date.getDate() + "-" + date.getFullYear();
-}
+
 
 const Cell = (props) => {
   return <Table.Cell {...props} />;
@@ -205,9 +173,13 @@ const EditCell = (props) => {
   return <TableEditRow.Cell {...props} />;
 };
 
-const DateTimeFormatter = ({ value }) => NOW(value);
 
-const DateFormatter = ({ value }) => to_date(value);
+
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3');
+const DateTimeFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/, '$1/$2/$3  $4:$5');
+
+
+
 
 const DateEditor = ({ value, onValueChange }) => (
 	 <TextField
@@ -280,6 +252,10 @@ class ViewTable extends Component{
 					{ columnName: 'Remarks', width: 180},
 					{ columnName: 'Date', width: 180},
 				],
+				defaultSorting: [{ columnName: 'timeAndDate', direction: 'desc' }],
+				sortingStateColumnExtensions: [
+				{ columnName: 'timeAndDate', sortingEnabled: false },
+				],
 				dateColumns: ['Date'],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
 				editingRowIds: [],
@@ -302,7 +278,7 @@ class ViewTable extends Component{
 		};
 	
 
-		
+		this.changeSorting = sorting => this.setState({ sorting });
 		this.changeEditingRowIds = editingRowIds => this.setState({ editingRowIds });
 
 		this.changeAddedRows = addedRows => this.setState({
@@ -323,38 +299,38 @@ class ViewTable extends Component{
 
 		this.commitChanges = ({ added, changed, deleted }) => {
 			let { rows } = this.state;
-			
-			
-			if (added) {
-			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;	
-				let data = added[0];
-				if(validate_cell(data)){
-					this.setState({empty_row: Object.values(data)});
-					this.changeAddedRows(added);
-				}else{
-					console.log(this.props.machine)
-					console.log(data);
-				}
-				rows = [
-					...rows,
-					...added.map((row, index) => ({
-					id: startingAddedId + index,
-					...row,
-					}))
-					];
-					
-				
-			}
+			const { machine } = this.props;
+
 			
 			if (changed) {
-				let changed_data = changed[0]
-				if(changed_data){
-					if(validated_chnaged(changed_data)){
-						this.setState({empty_row: Object.values(changed_data)});
-						this.changeAddedRows(changed_data);
+				let keys = Object.keys(changed);
+				let row_id; 
+				for (const key of keys) {
+					row_id = key;
+				}
+				rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+				const vale = rows[row_id];
+				
+				if(!isChanged(changed)){
+					if(validate_cell(vale)){
+						this.setState({empty_row: Object.values(changed)});
 					}else{
-						rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+						let query = {id: {_id: vale._id}, query: changed[row_id]};
+						if(machine === "N2"){
+							this.props.put_N2(query);
+							this.props.get_N2();
+						}else if(machine === "N2_plus_150"){
+							this.props.put_N2_plus_150(query);
+							this.props.get_N2_plus_150();
+						}else if(machine === "N2_plus_50"){
+							this.props.put_N2_plus_50(query);
+							this.props.get_N2_plus_50();
+						}
+						
 					}
+				}
+				else if(validate_cell(vale)){
+					this.setState({empty_row: Object.values(changed)});
 				}
 			}
 			
@@ -378,37 +354,64 @@ class ViewTable extends Component{
 	}
 	
 	componentDidMount(){
-		this.props.get_N2();
+		const { machine } = this.props;
+		if(machine === "N2"){
+			this.props.get_N2();
+		}else if(machine === "N2_plus_150"){
+			this.props.get_N2_plus_150();
+		}else if(machine === "N2_plus_50"){
+			this.props.get_N2_plus_50();
+		}
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState){
-		if(nextProps.N2!==prevState.N2 && !empty(nextProps.N2.Get_n2)){
-			let new_rows = [];
-			let next_rows = nextProps.N2.Get_n2;
-			for(let i = 0; i < next_rows.length; i++){
-				next_rows[i].id = i;
-				new_rows.push(next_rows[i]);
-			}
-			return { rows: new_rows };
+		const { machine } = nextProps;
+		if(machine === "N2"){
+			if(nextProps.N2!==prevState.N2 && !empty(nextProps.N2.Get_n2)){
+				return { rows: nextProps.N2.Get_n2 };
+			}else { return null };
+		}else if(machine === "N2_plus_150"){
+			if(nextProps.N2_Plus_150!==prevState.N2_Plus_150 && !empty(nextProps.N2_Plus_150.Get_n2_plus_150)){
+				return { rows: nextProps.N2_Plus_150.Get_n2_plus_150 };
+			}else { return null };
+		}else if(machine === "N2_plus_50"){
+			if(nextProps.N2_Plus_50!==prevState.N2_Plus_50 && !empty(nextProps.N2_Plus_50.Get_n2_plus_50)){
+				return { rows: nextProps.N2_Plus_50.Get_n2_plus_50 };
+			}else { return null };
 		}
-			else return null;
+		
 	};
 	
     
 	componentDidUpdate(prevProps, prevState) {
-		if(prevProps.N2!==this.props.N2 && !empty(this.props.N2.Get_n2) ) {
-			let new_rows = [];
-			let next_rows = this.props.N2.Get_n2;
-			for(let i = 0; i < next_rows.length; i++){
-				next_rows[i].id = i;
-				new_rows.push(next_rows[i]);
+		const { machine } = this.props;
+		if(machine === "N2"){
+			if(prevProps.N2!==this.props.N2 && !empty(this.props.N2.Get_n2) ){
+				this.setState({
+					rows: this.props.N2.Get_n2,
+				});
+			}else{
+				return null;
 			}
-			this.setState({
-				rows: new_rows,
-			});
-		}else{
-			return null;
+		}else if(machine === "N2_plus_150"){
+			if(prevProps.N2_Plus_150!==this.props.N2_Plus_150 && !empty(this.props.N2_Plus_150.Get_n2_plus_150) ){
+				this.setState({
+					rows: this.props.N2_Plus_150.Get_n2_plus_150,
+				});
+			}else{
+				return null;
+			}
+		}else if(machine === "N2_plus_50"){
+			if(prevProps.N2_Plus_50!==this.props.N2_Plus_50 && !empty(this.props.N2_Plus_50.Get_n2_plus_50) ){
+				this.setState({
+					rows: this.props.N2_Plus_50.Get_n2_plus_50,
+				});
+			}else{
+				return null;
+			}
 		}
+		
+
 	}
   
 
@@ -420,13 +423,15 @@ class ViewTable extends Component{
 			columns,
 			tableColumnExtensions,
 			editingRowIds,
+			defaultSorting,
 			rowChanges,
 			addedRows,
 			deletingRows,
 			leftFixedColumns,
 			empty_row,
 			dateColumns,
-			dateTimeColumns
+			dateTimeColumns,
+			sortingStateColumnExtensions
 		} = this.state;
 		return(
 
@@ -437,27 +442,36 @@ class ViewTable extends Component{
 			  getRowId={getRowId}
 			>
 			
-			<EditingState
-					 editingRowIds={editingRowIds}
-					 onEditingRowIdsChange={this.changeEditingRowIds}
-					 rowChanges={rowChanges}
-					 onRowChangesChange={this.changeRowChanges}
-					 onAddedRowsChange={this.changeAddedRows}
-					 onCommitChanges={this.commitChanges}
+			<SortingState
+				defaultSorting={defaultSorting}
+				onSortingChange={this.changeSorting}
+				columnExtensions={sortingStateColumnExtensions}
 			/>
+			
+			<EditingState
+					editingRowIds={editingRowIds}
+					onEditingRowIdsChange={this.changeEditingRowIds}
+					rowChanges={rowChanges}
+					onRowChangesChange={this.changeRowChanges}
+					addedRows={addedRows}
+					onAddedRowsChange={this.changeAddedRows}
+					onCommitChanges={this.commitChanges}
+			/>
+			<IntegratedSorting />
 			<DateTypeProvider
             for={dateColumns}
 			/>
 			<DateTimeTypeProvider
             for={dateTimeColumns}
 			/>
+			
 			<Table
 			style={{paddingBottom: 15}}
 			columnExtensions={tableColumnExtensions} 
 			cellComponent={Cell}/>
 			
-			<TableHeaderRow />
-			
+			<TableHeaderRow  showSortingControls />
+
 			<TableEditRow cellComponent={EditCell}/>
 			
 			<TableEditColumn
@@ -541,14 +555,22 @@ ViewTable.propTypes = {
 	auth: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 	get_N2: PropTypes.func.isRequired,
+	put_N2: PropTypes.func.isRequired,
+	get_N2_plus_150: PropTypes.func.isRequired,
+	get_N2_plus_50: PropTypes.func.isRequired,
+	put_N2_plus_150: PropTypes.func.isRequired,
+	put_N2_plus_50: PropTypes.func.isRequired,
+	
 };
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
-	N2: state.N2
+	N2: state.N2,
+	N2_Plus_150: state.N2_Plus_150,
+	N2_Plus_50: state.N2_Plus_50
 });
 
 
-export default  connect(mapStateToProps, { get_N2 } )(withStyles(styles)(ViewTable));
+export default  connect(mapStateToProps, { get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50 } )(withStyles(styles)(ViewTable));
 
 

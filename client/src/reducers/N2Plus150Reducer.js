@@ -1,16 +1,17 @@
 import { GET_N2_PLUS_150, POST_N2_PLUS_150 } from '../actions/types';
 
 const initialState = {
-	Posted_N2_Plus_150:{},
-	Get_N2_Plus_150:{}
+	Get_n2_plus_150: {},
+	Post_n2_plus_150: {},
+	Put_n2_plus_150: {},
 };
 
 export default function(state = initialState, action ) {
     switch(action.type) {
         case GET_N2_PLUS_150:
-            return { ...state, Get_N2_Plus_150: action.payload };
+            return { ...state, Get_n2_plus_150: action.payload };
 		case POST_N2_PLUS_150:
-			return { ...state, Posted_N2_Plus_150: action.payload };
+			return { ...state, Post_n2_plus_150: action.payload };
         default: 
             return state;
     }

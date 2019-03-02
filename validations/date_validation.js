@@ -7,7 +7,7 @@ function validate_date(d){
         hour: "numeric",
         minute: "numeric"
     };
-    
+    console.log(date.toLocaleDateString("fr", options));
     return (date.toLocaleDateString("fr", options))
 }
 
