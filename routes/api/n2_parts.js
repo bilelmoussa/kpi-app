@@ -15,12 +15,15 @@ const update_auth = require('../options/update_auth');
 const delete_auth = require('../options/delete_auth');
 
 //get all parts worked with n2
+
+/*
 router.get('/findparts', (req, res, next)=>{
   passport.authenticate('jwt', {session: false}, function(err, user){
     auth(req, res, next,err,user,N2_Part);
   })(req, res, next)
   
 });
+*/
 
 //create new part to n2
 router.post('/saveparts',(req, res, next)=>{
@@ -43,5 +46,24 @@ router.delete('/deleteparts',(req, res, next)=>{
     delete_auth(req, res, next,err,user,N2_Part);
   })(req, res, next)
 });
+
+router.get('/findparts', (req, res, next)=>{
+	passport.authenticate('jwt', {session: false}, function(err, user){
+		if (err) { return next(err); }
+		if (!user) { return res.json('Unauthorised user not found !'); }
+		if(user){
+			N2_Part.get_by_date((err, parts)=>{
+				if(err){
+					res.status(400).json({errors: err});
+				}
+				if(parts){
+					res.json({success: true, parts: parts})
+				}
+			})
+		}else{
+			return res.status(401).json('Unauthorised')
+		}
+	})(req, res, next)
+})
 
 module.exports = router;

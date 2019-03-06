@@ -15,11 +15,14 @@ const update_auth = require('../options/update_auth');
 const delete_auth = require('../options/delete_auth');
 
 //get all parts worked with n2_plus_50
+
+/*
 router.get('/findparts', (req, res, next)=>{
     passport.authenticate('jwt', {session: false}, function(err, user){
       auth(req, res, next,err,user,N2_plus_50_Part);
     })(req, res, next)
 });
+*/
 
 //create new part to n2_plus_50
 router.post('/saveparts', (req, res, next)=>{
@@ -42,6 +45,25 @@ router.delete('/deleteparts',(req, res, next)=>{
     delete_auth(req, res, next,err,user,N2_plus_50_Part);
   })(req, res, next)
 });
+
+router.get('/findparts', (req, res, next)=>{
+	passport.authenticate('jwt', {session: false}, function(err, user){
+		if (err) { return next(err); }
+		if (!user) { return res.status(401).json('Unauthorised'); }
+		if(user.role == "admin" || user.role == "write"){
+			N2_plus_50_Part.get_by_date((err, data)=>{
+				if(err){
+					 res.status(400).json("err")
+				}
+				if(data){
+					res.json(data)
+				}
+			})
+		}else{
+			return res.status(401).json('Unauthorised')
+		}	
+	})
+})
 
 
 module.exports = router;

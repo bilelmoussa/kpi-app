@@ -58,6 +58,7 @@ const config = require('./config/keys');
 const db = config.database;
 
 //connect to database
+mongoose.set('useFindAndModify', false);
 mongoose
     .connect(db, {useNewUrlParser: true })
     .then(()=>{console.log('MongoDB Connected... ')})

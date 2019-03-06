@@ -47,7 +47,9 @@ export const logoutUser = (history) => dispatch => {
     localStorage.removeItem('jwtToken');
     setAuthToken(false);
     dispatch(setCurrentUser({}));
-    history.push('/login');
+	if(history){
+		history.push('/login')
+	}
 }
 
 export const delete_Error = () => dispatch =>{
@@ -70,7 +72,7 @@ export const post_N2 = (Part) => dispatch =>{
 			.then(res =>{
 				dispatch({
 					type: POST_N2,
-					payload: res.data.part
+					payload: res.data.parts
 				})
 			})
 			.catch(err => {
@@ -86,7 +88,7 @@ export const post_N2_plus_150 = (Part) => dispatch =>{
 			.then(res =>{
 				dispatch({
 					type: POST_N2_PLUS_150,
-					payload: res.data.part
+					payload: res.data.parts
 				})
 			})
 			.catch(err => {
@@ -102,7 +104,7 @@ export const post_N2_plus_50 = (Part) => dispatch =>{
 			.then(res =>{
 				dispatch({
 					type: POST_N2_PLUS_50,
-					payload: res.data.part
+					payload: res.data.parts
 				})
 			})
 			.catch(err => {
@@ -115,6 +117,7 @@ export const post_N2_plus_50 = (Part) => dispatch =>{
 
 function to_date(data){
 	let date = new Date(data);
+	date.setHours(date.getHours() +1);
 	let new_form_d = date.toISOString().substring(0, 16);
 	return new_form_d;
 }
@@ -125,18 +128,45 @@ function only_date(data){
 	return n;
 }
 
+function time_hours(value){
+	let num = value * 60;
+	let hours = Math.floor(num / 60);  
+	let index_p = String(value).indexOf('.');
+	let before_col = String(value).slice(index_p);
+	let minutes_H = Math.round(Number(`0${before_col}`) * 60);
+	
+	if(minutes_H.toString().length < 2){
+		 minutes_H =  `0${minutes_H}`;
+	}
+	
+	if(hours.toString().length < 2){
+		hours = `0${hours}`;
+	}
+	
+	if(index_p == -1){
+		return hours + ":" + "00";
+	}else{
+		return hours + ":" + minutes_H;
+	}
+	
+}
+
 export const get_N2 = () => dispatch =>{
 	axios.get('/api/N2/findparts')
 			.then(res =>{
 				let new_rows = [];
-				let rows = res.data.parts;
-				for(let i = 0; i < rows.length; i++){
-					rows[i].id = i;
-					rows[i].Date = only_date(rows[i].Date);
-					rows[i].timeAndDate = to_date(rows[i].timeAndDate);
-					rows[i].finishingTime = to_date(rows[i].finishingTime);
-					new_rows.push(rows[i]);
-				}
+				res.data.parts.forEach((part, index)=>{
+					part.rows.forEach((row, i)=>{
+						row.id = i;
+						row.Date = only_date(row.Date);
+						row.timeAndDate = to_date(row.timeAndDate);
+						row.finishingTime = to_date(row.finishingTime);
+						row.workingHours = time_hours(row.workingHours);
+						row.actualWh = time_hours(row.actualWh);						
+					})
+					new_rows.push(part)
+				})
+								
 				dispatch({
 					type: GET_N2,
 					payload: new_rows
@@ -154,14 +184,18 @@ export const get_N2_plus_150 = () => dispatch =>{
 	axios.get('/api/N2_plus_150/findparts')
 			.then(res =>{
 				let new_rows = [];
-				let rows = res.data.parts;
-				for(let i = 0; i < rows.length; i++){
-					rows[i].id = i;
-					rows[i].Date = only_date(rows[i].Date);
-					rows[i].timeAndDate = to_date(rows[i].timeAndDate);
-					rows[i].finishingTime = to_date(rows[i].finishingTime);
-					new_rows.push(rows[i]);
-				}
+				res.data.parts.forEach((part, index)=>{
+					part.rows.forEach((row, i)=>{
+						row.id = i;
+						row.Date = only_date(row.Date);
+						row.timeAndDate = to_date(row.timeAndDate);
+						row.finishingTime = to_date(row.finishingTime);
+						row.workingHours = time_hours(row.workingHours);
+						row.actualWh = time_hours(row.actualWh);						
+					})
+					new_rows.push(part)
+				})
+								
 				dispatch({
 					type: GET_N2_PLUS_150,
 					payload: new_rows
@@ -179,14 +213,18 @@ export const get_N2_plus_50 = () => dispatch =>{
 	axios.get('/api/N2_plus_50/findparts')
 			.then(res =>{
 				let new_rows = [];
-				let rows = res.data.parts;
-				for(let i = 0; i < rows.length; i++){
-					rows[i].id = i;
-					rows[i].Date = only_date(rows[i].Date);
-					rows[i].timeAndDate = to_date(rows[i].timeAndDate);
-					rows[i].finishingTime = to_date(rows[i].finishingTime);
-					new_rows.push(rows[i]);
-				}
+				res.data.parts.forEach((part, index)=>{
+					part.rows.forEach((row, i)=>{
+						row.id = i;
+						row.Date = only_date(row.Date);
+						row.timeAndDate = to_date(row.timeAndDate);
+						row.finishingTime = to_date(row.finishingTime);
+						row.workingHours = time_hours(row.workingHours);
+						row.actualWh = time_hours(row.actualWh);						
+					})
+					new_rows.push(part)
+				})
+								
 				dispatch({
 					type: GET_N2_PLUS_50,
 					payload: new_rows
@@ -247,3 +285,50 @@ export const put_N2_plus_50 = (query) => dispatch =>{
 				})
 			})
 }
+
+export const delete_N2 = (id) => dispatch =>{
+	axios.delete('/api/N2/deleteparts', { data: { id } } )
+		.catch(err => {
+			dispatch({
+					type: GET_ERRORS,
+					payload: err
+				})
+		})
+}
+
+export const delete_N2_plus_150 = (id) => dispatch =>{
+	axios.delete('/api/N2_plus_150/deleteparts', { data: { id } })
+		.catch(err => {
+			dispatch({
+					type: GET_ERRORS,
+					payload: err
+				})
+		})
+}
+
+export const delete_N2_plus_50 = (id) => dispatch =>{
+	axios.delete('/api/N2_plus_50/deleteparts', { data: { id } })
+		.catch(err => {
+			dispatch({
+					type: GET_ERRORS,
+					payload: err
+				})
+		})
+}
+
+/*
+export const newDataForm = () =>{
+	 axios.get('/api/N2/test')
+		.then(res => {
+			let weekCount = 0;
+			
+			res.data.forEach(function(week, index){
+				weekCount++;
+				console.log(week);
+			})
+			console.log(res);
+		})
+		.catch(err =>{console.log(err)})
+}
+*/
+

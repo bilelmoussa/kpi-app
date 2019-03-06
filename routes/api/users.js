@@ -71,8 +71,14 @@ router.post("/login", (req, res, next)=>{
                 return res.status(400).json({success: false, msg:err.message})
             }else{
             if(isMatch){
-                    const token = jwt.sign(user.toJSON(), config.secret, {
-                    expiresIn: 604800, 
+					let user_token = {
+						_id: user._id,
+						user_name: user.user_name,
+						name: user.name,
+						role: user.role,
+					}
+                    const token = jwt.sign(user_token, config.secret, {
+                    expiresIn: 90000, 
                   });
                return res.json({
                     success: true,

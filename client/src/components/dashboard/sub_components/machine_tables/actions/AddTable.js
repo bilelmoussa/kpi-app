@@ -22,9 +22,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
-import { post_N2, put_N2, post_N2_plus_150, post_N2_plus_50, put_N2_plus_150, put_N2_plus_50 } from '../../../../../actions/authentication';
+import { post_N2, put_N2, post_N2_plus_150, post_N2_plus_50, put_N2_plus_150, put_N2_plus_50, delete_N2, delete_N2_plus_150, delete_N2_plus_50 } from '../../../../../actions/authentication';
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
-import { isChanged } from '../../../../../is-empty';
+import { isChanged, isObEmpty } from '../../../../../is-empty';
+import { ObjectId } from '../../../../../ObjectID';
+import {  get_date_format, get_dateTime_format } from '../../../../../date_validation'
+import NumberFormat from 'react-number-format';
 
 const styles = theme =>({
 	lookupEditCell: {
@@ -137,6 +140,9 @@ function empty(data)
   {
     return data.length == 0;
   }
+  if(typeof data === "string" &&  ( data === "" || data === null )){
+	  return true;
+  }
   var count = 0;
   for(var i in data)
   {
@@ -150,28 +156,22 @@ function empty(data)
 
 function validate_cell(data){
 	
-	if(empty(data.Date)){
-		return true;
-	}else if(empty(data.printedPart)){
-		return true;
-	}else if(empty(data.workingHours)){
-		return true;
-	}else if(empty(data.timeAndDate)){
-		return true;
-	}else if(empty(data.finishingTime)){
-		return true;
-	}else if(empty(data.failureCoef)){
-		return true;
-	}else if(empty(data.actualWh)){
-		return true;
-	}else if(empty(data.Date)){
-		return true;
+	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime) ||  empty(data.dayNumber) ||  empty(data.failureCoef) ||  empty(data.actualWh) || empty(data.Date)){
+		return true 
 	}else{
 		return false;
 	}
 	
 }
 
+function time_to_numb(value){
+	
+		let hours = Number(value.replace(/(\d{2}):(\d{2})/, '$1'));
+		let before_col = value.replace(/(\d{2}):(\d{2})/, '$2');
+		let minutes = Number(before_col)/60;
+		let new_time =  hours + minutes;
+		return new_time;
+}
 
 const Cell = (props) => {
   return <Table.Cell {...props} />;
@@ -181,8 +181,17 @@ const EditCell = (props) => {
   return <TableEditRow.Cell {...props} />;
 };
 
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3');
-const DateTimeFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/, '$1/$2/$3  $4:$5');
+const DateFormatter = ({ value }) => get_date_format(value);
+const DateTimeFormatter = ({ value }) => get_dateTime_format(value);
+
+
+const TimeFormatter = ({ value }) =>{ 
+		return value;
+};
+
+
+
+
 
 const DateEditor = ({ value, onValueChange }) => (
 	 <TextField
@@ -208,6 +217,28 @@ const DateTime = ({ value, onValueChange }) => (
       />
 )
 
+
+const Time = ({ value, onValueChange }) => (
+<NumberFormat
+	customInput={TextField}
+	format="##:##" 
+	placeholder="--:--" 
+	mask={['-', '-', '-', '-']}
+	value={value}
+	onChange={event => onValueChange(event.target.value)}
+/>
+)
+
+
+
+
+const TimeProvider = props =>(
+	  <DataTypeProvider
+			editorComponent={Time}
+			formatterComponent={TimeFormatter}	
+			{...props}
+	/>
+)
 
 const DateTypeProvider = props => (
   <DataTypeProvider
@@ -235,12 +266,12 @@ class AddTable extends Component{
 				],
 				columns:[
 				  { name: 'printedPart', title: 'Printed Part' },
-				  { name: 'workingHours', title: 'Working Hours' },
-				  { name: 'timeAndDate', title: 'Time and date' },
+				  { name: 'workingHours', title: 'Working Hours', dataType: 'number'},
+				  { name: 'timeAndDate', title: 'Time and date',  dataType: 'datetime-local' },
 				  { name: 'finishingTime', title: 'Finishing Time', dataType: 'datetime-local' },
 				  { name: 'dayNumber', title: 'Day Number' },
 				  { name: 'failureCoef', title: 'Failure Coef'},
-				  { name : 'actualWh', title: 'Actual Wh' },
+				  { name : 'actualWh', title: 'Actual Wh', dataType: 'number'},
 				  { name: 'Remarks', title: 'Remarks'},
 				  { name: 'Date', title: 'Date', dataType:'date'}
 				],
@@ -257,6 +288,7 @@ class AddTable extends Component{
 				],
 				dateColumns: ['Date'],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
+				TimeColumns: ['workingHours', "actualWh"],
 				editingRowIds: [],
 				addedRows: [],
 				rowChanges: {},
@@ -283,12 +315,12 @@ class AddTable extends Component{
 		this.changeAddedRows = addedrow =>{
 			let default_row = addedrow.map(row => (Object.keys(row).length ? row : {
 					printedPart: '',
-					workingHours: '',
+					workingHours: '00:00',
 					timeAndDate: '',
 					finishingTime: '',
 					dayNumber: '',
 					failureCoef: '',
-					actualWh: '',
+					actualWh: '00:00',
 					Remarks: '',
 					Date: ''
 				}));
@@ -303,57 +335,137 @@ class AddTable extends Component{
 			
 			if (added) {
 				const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+				const clientId = ObjectId();
+				
+				let part_data = {
+						printedPart: added[0].printedPart,
+						workingHours: time_to_numb(added[0].workingHours),
+						timeAndDate: added[0].timeAndDate,
+						finishingTime: added[0].finishingTime,
+						dayNumber: added[0].dayNumber,
+						failureCoef: added[0].failureCoef,
+						actualWh: time_to_numb(added[0].actualWh),
+						Remarks: added[0].Remarks,
+						Date: added[0].Date,
+						client_id: clientId
+					};
+				
+				
 				if(validate_cell(added[0])){
 					this.setState({empty_row: Object.values(added)});
-				}else{
+					added[0].added = false;
+				}else if(!/(\d{2}):(\d{2})/.test(String(added[0].workingHours)) || !/(\d{2}):(\d{2})/.test(String(added[0].actualWh))){
+					this.setState({empty_row: Object.values(added)});
+					added[0].added = false;
+				}
+				else{
+					added[0].added = true;
 					if(machine === "N2"){
-						this.props.post_N2(added[0]);
+						this.props.post_N2(part_data);
 					}else if(machine === "N2_plus_150"){
-						this.props.post_N2_plus_150(added[0]);
+						this.props.post_N2_plus_150(part_data);
 				
 					}else if(machine === "N2_plus_50"){
-						this.props.post_N2_plus_50(added[0]);
+						this.props.post_N2_plus_50(part_data);
 					}
+					
 				}
+				
 				rows = [
 					...rows,
 					...added.map((row, index) => ({
 					id: startingAddedId + index,
+					client_id: clientId,
 					...row,
 					}))
 					];	
 			}
 			if (changed) {
+				let old_rows = rows;
 				let keys = Object.keys(changed);
 				let row_id; 
 				for (const key of keys) {
 					row_id = key;
 				}
-				rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
-				const vale = rows[row_id];
-				
-			
+								
 				if(!isChanged(changed)){
-					if(validate_cell(vale)){
+
+					rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+
+					const vale = {
+						printedPart: rows[row_id].printedPart,
+						workingHours: time_to_numb(rows[row_id].workingHours),
+						timeAndDate: rows[row_id].timeAndDate,
+						finishingTime: rows[row_id].finishingTime,
+						dayNumber: rows[row_id].dayNumber,
+						failureCoef: rows[row_id].failureCoef,
+						actualWh: time_to_numb(rows[row_id].actualWh),
+						Remarks: rows[row_id].Remarks,
+						Date: rows[row_id].Date,
+						client_id: rows[row_id].client_id,
+					};
+					
+
+					if(isObEmpty(changed[row_id])){
+						let query = Object.keys(changed[row_id]);
+						for(let i = 0; i < query.length; i++){
+							if(query[i] === "Remarks"){
+							}else{
+								rows[row_id][query[i]] = old_rows[row_id][query[i]];
+							}
+						}
+						this.setState({empty_row: Object.values(changed)});
+					}
+					else if(validate_cell(rows[row_id])){
+						this.setState({empty_row: Object.values(changed)});
+					}else if(!/(\d{2}):(\d{2})/.test(String(rows[row_id].workingHours)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].actualWh))){
 						this.setState({empty_row: Object.values(changed)});
 					}else{
-						let query = {id: {_id: vale._id}, query: changed[row_id]};
-						if(machine === "N2"){
-							this.props.put_N2(query);
-						}else if(machine === "N2_plus_150"){
-							this.props.put_N2_plus_150(query);
-						}else if(machine === "N2_plus_50"){
-							this.props.put_N2_plus_50(query);
-						}	
+						if(rows[row_id].added){
+							let keys = Object.keys(changed[row_id]);
+							let chnged_val = [];
+							for(let i = 0; i < keys.length; i++){
+							 chnged_val.push([keys[i], vale[keys[i]]]);	
+							}
+						
+							let json =  chnged_val.reduce(function(p, c) {
+									 p[c[0]] = c[1];
+									 return p;}, {});
+									 
+						
+							let query = {id: {client_id: vale.client_id}, query: json};
+							
+							if(machine === "N2"){
+								this.props.put_N2(query);
+							}else if(machine === "N2_plus_150"){
+								this.props.put_N2_plus_150(query);
+							}else if(machine === "N2_plus_50"){
+								this.props.put_N2_plus_50(query);
+							}
+							
+							
+						}else{
+							rows[row_id].added = true;
+					
+							if(machine === "N2"){
+								this.props.post_N2(vale);
+							}else if(machine === "N2_plus_150"){
+								this.props.post_N2_plus_150(vale);
+							}else if(machine === "N2_plus_50"){
+								this.props.post_N2_plus_50(vale);
+							}
+							
+							rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+						}
 					}
-				}
-				else if(validate_cell(vale)){
+					
+				}else if(validate_cell(rows[row_id])){
 					this.setState({empty_row: Object.values(changed)});
 				}
+
 				
 				
 			}
-			
 			this.setState({ rows, deletingRows: deleted || getStateDeletingRows() });
 		};
 
@@ -364,6 +476,17 @@ class AddTable extends Component{
 			const rows = getStateRows().slice();
 			getStateDeletingRows().forEach((rowId) => {
 				const index = rows.findIndex(row => row.id === rowId);
+				if(rows[index].added){
+					let query = {cleint_id: rows[index].cleint_id };
+					if(this.props.machine === "N2"){
+						this.props.delete_N2(query);
+					}else if(this.props.machine === "N2_Plus_150"){
+						this.props.delete_N2_plus_150(query);
+					}else if(this.props.machine === "N2_Plus_50"){
+						this.props.delete_N2_plus_50(query);
+					}
+				}
+				
 				if (index > -1) {
 					rows.splice(index, 1);
 				}
@@ -381,6 +504,8 @@ class AddTable extends Component{
 	componentDidMount(){
 	}
 	
+
+	
 	render(){
 		const { classes } = this.props;
 		const { 
@@ -394,10 +519,11 @@ class AddTable extends Component{
 			leftFixedColumns,
 			empty_row,
 			dateColumns,
-			dateTimeColumns
+			dateTimeColumns,
+			TimeColumns,
 		} = this.state;
-		return(
-
+		
+	return(
 		<Paper>
 			<Grid
 			  rows={rows}
@@ -414,6 +540,11 @@ class AddTable extends Component{
 					onAddedRowsChange={this.changeAddedRows}
 					onCommitChanges={this.commitChanges}
 			/>
+			
+			<TimeProvider 
+			for={TimeColumns}
+			/>
+			
 			<DateTypeProvider
             for={dateColumns}
 			/>
@@ -459,6 +590,17 @@ class AddTable extends Component{
                 rows={rows.filter(row => deletingRows.indexOf(row.id) > -1)}
                 columns={columns}
               >
+			  
+			<TimeProvider 
+			for={TimeColumns}
+			/>
+			
+			<DateTypeProvider
+            for={dateColumns}
+			/>
+			<DateTimeTypeProvider
+            for={dateTimeColumns}
+			/>
                 <Table
                   cellComponent={Cell}
 				  columnExtensions={tableColumnExtensions}
@@ -516,14 +658,20 @@ AddTable.propTypes = {
 	post_N2_plus_50: PropTypes.func.isRequired,
 	put_N2_plus_150: PropTypes.func.isRequired,
 	put_N2_plus_50: PropTypes.func.isRequired,
+	delete_N2: PropTypes.func.isRequired,
+	delete_N2_plus_150: PropTypes.func.isRequired, 
+	delete_N2_plus_50: PropTypes.func.isRequired,
 
 };
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
+	N2: state.N2,
+	N2_Plus_150: state.N2_Plus_150,
+	N2_Plus_50: state.N2_Plus_50,
 });
 
 
-export default  connect(mapStateToProps, { post_N2, put_N2, post_N2_plus_150, post_N2_plus_50, put_N2_plus_150, put_N2_plus_50 } )(withStyles(styles)(AddTable));
+export default  connect(mapStateToProps, { post_N2, put_N2, post_N2_plus_150, post_N2_plus_50, put_N2_plus_150, put_N2_plus_50,  delete_N2, delete_N2_plus_150, delete_N2_plus_50 } )(withStyles(styles)(AddTable));
 
 

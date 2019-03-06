@@ -1,5 +1,5 @@
 const validate_date = require('../../validations/date_validation');
-
+ 
 function new_parts(req){
     const new_part ={
         printedPart: req.body.printedPart,
@@ -11,6 +11,7 @@ function new_parts(req){
 		actualWh: req.body.actualWh,
         Remarks: req.body.Remarks,
 		Date:validate_date(req.body.Date),
+		client_id: req.body.client_id,
     }
     return new_part;
 }

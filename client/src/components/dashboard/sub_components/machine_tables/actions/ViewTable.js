@@ -2,8 +2,8 @@ import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { EditingState, SortingState, IntegratedSorting } from '@devexpress/dx-react-grid';
-import { Grid, Table, TableHeaderRow, TableEditRow, TableEditColumn, TableFixedColumns } from '@devexpress/dx-react-grid-material-ui';
+import { EditingState, IntegratedSorting,  PagingState, SortingState, CustomPaging, } from '@devexpress/dx-react-grid';
+import { Grid, Table, TableHeaderRow, TableEditRow, TableEditColumn, TableFixedColumns, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import Paper from '@material-ui/core/Paper';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -22,9 +22,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
-import { get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50   } from '../../../../../actions/authentication';
+import { get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50, delete_N2 , delete_N2_plus_150, delete_N2_plus_50  } from '../../../../../actions/authentication';
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
-import { isChanged } from '../../../../../is-empty';
+import { isChanged, isObEmpty } from '../../../../../is-empty';
+import NumberFormat from 'react-number-format';
 
 const styles = theme =>({
 	lookupEditCell: {
@@ -126,6 +127,9 @@ function empty(data)
   {
     return data.length == 0;
   }
+  if(typeof data === "string" &&  ( data === "" || data === null )){
+	  return true;
+  }
   var count = 0;
   for(var i in data)
   {
@@ -139,29 +143,21 @@ function empty(data)
 
 function validate_cell(data){
 	
-	if(empty(data.Date)){
-		return true;
-	}else if(empty(data.printedPart)){
-		return true;
-	}else if(empty(data.workingHours)){
-		return true;
-	}else if(empty(data.timeAndDate)){
-		return true;
-	}else if(empty(data.finishingTime)){
-		return true;
-	}else if(empty(data.failureCoef)){
-		return true;
-	}else if(empty(data.actualWh)){
-		return true;
-	}else if(empty(data.dayNumber)){
-		return true;
+	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime) ||  empty(data.dayNumber) ||  empty(data.failureCoef) ||  empty(data.actualWh) || empty(data.Date)){
+		return true 
 	}else{
 		return false;
 	}
 	
 }
 
-
+function time_to_numb(value){
+		let hours = Number(value.replace(/(\d{2}):(\d{2})/, '$1'));
+		let before_col = value.replace(/(\d{2}):(\d{2})/, '$2');
+		let minutes = Number(before_col)/60;
+		let new_time =  hours + minutes;
+		return new_time;
+}
 
 
 
@@ -177,8 +173,20 @@ const EditCell = (props) => {
 
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3');
 const DateTimeFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/, '$1/$2/$3  $4:$5');
+const TimeFormatter = ({ value }) =>{
+	return value;	
+};
 
-
+const Time = ({ value, onValueChange }) => (
+<NumberFormat
+	customInput={TextField}
+	format="##:##" 
+	placeholder="--:--" 
+	mask={['-', '-', '-', '-']}
+	value={value}
+	onChange={event => onValueChange(event.target.value)}
+/>
+)
 
 
 const DateEditor = ({ value, onValueChange }) => (
@@ -221,6 +229,15 @@ const DateTimeTypeProvider = props => (
 	/>)
 
 
+const TimeProvider = props =>(
+	  <DataTypeProvider
+			editorComponent={Time}
+			formatterComponent={TimeFormatter}	
+			{...props}
+	/>
+)
+
+
 const getRowId = row => row.id;
 
 class ViewTable extends Component{
@@ -228,8 +245,8 @@ class ViewTable extends Component{
 	constructor(){
 		super();
 		this.state = {
-				rows:[
-				],
+				data: [],
+				rows:[],
 				columns:[
 				  { name: 'printedPart', title: 'Printed Part' },
 				  { name: 'workingHours', title: 'Working Hours' },
@@ -252,17 +269,21 @@ class ViewTable extends Component{
 					{ columnName: 'Remarks', width: 180},
 					{ columnName: 'Date', width: 180},
 				],
-				defaultSorting: [{ columnName: 'timeAndDate', direction: 'desc' }],
+				defaultSorting: [{ columnName: 'timeAndDate', direction: 'asc' }],
 				sortingStateColumnExtensions: [
 				{ columnName: 'timeAndDate', sortingEnabled: false },
 				],
 				dateColumns: ['Date'],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
+				TimeColumns: ['workingHours', 'actualWh'],
 				editingRowIds: [],
 				addedRows: [],
 				rowChanges: {},
 				deletingRows: [],
 				empty_row: [],
+				totalCount: 1,
+				pageSize: 1,
+				currentPage: 0,
 				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'dayNumber', 'failureCoef', 'actualWh', 'Remarks', 'Date'],
 				leftFixedColumns: [TableEditColumn.COLUMN_TYPE],
 		};
@@ -277,19 +298,30 @@ class ViewTable extends Component{
 			return rows;
 		};
 	
-
+		
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.changeEditingRowIds = editingRowIds => this.setState({ editingRowIds });
-
+		this.changeCurrentPage = (currentPage) => {  
+			this.setState({ currentPage }); 
+			if(this.props.machine === "N2"){
+				this.setState({ rows: this.props.N2.Get_n2[currentPage].rows })
+			}else if(this.props.machine === "N2_Plus_150"){
+				this.setState({ rows: this.props.N2.Get_n2_plus_150[currentPage].rows })
+			}else if(this.props.machine === "N2_Plus_50"){
+				this.setState({ rows: this.props.N2.Get_n2_plus_50[currentPage].rows })
+			}
+			
+		}; 
+	
 		this.changeAddedRows = addedRows => this.setState({
 				addedRows: addedRows.map(row => (Object.keys(row).length ? row : {
 				printedPart: '',
-				workingHours: '',
+				workingHours: "00:00",
 				timeAndDate: '',
 				finishingTime: '',
 				dayNumber: '',
 				failureCoef: '',
-				actualWh: '',
+				actualWh: "00:00",
 				Remarks: '',
 				Date: '',
 			})),
@@ -300,22 +332,61 @@ class ViewTable extends Component{
 		this.commitChanges = ({ added, changed, deleted }) => {
 			let { rows } = this.state;
 			const { machine } = this.props;
-
 			
 			if (changed) {
+				let old_rows = rows;
 				let keys = Object.keys(changed);
 				let row_id; 
 				for (const key of keys) {
 					row_id = key;
 				}
-				rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
-				const vale = rows[row_id];
+				
 				
 				if(!isChanged(changed)){
-					if(validate_cell(vale)){
+
+					rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+					
+					const vale = {
+						printedPart: rows[row_id].printedPart,
+						workingHours: time_to_numb(rows[row_id].workingHours),
+						timeAndDate: rows[row_id].timeAndDate,
+						finishingTime: rows[row_id].finishingTime,
+						dayNumber: rows[row_id].dayNumber,
+						failureCoef: rows[row_id].failureCoef,
+						actualWh: time_to_numb(rows[row_id].actualWh),
+						Remarks: rows[row_id].Remarks,
+						Date: rows[row_id].Date,
+						_id: rows[row_id]._id,
+					};
+					
+					if(isObEmpty(changed[row_id])){
+						let query = Object.keys(changed[row_id]);
+						for(let i = 0; i < query.length; i++){
+							if(query[i] === "Remarks"){
+							}else{
+								rows[row_id][query[i]] = old_rows[row_id][query[i]];
+							}
+						}
 						this.setState({empty_row: Object.values(changed)});
-					}else{
-						let query = {id: {_id: vale._id}, query: changed[row_id]};
+					}else if(validate_cell(rows[row_id])){
+						this.setState({empty_row: Object.values(changed)});
+					}else if(!/(\d{2}):(\d{2})/.test(String(rows[row_id].workingHours)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].actualWh))){
+						this.setState({empty_row: Object.values(changed)});
+					}
+					else{
+						
+						let keys = Object.keys(changed[row_id]);
+						let chnged_val = [];
+						for(let i = 0; i < keys.length; i++){
+							 chnged_val.push([keys[i], vale[keys[i]]]);	
+						}
+						
+						let json =  chnged_val.reduce(function(p, c) {
+									 p[c[0]] = c[1];
+									 return p;}, {});
+									 
+						let query = {id: {_id: vale._id}, query: json};
+						
 						if(machine === "N2"){
 							this.props.put_N2(query);
 							this.props.get_N2();
@@ -327,11 +398,13 @@ class ViewTable extends Component{
 							this.props.get_N2_plus_50();
 						}
 						
+						rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
 					}
-				}
-				else if(validate_cell(vale)){
+					
+				}else if(validate_cell(rows[row_id])){
 					this.setState({empty_row: Object.values(changed)});
 				}
+				
 			}
 			
 			this.setState({ rows, deletingRows: deleted || getStateDeletingRows() });
@@ -343,7 +416,18 @@ class ViewTable extends Component{
 		this.deleteRows = () => {
 			const rows = getStateRows().slice();
 			getStateDeletingRows().forEach((rowId) => {
-				const index = rows.findIndex(row => row.id === rowId);
+				let index = rows.findIndex(row => row.id === rowId);
+				let query = {_id: rows[index]._id };
+				if(this.props.machine === "N2"){
+					this.props.delete_N2(query);
+					this.props.get_N2();
+				}else if(this.props.machine === "N2_Plus_150"){
+					this.props.delete_N2_plus_150(query);
+					this.props.get_N2_plus_150();
+				}else if(this.props.machine === "N2_Plus_50"){
+					this.props.delete_N2_plus_50(query);
+					this.props.get_N2_plus_50();
+				}
 				if (index > -1) {
 					rows.splice(index, 1);
 				}
@@ -367,16 +451,28 @@ class ViewTable extends Component{
 	static getDerivedStateFromProps(nextProps, prevState){
 		const { machine } = nextProps;
 		if(machine === "N2"){
-			if(nextProps.N2!==prevState.N2 && !empty(nextProps.N2.Get_n2)){
-				return { rows: nextProps.N2.Get_n2 };
+			if(nextProps.N2!==prevState.N2){
+				if(empty(nextProps.N2.Get_n2)){
+					return { data: [] };
+				}else{
+				return { data: nextProps.N2.Get_n2,  totalCount: nextProps.N2.Get_n2.length };
+				}
 			}else { return null };
 		}else if(machine === "N2_plus_150"){
-			if(nextProps.N2_Plus_150!==prevState.N2_Plus_150 && !empty(nextProps.N2_Plus_150.Get_n2_plus_150)){
-				return { rows: nextProps.N2_Plus_150.Get_n2_plus_150 };
+			if(nextProps.N2_Plus_150!==prevState.N2_Plus_150 ){
+				if(empty(nextProps.N2_Plus_150.Get_n2_plus_150)){
+					return { data: [] };
+				}else{
+					return { rows: nextProps.N2_Plus_150.Get_n2_plus_150 };
+				}
 			}else { return null };
 		}else if(machine === "N2_plus_50"){
-			if(nextProps.N2_Plus_50!==prevState.N2_Plus_50 && !empty(nextProps.N2_Plus_50.Get_n2_plus_50)){
-				return { rows: nextProps.N2_Plus_50.Get_n2_plus_50 };
+			if(nextProps.N2_Plus_50!==prevState.N2_Plus_50 ){
+				if(empty(nextProps.N2_Plus_50.Get_n2_plus_50)){
+					return { rows: [] };
+				}else{
+					return { rows: nextProps.N2_Plus_50.Get_n2_plus_50 };
+				}
 			}else { return null };
 		}
 		
@@ -385,33 +481,54 @@ class ViewTable extends Component{
     
 	componentDidUpdate(prevProps, prevState) {
 		const { machine } = this.props;
+		const { currentPage } = this.state;
+		
 		if(machine === "N2"){
-			if(prevProps.N2!==this.props.N2 && !empty(this.props.N2.Get_n2) ){
-				this.setState({
-					rows: this.props.N2.Get_n2,
-				});
+			if(prevProps.N2!==this.props.N2  ){
+				if(empty(this.props.N2.Get_n2)){
+					this.setState({
+						data: [],
+						rows: [],
+					})
+				}else{
+					this.setState({
+						data: this.props.N2.Get_n2,
+						totalCount: this.props.N2.Get_n2.length,
+						rows: this.props.N2.Get_n2[currentPage].rows
+					});
+				}
 			}else{
 				return null;
 			}
 		}else if(machine === "N2_plus_150"){
-			if(prevProps.N2_Plus_150!==this.props.N2_Plus_150 && !empty(this.props.N2_Plus_150.Get_n2_plus_150) ){
-				this.setState({
-					rows: this.props.N2_Plus_150.Get_n2_plus_150,
-				});
+			if(prevProps.N2_Plus_150!==this.props.N2_Plus_150){
+				if(empty(this.props.N2_Plus_150.Get_n2_plus_150)){
+					this.setState({
+						rows: [],
+					})
+				}else{
+					this.setState({
+						rows: this.props.N2_Plus_150.Get_n2_plus_150,
+					});
+				}
 			}else{
 				return null;
 			}
 		}else if(machine === "N2_plus_50"){
-			if(prevProps.N2_Plus_50!==this.props.N2_Plus_50 && !empty(this.props.N2_Plus_50.Get_n2_plus_50) ){
-				this.setState({
-					rows: this.props.N2_Plus_50.Get_n2_plus_50,
-				});
+			if(prevProps.N2_Plus_50!==this.props.N2_Plus_50){
+				if(empty(this.props.N2_Plus_50.Get_n2_plus_50)){
+					this.setState({
+						rows: [],
+					})
+				}else{
+					this.setState({
+						rows: this.props.N2_Plus_50.Get_n2_plus_50,
+					});
+				}
 			}else{
 				return null;
 			}
 		}
-		
-
 	}
   
 
@@ -431,16 +548,30 @@ class ViewTable extends Component{
 			empty_row,
 			dateColumns,
 			dateTimeColumns,
-			sortingStateColumnExtensions
+			sortingStateColumnExtensions,
+			TimeColumns,
+			pageSize, 
+			currentPage, 
+			totalCount,
+			data, 
 		} = this.state;
+				
 		return(
-
 		<Paper>
 			<Grid
 			  rows={rows}
 			  columns={columns}
 			  getRowId={getRowId}
 			>
+			<PagingState
+				currentPage={currentPage}
+				onCurrentPageChange={this.changeCurrentPage}
+				pageSize={pageSize}
+			/>
+			
+			<CustomPaging
+				totalCount={totalCount}
+			/>
 			
 			<SortingState
 				defaultSorting={defaultSorting}
@@ -457,12 +588,17 @@ class ViewTable extends Component{
 					onAddedRowsChange={this.changeAddedRows}
 					onCommitChanges={this.commitChanges}
 			/>
+			
 			<IntegratedSorting />
+			
+			<TimeProvider 
+				for={TimeColumns}
+			/>
 			<DateTypeProvider
-            for={dateColumns}
+				for={dateColumns}
 			/>
 			<DateTimeTypeProvider
-            for={dateTimeColumns}
+				for={dateTimeColumns}
 			/>
 			
 			<Table
@@ -471,8 +607,9 @@ class ViewTable extends Component{
 			cellComponent={Cell}/>
 			
 			<TableHeaderRow  showSortingControls />
-
+	
 			<TableEditRow cellComponent={EditCell}/>
+			
 			
 			<TableEditColumn
             width={150}
@@ -485,12 +622,14 @@ class ViewTable extends Component{
             leftColumns={leftFixedColumns}
 			/>
 			
+			<PagingPanel />
 			</Grid>
 			<Dialog
-          open={!!deletingRows.length}
-          onClose={this.cancelDelete}
-          classes={{ paper: classes.dialog }}
-		>
+				open={!!deletingRows.length}
+				onClose={this.cancelDelete}
+				classes={{ paper: classes.dialog }}
+			>
+			
           <DialogTitle>
             Delete Row
           </DialogTitle>
@@ -503,11 +642,24 @@ class ViewTable extends Component{
                 rows={rows.filter(row => deletingRows.indexOf(row.id) > -1)}
                 columns={columns}
               >
+			  
+					<TimeProvider 
+						for={TimeColumns}
+					/>
+					<DateTypeProvider
+						for={dateColumns}
+					/>
+					<DateTimeTypeProvider
+						for={dateTimeColumns}
+					/>
+				
                 <Table
                   cellComponent={Cell}
 				  columnExtensions={tableColumnExtensions}
                 />
+				
                 <TableHeaderRow />
+				
               </Grid>
             </Paper>
           </DialogContent>
@@ -560,7 +712,7 @@ ViewTable.propTypes = {
 	get_N2_plus_50: PropTypes.func.isRequired,
 	put_N2_plus_150: PropTypes.func.isRequired,
 	put_N2_plus_50: PropTypes.func.isRequired,
-	
+	delete_N2: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -571,6 +723,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default  connect(mapStateToProps, { get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50 } )(withStyles(styles)(ViewTable));
+export default  connect(mapStateToProps, {  get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50, delete_N2, delete_N2_plus_150, delete_N2_plus_50 } )(withStyles(styles)(ViewTable));
 
 

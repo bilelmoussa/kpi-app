@@ -11,13 +11,6 @@ export const isEmpty = (value) => {
 
  
 
-export const  isObEmpty = (obj) => {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-}
 
 export const isChanged = (obj) => {
 	const keys = Object.values(obj)
@@ -26,6 +19,24 @@ export const isChanged = (obj) => {
 			return true;
 		}else{
 			return false;
+		}
+	}
+}
+
+export const isObEmpty = (obj) => {
+	const values = Object.values(obj);
+	const keys = Object.keys(obj);
+	if(keys.includes("Remarks") && keys.length === 1){
+		return false;
+	}else{
+		for (const key of values) {
+			if(key === undefined){
+				return true;
+			}else if(typeof key === "string" && key.trim().length < 1){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 }
