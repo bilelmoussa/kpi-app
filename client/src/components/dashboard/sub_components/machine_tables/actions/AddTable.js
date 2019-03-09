@@ -126,8 +126,7 @@ const LookupEditCellBase = ({
 
 export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
 
-function empty(data)
-{
+function empty(data){
   if(typeof(data) == 'number' || typeof(data) == 'boolean')
   { 
     return false; 

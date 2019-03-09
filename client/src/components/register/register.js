@@ -106,12 +106,12 @@ export  class register extends Component {
     constructor() {
         super();
         this.state = {
-            name: '',
-            user_name: '',
-            password: '',
-            confirmPassword: '',
-			errors: {},
-			toggle_error: true,
+          name: '',
+          user_name: '',
+          password: '',
+          confirmPassword: '',
+			    errors: {},
+			    toggle_error: true,
 			
         }
     }

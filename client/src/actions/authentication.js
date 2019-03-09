@@ -154,6 +154,7 @@ function time_hours(value){
 export const get_N2 = () => dispatch =>{
 	axios.get('/api/N2/findparts')
 			.then(res =>{
+				console.log(res.data);
 				let new_rows = [];
 				res.data.parts.forEach((part, index)=>{
 					part.rows.forEach((row, i)=>{
