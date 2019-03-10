@@ -46,14 +46,14 @@ handleOpenYear = () => {this.setState({ openYear: true })}
 
 
 render() {
-    const { classes } = this.props;
-    const { openYear,  data,  year } = this.state;
+    const { classes, years } = this.props;
+    const { openYear, year } = this.state;
 
-    /*
-    let WeekList = () =>{
-            return data.map((row, i) => { return <MenuItem key={i} value={row}>Week {row._id.week}</MenuItem> });
+    
+    let YearList = () =>{
+            return years.map((year, i) => { return <MenuItem key={i} value={year}>Year {year}</MenuItem> });
     }
-    */
+    
 
 
     return (
@@ -75,9 +75,7 @@ render() {
 							}}
 						>
 
-                            <MenuItem value={2019}>Year 2019</MenuItem>
-                            <MenuItem value={2018}>Year 2018</MenuItem>
-                            <MenuItem value={2017}>Year 2017</MenuItem>
+								{YearList()}
 
 						</Select>
 					</FormControl>

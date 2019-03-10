@@ -1,5 +1,15 @@
 import axios from 'axios';
-import { GET_ERRORS, SET_CURRENT_USER, GET_N2, GET_N2_PLUS_150, GET_N2_PLUS_50, POST_N2, POST_N2_PLUS_150, POST_N2_PLUS_50, PUT_N2, PUT_N2_PLUS_150, PUT_N2_PLUS_50 } from './types';
+import { 
+	GET_ERRORS, 
+	SET_CURRENT_USER,
+	GET_N2, 
+	GET_N2_PLUS_150,
+	GET_N2_PLUS_50, 
+	N2_YEARS,
+	N2_PLUS_150_YEARS,
+	N2_PLUS_50_YEARS,
+	N2_MONTHS 
+} from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
 
@@ -60,21 +70,11 @@ export const delete_Error = () => dispatch =>{
 	})
 }
 
-export const GET_Token = ()=>{
-	const Token = localStorage.getItem('jwtToken');
-	console.log(Token);
-	return Token || null;
-}
+
 
  
 export const post_N2 = (Part) => dispatch =>{
 	axios.post('/api/N2/saveparts', Part)
-			.then(res =>{
-				dispatch({
-					type: POST_N2,
-					payload: res.data.parts
-				})
-			})
 			.catch(err => {
 				dispatch({
 					type: GET_ERRORS,
@@ -85,12 +85,6 @@ export const post_N2 = (Part) => dispatch =>{
 
 export const post_N2_plus_150 = (Part) => dispatch =>{
 	axios.post('/api/N2_plus_150/saveparts', Part)
-			.then(res =>{
-				dispatch({
-					type: POST_N2_PLUS_150,
-					payload: res.data.parts
-				})
-			})
 			.catch(err => {
 				dispatch({
 					type: GET_ERRORS,
@@ -101,12 +95,6 @@ export const post_N2_plus_150 = (Part) => dispatch =>{
 
 export const post_N2_plus_50 = (Part) => dispatch =>{
 	axios.post('/api/N2_plus_50/saveparts', Part)
-			.then(res =>{
-				dispatch({
-					type: POST_N2_PLUS_50,
-					payload: res.data.parts
-				})
-			})
 			.catch(err => {
 				dispatch({
 					type: GET_ERRORS,
@@ -181,6 +169,7 @@ export const get_N2 = () => dispatch =>{
 			})
 }
 
+
 export const get_N2_plus_150 = () => dispatch =>{
 	axios.get('/api/N2_plus_150/findparts')
 			.then(res =>{
@@ -241,12 +230,6 @@ export const get_N2_plus_50 = () => dispatch =>{
 
 export const put_N2 = (query) => dispatch =>{
 	axios.put('/api/N2/updateparts', query)
-			.then(res =>{
-				dispatch({
-					type: PUT_N2,
-					payload: res.data
-				})
-				})
 			.catch(err => {
 				dispatch({
 					type: GET_ERRORS,
@@ -257,12 +240,6 @@ export const put_N2 = (query) => dispatch =>{
 
 export const put_N2_plus_150 = (query) => dispatch =>{
 	axios.put('/api/N2_plus_150/updateparts', query)
-			.then(res =>{
-				dispatch({
-					type: PUT_N2_PLUS_150,
-					payload: res.data
-				})
-				})
 			.catch(err => {
 				dispatch({
 					type: GET_ERRORS,
@@ -273,12 +250,6 @@ export const put_N2_plus_150 = (query) => dispatch =>{
 
 export const put_N2_plus_50 = (query) => dispatch =>{
 	axios.put('/api/N2_plus_50/updateparts', query)
-			.then(res =>{
-				dispatch({
-					type: PUT_N2_PLUS_50,
-					payload: res.data
-				})
-				})
 			.catch(err => {
 				dispatch({
 					type: GET_ERRORS,
@@ -317,19 +288,27 @@ export const delete_N2_plus_50 = (id) => dispatch =>{
 		})
 }
 
-/*
-export const newDataForm = () =>{
-	 axios.get('/api/N2/test')
+
+export const get_years = () => dispatch =>{
+	 axios.get('/api/N2/years')
 		.then(res => {
-			let weekCount = 0;
-			
-			res.data.forEach(function(week, index){
-				weekCount++;
-				console.log(week);
-			})
 			console.log(res);
+			dispatch({
+				type: N2_YEARS,
+				payload: res.data.years
+			})
 		})
 		.catch(err =>{console.log(err)})
 }
-*/
 
+export const get_months = (year) => dispatch =>{
+	axios.get(`/api/N2/months/${year}`)
+	   .then(res => {
+		   console.log(res)
+		   dispatch({
+			   type: N2_MONTHS,
+			   payload: res.data.months
+		   })
+	   })
+	   .catch(err =>{console.log(err)})
+}

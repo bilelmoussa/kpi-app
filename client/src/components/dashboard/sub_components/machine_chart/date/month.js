@@ -27,19 +27,27 @@ const styles = theme => ({
 })
 
 
+
 class Month extends Component {
 constructor(){
     super();
     this.state = {
-        month: 0,
-        year: 0,
+				month: 0,
+				year: 0,
         openMonth: false,
-        openYear: false,
+				openYear: false	
     }
 }
 
+
+
 handleChange = event => {
 	this.setState({ [event.target.name]: event.target.value });
+	if(event.target.name === "year"){
+		
+	}else if(event.target.name === "month"){
+		
+	}
 };
 
 handleCloseYear = () => {this.setState({ openYear: false })}
@@ -50,18 +58,18 @@ handleOpenMonth = () => {this.setState({ openMonth: true })}
 
 render() {
     const { classes } = this.props;
-    const { openMonth, openYear,  data, month, year } = this.state;
+    const { openMonth, openYear,  month, year } = this.state;
+	/*
+		let YearList = () =>{
+			return years.map((year, i) => { return <MenuItem key={i} value={year}>Year {year}</MenuItem> });
+		}
 
-    /*
-    let WeekList = () =>{
-            return data.map((row, i) => { return <MenuItem key={i} value={row}>Week {row._id.week}</MenuItem> });
-    }
-    */
-
-
+		let MonthList = () =>{
+			return months.map((month, i) => { return <MenuItem key={i} value={month}>Month {month}</MenuItem> })
+		}
+*/
     return (
-
-        <div className={classes.root}>
+    <div className={classes.root}>
 			<AppBar className={classes.app_nav}  position="static">
 				<form autoComplete="off">
 
@@ -78,10 +86,9 @@ render() {
 								id: 'Month',
 							}}
 						>
-
-                            <MenuItem value={10}>Month 10</MenuItem>
-                            <MenuItem value={11}>Month 11</MenuItem>
-                            <MenuItem value={12}>Month 12</MenuItem>
+							<MenuItem value={10}>Month 10</MenuItem>
+							<MenuItem value={11}>Month 11</MenuItem>
+							<MenuItem value={12}>Month 12</MenuItem>
 
 						</Select>
 					</FormControl>
@@ -99,16 +106,15 @@ render() {
 								id: 'Year',
 							}}
 						>
-
-                            <MenuItem value={2019}>Year 2019</MenuItem>
-                            <MenuItem value={2018}>Year 2018</MenuItem>
-                            <MenuItem value={2017}>Year 2017</MenuItem>
+							<MenuItem value={10}>Year 10</MenuItem>
+							<MenuItem value={11}>Year 11</MenuItem>
+							<MenuItem value={12}>Year 12</MenuItem>
 
 						</Select>
 					</FormControl>
 
-      	    </form>
-		</AppBar>
+      	  </form>
+				</AppBar>
 				
         <Chart Target="Month" />
 
@@ -119,7 +125,9 @@ render() {
 }
 
 Month.propTypes = {
-    classes: PropTypes.object.isRequired,
+		classes: PropTypes.object.isRequired,
 }
+
+
 
 export default withStyles(styles)(Month)

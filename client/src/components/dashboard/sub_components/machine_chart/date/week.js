@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Chart from '../CHART';
+import { connect } from 'react-redux';
+import { get_months, get_years } from '../../../../../actions/authentication';
 
 const styles = theme => ({
 	root: {
@@ -24,25 +26,94 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     minWidth: 120,
   },	
-})
+});
 
+function empty(data){
+	if(typeof(data) == 'number' || typeof(data) == 'boolean')
+	{ 
+	  return false; 
+	}
+	if(typeof(data) == 'undefined' || data === null)
+	{
+	  return true; 
+	}
+	if(typeof(data.length) != 'undefined')
+	{
+	  return data.length == 0;
+	}
+	if(typeof data === "string" &&  ( data === "" || data === null )){
+		return true;
+	}
+	var count = 0;
+	for(var i in data)
+	{
+	  if(data.hasOwnProperty(i))
+	  {
+		count ++;
+	  }
+	}
+	return count == 0;
+  }
 
 class Week extends Component {
 constructor(){
     super();
     this.state = {
+		years: [],
+		months: [],
         week: 0,
         month: 0,
         year: 0,
-        
         openWeek: false,
         openMonth: false,
         openYear: false,
     }
 }
 
+componentDidMount(){
+	this.props.get_years();
+}
+
+static getDerivedStateFromProps(nextProps, prevState){
+	if(nextProps.N2!==prevState.N2){
+		console.log(nextProps.N2.Years)
+		if(empty(nextProps.N2.Years)){
+			return { years: [] };
+		}
+		else{
+			console.log("wtf");
+			return { years: nextProps.N2.Years, months: nextProps.N2.Months };
+		}
+	}else { return null };
+}		
+
+componentDidUpdate(prevProps, prevState) {
+	if(prevProps.N2!==this.props.N2  ){
+		if(empty(this.props.N2.Years)){
+			this.setState({
+				years: [],
+			})
+		}else if(empty(this.props.N2.Months)){
+			this.setState({
+				months: [],
+			})
+		}
+		else{
+			this.setState({
+				years: this.props.N2.Years });
+		}
+	}else{
+		return null;
+	}
+}
+
 handleChange = event => {
 	this.setState({ [event.target.name]: event.target.value });
+	if(event.target.name === "year"){
+		//this.props.get_months(event.target.value);
+	}else if(event.target.name === "month"){
+		
+	}
 };
 
 handleCloseYear = () => {this.setState({ openYear: false })}
@@ -55,17 +126,20 @@ handleOpenWeek = () => {this.setState({ openWeek: true })}
 
 render() {
     const { classes } = this.props;
-    const { openWeek, openMonth, openYear, week, data, month, year } = this.state;
+    const { openWeek, openMonth, openYear, week,  month, year, months, years } = this.state;
 
-    /*
-    let WeekList = () =>{
-            return data.map((row, i) => { return <MenuItem key={i} value={row}>Week {row._id.week}</MenuItem> });
-    }
-    */
+	let YearList = () =>{
+		return years.map((year, i) => { return <MenuItem key={i} value={year}>Year {year}</MenuItem> });
+	}
 
+	
+	let MonthList = () =>{
+		return months.map((month, i) => { return <MenuItem key={i} value={month}>Month {month}</MenuItem> })
+	}
+	
 
     return (
-
+		
         <div className={classes.root}>
 			<AppBar className={classes.app_nav}  position="static">
 				<form autoComplete="off">
@@ -103,9 +177,7 @@ render() {
 							}}
 						>
 
-                            <MenuItem value={10}>Month 10</MenuItem>
-                            <MenuItem value={11}>Month 11</MenuItem>
-                            <MenuItem value={12}>Month 12</MenuItem>
+							{MonthList()}
 
 						</Select>
 					</FormControl>
@@ -124,9 +196,7 @@ render() {
 							}}
 						>
 
-                            <MenuItem value={2019}>Year 2019</MenuItem>
-                            <MenuItem value={2018}>Year 2018</MenuItem>
-                            <MenuItem value={2017}>Year 2017</MenuItem>
+                            {YearList()}
 
 						</Select>
 					</FormControl>
@@ -143,7 +213,13 @@ render() {
 }
 
 Week.propTypes = {
-    classes: PropTypes.object.isRequired,
+	classes: PropTypes.object.isRequired,
+	get_years: PropTypes.func.isRequired,
+	get_months: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(Week)
+const mapStateToProps = (state) => ({
+	N2: state.N2,
+});
+
+export default connect(mapStateToProps, { get_years, get_months })(withStyles(styles)(Week))
