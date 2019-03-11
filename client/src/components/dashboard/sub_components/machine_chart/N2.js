@@ -32,32 +32,7 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-function empty(data){
-  if(typeof(data) == 'number' || typeof(data) == 'boolean')
-  { 
-    return false; 
-  }
-  if(typeof(data) == 'undefined' || data === null)
-  {
-    return true; 
-  }
-  if(typeof(data.length) != 'undefined')
-  {
-    return data.length == 0;
-  }
-  if(typeof data === "string" &&  ( data === "" || data === null )){
-	  return true;
-  }
-  var count = 0;
-  for(var i in data)
-  {
-    if(data.hasOwnProperty(i))
-    {
-      count ++;
-    }
-  }
-  return count == 0;
-}
+
 
 
 
@@ -88,9 +63,9 @@ class N2 extends Component{
 							<Tab label="Year" />
 					</Tabs>
 				</AppBar>
-				{value === 0 && <TabContainer><Week /></TabContainer>}
-				{value === 1 && <TabContainer><Month  /></TabContainer>}
-				{value === 2 && <TabContainer><Year  /></TabContainer>}
+				{value === 0 && <TabContainer><Week machine="N2"/></TabContainer>}
+				{value === 1 && <TabContainer><Month  machine="N2"/></TabContainer>}
+				{value === 2 && <TabContainer><Year  machine="N2"/></TabContainer>}
 
 			</div>
 		)

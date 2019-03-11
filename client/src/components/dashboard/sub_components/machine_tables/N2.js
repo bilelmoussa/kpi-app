@@ -41,9 +41,7 @@ class N2 extends Component{
 		}
 	}
 	
-	componentDidMount(){
-		
-	}
+
 	
 	handleChange = (event, value) => {
 		this.setState({ value });

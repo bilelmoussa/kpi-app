@@ -8,7 +8,15 @@ import {
 	N2_YEARS,
 	N2_PLUS_150_YEARS,
 	N2_PLUS_50_YEARS,
-	N2_MONTHS 
+	N2_MONTHS,
+	N2_PLUS_150_MONTHS,
+	N2_PLUS_50_MONTHS,
+	N2_WEEKS,
+	N2_PLUS_150_WEEKS,
+	N2_PLUS_50_WEEKS,
+	N2_CHART_DATA,
+	N2_PLUS_150_CHART_DATA,
+	N2_PLUS_50_CHART_DATA 
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -142,7 +150,6 @@ function time_hours(value){
 export const get_N2 = () => dispatch =>{
 	axios.get('/api/N2/findparts')
 			.then(res =>{
-				console.log(res.data);
 				let new_rows = [];
 				res.data.parts.forEach((part, index)=>{
 					part.rows.forEach((row, i)=>{
@@ -172,60 +179,60 @@ export const get_N2 = () => dispatch =>{
 
 export const get_N2_plus_150 = () => dispatch =>{
 	axios.get('/api/N2_plus_150/findparts')
-			.then(res =>{
-				let new_rows = [];
-				res.data.parts.forEach((part, index)=>{
-					part.rows.forEach((row, i)=>{
-						row.id = i;
-						row.Date = only_date(row.Date);
-						row.timeAndDate = to_date(row.timeAndDate);
-						row.finishingTime = to_date(row.finishingTime);
-						row.workingHours = time_hours(row.workingHours);
-						row.actualWh = time_hours(row.actualWh);						
-					})
-					new_rows.push(part)
-				})
-								
-				dispatch({
-					type: GET_N2_PLUS_150,
-					payload: new_rows
-				})
+	.then(res =>{
+		let new_rows = [];
+		res.data.parts.forEach((part, index)=>{
+			part.rows.forEach((row, i)=>{
+				row.id = i;
+				row.Date = only_date(row.Date);
+				row.timeAndDate = to_date(row.timeAndDate);
+				row.finishingTime = to_date(row.finishingTime);
+				row.workingHours = time_hours(row.workingHours);
+				row.actualWh = time_hours(row.actualWh);						
 			})
-			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
-			})
+			new_rows.push(part)
+		})
+						
+		dispatch({
+			type: GET_N2_PLUS_150,
+			payload: new_rows
+		})
+	})
+	.catch(err => {
+		dispatch({
+			type: GET_ERRORS,
+			payload: err
+		})
+	})
 }
 
 export const get_N2_plus_50 = () => dispatch =>{
 	axios.get('/api/N2_plus_50/findparts')
-			.then(res =>{
-				let new_rows = [];
-				res.data.parts.forEach((part, index)=>{
-					part.rows.forEach((row, i)=>{
-						row.id = i;
-						row.Date = only_date(row.Date);
-						row.timeAndDate = to_date(row.timeAndDate);
-						row.finishingTime = to_date(row.finishingTime);
-						row.workingHours = time_hours(row.workingHours);
-						row.actualWh = time_hours(row.actualWh);						
-					})
-					new_rows.push(part)
-				})
-								
-				dispatch({
-					type: GET_N2_PLUS_50,
-					payload: new_rows
-				})
+	.then(res =>{
+		let new_rows = [];
+		res.data.parts.forEach((part, index)=>{
+			part.rows.forEach((row, i)=>{
+				row.id = i;
+				row.Date = only_date(row.Date);
+				row.timeAndDate = to_date(row.timeAndDate);
+				row.finishingTime = to_date(row.finishingTime);
+				row.workingHours = time_hours(row.workingHours);
+				row.actualWh = time_hours(row.actualWh);						
 			})
-			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
-			})
+			new_rows.push(part)
+		})
+						
+		dispatch({
+			type: GET_N2_PLUS_50,
+			payload: new_rows
+		})
+	})
+	.catch(err => {
+		dispatch({
+			type: GET_ERRORS,
+			payload: err
+		})
+	})
 }
 
 export const put_N2 = (query) => dispatch =>{
@@ -289,10 +296,9 @@ export const delete_N2_plus_50 = (id) => dispatch =>{
 }
 
 
-export const get_years = () => dispatch =>{
+export const get_n2_years = () => dispatch =>{
 	 axios.get('/api/N2/years')
 		.then(res => {
-			console.log(res);
 			dispatch({
 				type: N2_YEARS,
 				payload: res.data.years
@@ -301,10 +307,31 @@ export const get_years = () => dispatch =>{
 		.catch(err =>{console.log(err)})
 }
 
-export const get_months = (year) => dispatch =>{
+export const get_n2_plus_150_years = () => dispatch =>{
+	axios.get('/api/N2_plus_150/years')
+	   .then(res => {
+		   dispatch({
+			   type: N2_PLUS_150_YEARS,
+			   payload: res.data.years
+		   })
+	   })
+	   .catch(err =>{console.log(err)})
+}
+
+export const get_n2_plus_50_years = () => dispatch =>{
+	axios.get('/api/N2_plus_50/years')
+	   .then(res => {
+		   dispatch({
+			   type: N2_PLUS_50_YEARS,
+			   payload: res.data.years
+		   })
+	   })
+	   .catch(err =>{console.log(err)})
+}
+
+export const get_n2_months = (year) => dispatch =>{
 	axios.get(`/api/N2/months/${year}`)
 	   .then(res => {
-		   console.log(res)
 		   dispatch({
 			   type: N2_MONTHS,
 			   payload: res.data.months
@@ -312,3 +339,97 @@ export const get_months = (year) => dispatch =>{
 	   })
 	   .catch(err =>{console.log(err)})
 }
+
+export const get_n2_plus_150_months = (year) => dispatch =>{
+	axios.get(`/api/N2_plus_150/months/${year}`)
+	   .then(res => {
+		   dispatch({
+			   type: N2_PLUS_150_MONTHS,
+			   payload: res.data.months
+		   })
+	   })
+	   .catch(err =>{console.log(err)})
+}
+
+export const get_n2_plus_50_months = (year) => dispatch =>{
+	axios.get(`/api/N2_plus_50/months/${year}`)
+	   .then(res => {
+		   dispatch({
+			   type: N2_PLUS_50_MONTHS,
+			   payload: res.data.months
+		   })
+	   })
+	   .catch(err =>{console.log(err)})
+}
+
+export const get_n2_weeks = (year, month) => dispatch =>{
+	axios.get(`/api/N2/weeks/${year}/${month}`)
+		.then(res=>{
+			dispatch({
+				type: N2_WEEKS,
+				payload: res.data.weeks
+			})
+		})
+		.catch(err=>{console.log(err)})
+}
+
+export const get_n2_plus_150_weeks = (year, month) => dispatch =>{
+	axios.get(`/api/N2_plus_150/weeks/${year}/${month}`)
+		.then(res=>{
+			dispatch({
+				type: N2_PLUS_150_WEEKS,
+				payload: res.data.weeks
+			})
+		})
+		.catch(err=>{console.log(err)})
+}
+
+export const get_n2_plus_50_weeks = (year, month) => dispatch =>{
+	axios.get(`/api/N2_plus_50/weeks/${year}/${month}`)
+		.then(res=>{
+			dispatch({
+				type: N2_PLUS_50_WEEKS,
+				payload: res.data.weeks
+			})
+		})
+		.catch(err=>{console.log(err)})
+}
+
+
+//CHART DATA
+export const N2ChartData = (year, month, week) => dispatch =>{
+	axios.get(`/api/N2/week_chart/${year}/${month}/${week}`)
+		.then(res=>{
+			console.log(res);
+			dispatch({
+				type: N2_CHART_DATA,
+				payload: res.data.data
+			})
+		})
+		.catch(err=>{console.log(err)})
+}
+
+export const N2PLUS150ChartData = (year, month, week) => dispatch =>{
+	axios.get(`/api/N2_plus_150/week_chart/${year}/${month}/${week}`)
+		.then(res=>{
+			console.log(res);
+			dispatch({
+				type: N2_PLUS_150_CHART_DATA,
+				payload: res.data.data
+			})
+		})
+		.catch(err=>{console.log(err)})
+}
+
+export const N2PLUS50ChartData = (year, month, week) => dispatch =>{
+	axios.get(`/api/N2_plus_50/week_chart/${year}/${month}/${week}`)
+		.then(res=>{
+			console.log(res);
+			dispatch({
+				type: N2_PLUS_50_CHART_DATA,
+				payload: res.data.data
+			})
+		})
+		.catch(err=>{console.log(err)})
+}
+

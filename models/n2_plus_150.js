@@ -9,6 +9,60 @@ const partSchema = new schema(Joigoose.convert(options));
 
 module.exports = n2_plus_150_part = mongoose.model('n2_plus_150_part', partSchema);
 
+module.exports.get_years = function(callback){
+	let options = [
+		{
+			$group: {
+				_id:  { year: { $year: "$Date" } }
+			}
+		},
+		{
+			$project: {
+				_id: 1,
+			}
+		},
+		{ $sort : { "_id.year" : -1 } }
+	];
+	n2_plus_150_part.aggregate(options, callback);
+}
+
+module.exports.get_months = function(year, callback){
+	let options = [
+		{
+			$group: {
+				_id:  { year: { $year: "$Date" }, month: { $month: "$Date" } }
+			}
+		},
+		{
+			$project: {
+				_id: 1,
+			}
+		},
+		{ $match: {"_id.year": year} },
+		{ $sort : { "_id.year": -1, "_id.month" : -1 } }
+	];
+	n2_plus_150_part.aggregate(options, callback);
+}
+
+module.exports.get_weeks = function(year, month, callback){
+	let options = [
+		{
+			$group: {
+				_id:  { year: { $year: "$Date" }, month: { $month: "$Date" }, week: { $isoWeek: "$Date" } }
+			}
+		},
+		{
+			$project: {
+				_id: 1,
+			}
+		},
+		{ $match: { "_id.month": year, "_id.month": month  } },
+		{ $sort : { "_id.year": -1, "_id.month" : -1, "_id.week": -1 } }
+	];
+
+	n2_plus_150_part.aggregate(options, callback);
+}
+
 module.exports.get_by_date = function(callback){
 	let options  = [
 		{
@@ -26,4 +80,40 @@ module.exports.get_by_date = function(callback){
    ];
    
    n2_plus_150_part.aggregate(options, callback);
+}
+
+module.exports.getMonthChartValues = function(year, month, callback){
+	let options = [
+		{
+			$group : {
+			   _id : { year: { $year: "$Date" }, month: { $month: "$Date" }, week: { $isoWeek: "$Date" } },
+			   workingHours : { $push: "$workingHours" },
+			   timeAndDate: { $push: "$timeAndDate" },
+			   count: { $sum: 1 }
+			}
+		  },
+		  { $project: { _id: 1, workingHours: 1, timeAndDate: 1, count: 1 } },
+		  { $match: { $and: [{"_id.month": month}, {"_id.year": year} ] } },
+		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
+	]
+
+	n2_plus_150_part.aggregate(options, callback);
+}
+
+module.exports.getYearChartValues = function(year, callback){
+	let options = [
+		{
+			$group : {
+			   _id : { year: { $year: "$Date" }, month: { $month: "$Date" }, week: { $isoWeek: "$Date" } },
+			   workingHours : { $push: "$workingHours" },
+			   timeAndDate: { $push: "$timeAndDate" },
+			   count: { $sum: 1 }
+			}
+		  },
+		  { $project: { _id: 1, workingHours: 1, timeAndDate: 1, count: 1 } },
+		  { $match: { $and: [ {"_id.year": year} ] } },
+		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
+	]
+
+	n2_plus_150_part.aggregate(options, callback);
 }

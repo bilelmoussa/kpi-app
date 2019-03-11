@@ -104,4 +104,99 @@ router.get('/months/:year', (req, res, next)=>{
 		}
 	})(req, res, next)
 })
+
+//get Weeks by YEAR AND MONTH 
+router.get('/weeks/:year/:month', (req, res, next)=>{
+	passport.authenticate('jwt', {session: false}, function(err, user){
+		if (err) { return next(err); }
+		if (!user) { return res.json('Unauthorised user not found !'); }
+		if(user){
+			let year = parseInt(req.params.year);
+			let month = parseInt(req.params.month);
+			N2_Part.get_weeks(year, month, (err, weeks)=>{
+				if(err){
+					res.status(400).json({errors: err});
+				}
+				if(weeks){
+					let Weeks_ = [];
+					weeks.forEach((week, i)=>{
+						Weeks_.push(week._id.week)
+					});
+					res.json({success: true, weeks: Weeks_})
+				}
+			})
+		}else{
+			return res.status(401).json('Unauthorised')
+		}
+	})(req, res, next)
+})
+
+//GET DATA FOR WEEK CHART !
+router.get('/week_chart/:year/:month/:week', (req, res, next)=>{
+	passport.authenticate('jwt', {session: false}, function(err, user){
+		if (err) { return next(err); }
+		if (!user) { return res.json('Unauthorised user not found !'); }
+		if(user){
+			let year = parseInt(req.params.year);
+			let month = parseInt(req.params.month);
+			let week = parseInt(req.params.week);
+			N2_Part.getWeekChartValues(year, month, week, (err, data)=>{
+				if(err){
+					res.status(400).json({errors: err});
+				}
+				if(data){
+					res.json({success: true, data: data})
+				}
+			})
+		}else{
+			return res.status(401).json('Unauthorised')
+		}
+	})(req, res, next)
+})
+
+
+//GET DATA FOR MONTH CHART !
+router.get('/month_chart/:year/:month', (req, res, next)=>{
+	passport.authenticate('jwt', {session: false}, function(err, user){
+		if (err) { return next(err); }
+		if (!user) { return res.json('Unauthorised user not found !'); }
+		if(user){
+			let year = parseInt(req.params.year);
+			let month = parseInt(req.params.month);
+			N2_Part.getMonthChartValues(year, month, (err, data)=>{
+				if(err){
+					res.status(400).json({errors: err});
+				}
+				if(data){
+					res.json({success: true, data: data})
+				}
+			})
+		}else{
+			return res.status(401).json('Unauthorised')
+		}
+	})(req, res, next)
+})
+
+//GET DATA FOR YEAR CHART !
+router.get('/year_chart/:year', (req, res, next)=>{
+	passport.authenticate('jwt', {session: false}, function(err, user){
+		if (err) { return next(err); }
+		if (!user) { return res.json('Unauthorised user not found !'); }
+		if(user){
+			let year = parseInt(req.params.year);
+			N2_Part.getYearChartValues(year, (err, data)=>{
+				if(err){
+					res.status(400).json({errors: err});
+				}
+				if(data){
+					res.json({success: true, data: data})
+				}
+			})
+		}else{
+			return res.status(401).json('Unauthorised')
+		}
+	})(req, res, next)
+})
+
 module.exports = router;
+

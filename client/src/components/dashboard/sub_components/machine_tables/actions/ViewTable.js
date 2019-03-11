@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import { empty } from '../../../../../is-empty'
 import { EditingState, IntegratedSorting,  PagingState, SortingState, CustomPaging, } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, TableEditRow, TableEditColumn, TableFixedColumns, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import Paper from '@material-ui/core/Paper';
@@ -113,33 +113,7 @@ const LookupEditCellBase = ({
 
 export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
 
-function empty(data)
-{
-  if(typeof(data) == 'number' || typeof(data) == 'boolean')
-  { 
-    return false; 
-  }
-  if(typeof(data) == 'undefined' || data === null)
-  {
-    return true; 
-  }
-  if(typeof(data.length) != 'undefined')
-  {
-    return data.length == 0;
-  }
-  if(typeof data === "string" &&  ( data === "" || data === null )){
-	  return true;
-  }
-  var count = 0;
-  for(var i in data)
-  {
-    if(data.hasOwnProperty(i))
-    {
-      count ++;
-    }
-  }
-  return count == 0;
-}
+
 
 function validate_cell(data){
 	
@@ -172,7 +146,11 @@ const EditCell = (props) => {
 
 
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3');
+
+
 const DateTimeFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/, '$1/$2/$3  $4:$5');
+
+
 const TimeFormatter = ({ value }) =>{
 	return value;	
 };
@@ -305,10 +283,12 @@ class ViewTable extends Component{
 			this.setState({ currentPage }); 
 			if(this.props.machine === "N2"){
 				this.setState({ rows: this.props.N2.Get_n2[currentPage].rows })
-			}else if(this.props.machine === "N2_Plus_150"){
-				this.setState({ rows: this.props.N2.Get_n2_plus_150[currentPage].rows })
-			}else if(this.props.machine === "N2_Plus_50"){
-				this.setState({ rows: this.props.N2.Get_n2_plus_50[currentPage].rows })
+			}else if(this.props.machine === "N2_plus_150"){
+				this.setState({ rows: this.props.N2_Plus_150.Get_n2_plus_150[currentPage].rows })
+			}else if(this.props.machine === "N2_plus_50"){
+				this.setState({ rows: this.props.N2_Plus_50.Get_n2_plus_50[currentPage].rows })
+			}else{
+				return null;
 			}
 			
 		}; 
@@ -421,10 +401,10 @@ class ViewTable extends Component{
 				if(this.props.machine === "N2"){
 					this.props.delete_N2(query);
 					this.props.get_N2();
-				}else if(this.props.machine === "N2_Plus_150"){
+				}else if(this.props.machine === "N2_plus_150"){
 					this.props.delete_N2_plus_150(query);
 					this.props.get_N2_plus_150();
-				}else if(this.props.machine === "N2_Plus_50"){
+				}else if(this.props.machine === "N2_plus_50"){
 					this.props.delete_N2_plus_50(query);
 					this.props.get_N2_plus_50();
 				}
@@ -438,6 +418,7 @@ class ViewTable extends Component{
 	}
 	
 	componentDidMount(){
+
 		const { machine } = this.props;
 		if(machine === "N2"){
 			this.props.get_N2();
@@ -446,9 +427,10 @@ class ViewTable extends Component{
 		}else if(machine === "N2_plus_50"){
 			this.props.get_N2_plus_50();
 		}
+		
 	}
 
-	static getDerivedStateFromProps(nextProps, prevState){
+	static getDerivedStateFromProps(nextProps, prevState){		
 		const { machine } = nextProps;
 		if(machine === "N2"){
 			if(nextProps.N2!==prevState.N2){
@@ -463,19 +445,18 @@ class ViewTable extends Component{
 				if(empty(nextProps.N2_Plus_150.Get_n2_plus_150)){
 					return { data: [] };
 				}else{
-					return { rows: nextProps.N2_Plus_150.Get_n2_plus_150 };
+					return { data: nextProps.N2_Plus_150.Get_n2_plus_150, totalCount: nextProps.N2_Plus_150.length };
 				}
 			}else { return null };
 		}else if(machine === "N2_plus_50"){
 			if(nextProps.N2_Plus_50!==prevState.N2_Plus_50 ){
 				if(empty(nextProps.N2_Plus_50.Get_n2_plus_50)){
-					return { rows: [] };
+					return { data: [] };
 				}else{
-					return { rows: nextProps.N2_Plus_50.Get_n2_plus_50 };
+					return { data: nextProps.N2_Plus_50.Get_n2_plus_50,  totalCount: nextProps.N2_Plus_50.length };
 				}
 			}else { return null };
 		}
-		
 	};
 	
     
@@ -505,10 +486,13 @@ class ViewTable extends Component{
 				if(empty(this.props.N2_Plus_150.Get_n2_plus_150)){
 					this.setState({
 						rows: [],
+						data: [],
 					})
 				}else{
 					this.setState({
-						rows: this.props.N2_Plus_150.Get_n2_plus_150,
+						data: this.props.N2_Plus_150.Get_n2_plus_150,
+						totalCount: this.props.N2_Plus_150.Get_n2_plus_150.length,
+						rows: this.props.N2_Plus_150.Get_n2_plus_150[currentPage].rows,
 					});
 				}
 			}else{
@@ -519,10 +503,13 @@ class ViewTable extends Component{
 				if(empty(this.props.N2_Plus_50.Get_n2_plus_50)){
 					this.setState({
 						rows: [],
+						data: [],
 					})
 				}else{
 					this.setState({
-						rows: this.props.N2_Plus_50.Get_n2_plus_50,
+						data: this.props.N2_Plus_50.Get_n2_plus_50,
+						totalCount: this.props.N2_Plus_50.Get_n2_plus_50.length,
+						rows: this.props.N2_Plus_50.Get_n2_plus_50[currentPage].rows,
 					});
 				}
 			}else{

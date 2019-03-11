@@ -1,12 +1,13 @@
 import React,{ Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
-
+import Week from './date/week';
+import Month from './date/month';
+import Year from './date/year';
 
 const styles = theme => ({
 	root: {
@@ -14,13 +15,14 @@ const styles = theme => ({
 	},
 	app_nav: {
 		backgroundColor: '#272727' ,
-		borderBottom: '1px solid #444'	
-	},	
+		borderBottom: '1px solid #444',
+		flexDirection: "row",	
+	}
 })
 
 function TabContainer(props) {
   return (
-    <Card component="div">
+    <Card component="div" style={{overflow: 'auto', margin: '0', width: '100%'  }}>
       {props.children}
     </Card>
   );
@@ -28,22 +30,18 @@ function TabContainer(props) {
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
-};
+}
 
 class N2Plus50 extends Component{
 	constructor(){
 		super();
 		this.state = {
-			value: 0
+			value: 0,
 		}
 	}
 	
-	componentDidMount(){
-		
-	}
-	
 	handleChange = (event, value) => {
-		this.setState({ value });
+    this.setState({ value });
 	};
 	
 	render(){
@@ -54,13 +52,16 @@ class N2Plus50 extends Component{
 			<div className={classes.root}>
 				<AppBar className={classes.app_nav}  position="static">
 					<Tabs value={value} onChange={this.handleChange}>
-						<Tab label="week 1" />
-						<Tab label="week 2" />
+							<Tab label="Week" />
+							<Tab label="Month" />
+							<Tab label="Year" />
 					</Tabs>
 				</AppBar>
-					{value === 0 && <TabContainer>Week 1</TabContainer>}
-					{value === 1 && <TabContainer>week 2</TabContainer>}
-			</div>		
+				{value === 0 && <TabContainer><Week machine="N2Plus50"/></TabContainer>}
+				{value === 1 && <TabContainer><Month  machine="N2Plus50"/></TabContainer>}
+				{value === 2 && <TabContainer><Year  machine="N2Plus50"/></TabContainer>}
+
+			</div>	
 		)
 		
 	}	
@@ -68,14 +69,11 @@ class N2Plus50 extends Component{
 
 
 N2Plus50.propTypes = {
-	auth: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 };
 
 
-const mapStateToProps = (state) => ({
-	auth: state.auth,
-});
 
 
-export default  connect(mapStateToProps)(withStyles(styles)(N2Plus50));
+
+export default  withStyles(styles)(N2Plus50);

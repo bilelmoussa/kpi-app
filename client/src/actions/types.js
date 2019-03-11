@@ -13,3 +13,15 @@ export const N2_PLUS_50_YEARS = "N2_PLUS_50_YEARS";
 
 //Months of Year For Every Machine
 export const N2_MONTHS = "N2_MONTHS";
+export const N2_PLUS_150_MONTHS = "N2_PLUS_150_MONTHS";
+export const N2_PLUS_50_MONTHS = "N2_PLUS_50_MONTHS";
+
+//Weeks
+export const N2_WEEKS = "N2_WEEKS";
+export const N2_PLUS_150_WEEKS = "N2_PLUS_150_WEEKS";
+export const N2_PLUS_50_WEEKS = "N2_PLUS_50_WEEKS";
+
+//CHART DATA
+export const N2_CHART_DATA = "N2_CHART_DATA";
+export const N2_PLUS_150_CHART_DATA = "N2_PLUS_150_CHART_DATA";
+export const N2_PLUS_50_CHART_DATA = "N2_PLUS_50_CHART_DATA";
