@@ -90,11 +90,11 @@ module.exports.getWeekChartValues = function(year, month, week, callback){
 			$group : {
 			   _id : { year: { $year: "$Date" }, month: { $month: "$Date" }, week: { $isoWeek: "$Date" } },
 			   workingHours : { $push: "$workingHours" },
-			   timeAndDate: { $push: "$timeAndDate" },
+			   Date: { $push: "$Date" },
 			   count: { $sum: 1 }
 			}
 		  },
-		  { $project: { _id: 1, workingHours: 1, timeAndDate: 1, count: 1 } },
+		  { $project: { _id: 1, workingHours: 1, Date: 1, count: 1 } },
 		  { $match: { $and: [{"_id.week": week}, {"_id.month": month}, {"_id.year": year} ] } },
 		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
 	]
@@ -121,8 +121,19 @@ module.exports.getMonthChartValues = function(year, month, callback){
 
 	n2_part.aggregate(options, callback);
 }
-
-
+/*
+n2_part.getMonthChartValues(2019, 2, (err, values)=>{
+	if(err)throw err;
+	if(values){
+		let month_values = {}
+		values.forEach((val)=>{
+			month_values.weekWH = Number(val.workingHours.reduce((a, b)=>a+b))/7;
+			month_values._id = val._id;
+		})
+		console.log(month_values);
+	}
+})
+*/
 module.exports.getYearChartValues = function(year, callback){
 	let options = [
 		{

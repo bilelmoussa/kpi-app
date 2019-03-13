@@ -55,7 +55,7 @@ export const  empty = (data) => {
 	}
 	if(typeof(data.length) != 'undefined')
 	{
-	  return data.length == 0;
+	  return data.length === 0;
 	}
 	if(typeof data === "string" &&  ( data === "" || data === null )){
 		return true;
@@ -68,5 +68,5 @@ export const  empty = (data) => {
 		count ++;
 	  }
 	}
-	return count == 0;
+	return count === 0;
   }

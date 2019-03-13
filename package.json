@@ -4,11 +4,11 @@
   "description": "KPI application",
   "main": "server.js",
   "scripts": {
-    "client-install":"npm install --prefix client",
+    "client-install": "npm install --prefix client",
     "start": "node server.js",
     "serve": "nodemon server.js",
     "client": "npm run start --prefix client",
-    "dev" : "concurrently \"npm run serve\" \"npm run client\""
+    "dev": "concurrently \"npm run serve\" \"npm run client\""
   },
   "keywords": [],
   "author": "Bilel Moussa",

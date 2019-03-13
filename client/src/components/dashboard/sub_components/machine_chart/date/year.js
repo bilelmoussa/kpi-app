@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Chart from '../CHART';
+import CHART from '../CHART';
 import { connect } from 'react-redux';
 import { get_n2_years, get_n2_plus_150_years, get_n2_plus_50_years } from '../../../../../actions/authentication';
 import { empty } from '../../../../../is-empty';
@@ -194,7 +194,7 @@ render() {
       	    </form>
 		</AppBar>
 				
-        <Chart Target="Year" />
+        <CHART Target="Year" />
 
 	</div>
 

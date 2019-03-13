@@ -539,8 +539,7 @@ class ViewTable extends Component{
 			TimeColumns,
 			pageSize, 
 			currentPage, 
-			totalCount,
-			data, 
+			totalCount 
 		} = this.state;
 				
 		return(

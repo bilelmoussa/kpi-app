@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Chart from '../CHART';
+import CHART from '../CHART';
 import { connect } from 'react-redux';
 import { 
 	get_n2_months,
@@ -18,6 +18,7 @@ import {
 
  } from '../../../../../actions/authentication';
 import { empty } from '../../../../../is-empty';
+import { Chart } from '@devexpress/dx-react-chart';
 
 const styles = theme => ({
 	root: {
@@ -293,7 +294,7 @@ render() {
       	  </form>
 				</AppBar>
 				
-        <Chart Target="Month" />
+        <CHART Target="Month" />
 
 	</div>
 
