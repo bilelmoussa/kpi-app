@@ -121,19 +121,8 @@ module.exports.getMonthChartValues = function(year, month, callback){
 
 	n2_part.aggregate(options, callback);
 }
-/*
-n2_part.getMonthChartValues(2019, 2, (err, values)=>{
-	if(err)throw err;
-	if(values){
-		let month_values = {}
-		values.forEach((val)=>{
-			month_values.weekWH = Number(val.workingHours.reduce((a, b)=>a+b))/7;
-			month_values._id = val._id;
-		})
-		console.log(month_values);
-	}
-})
-*/
+
+
 module.exports.getYearChartValues = function(year, callback){
 	let options = [
 		{
@@ -152,3 +141,49 @@ module.exports.getYearChartValues = function(year, callback){
 	n2_part.aggregate(options, callback);
 }
 
+
+
+//GET WEEK TABLE 
+
+module.exports.getWeekTableValues = function(year, month, week, callback){
+	let options = [
+		{
+			$group : {
+			   _id : { year: { $year: "$Date" }, month: { $month: "$Date" }, week: { $isoWeek: "$Date" } },
+			   rows : { 
+				   $push:{
+					   _id: "$_id",
+					   printedPart: "$printedPart",
+					   workingHours: "$workingHours",
+					   timeAndDate: "$timeAndDate",
+					   finishingTime: "$finishingTime",
+					   dayNumber: "$dayNumber",
+					   failureCoef: "$failureCoef",
+					   actualWh: "$actualWh",
+					   Remarks: "$Remarks",
+					   Date: "$Date",
+					   client_id: "$client_id"
+				   } 
+				},
+			   workingHours_Total: { $sum: "$workingHours" },
+			   actualWh_Total : { $sum: "$actualWh" },
+			   Faillure_Total: { $sum: "$failureCoef" },
+			   count: { $sum: 1 }
+			}
+		  },
+		  { $project: { _id: 1, rows: 1, workingHours_Total: 1,  actualWh_Total: 1, Faillure_Total: 1,  count: 1,  Efficiency: { $divide: [ "$actualWh_Total", 168 ] }, FailRate: { $subtract: [ 1, {$divide: ["$Faillure_Total", "$count"] } ] }, PlanningEfficiency: { $divide: [ "$workingHours_Total", 168 ] }, AvgPrinting: { $divide: [ "$actualWh_Total", 7 ] }  }  },
+		  { $match: { $and: [{"_id.week": week}, {"_id.month": month}, {"_id.year": year} ] } },
+		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
+	]
+
+	n2_part.aggregate(options, callback);
+}
+
+/*
+n2_part.getWeekTableValues(2019, 2, 8, (err, rows)=>{
+	if(err) throw err;
+	if(rows){
+		console.log(rows[0])
+	}
+})
+*/

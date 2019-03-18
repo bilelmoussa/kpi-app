@@ -83,6 +83,26 @@ module.exports.get_by_date = function(callback){
    n2_plus_50_part.aggregate(options, callback);
 }
 
+
+module.exports.getWeekChartValues = function(year, month, week, callback){
+	let options = [
+		{
+			$group : {
+			   _id : { year: { $year: "$Date" }, month: { $month: "$Date" }, week: { $isoWeek: "$Date" } },
+			   workingHours : { $push: "$workingHours" },
+			   Date: { $push: "$Date" },
+			   count: { $sum: 1 }
+			}
+		  },
+		  { $project: { _id: 1, workingHours: 1, Date: 1, count: 1 } },
+		  { $match: { $and: [{"_id.week": week}, {"_id.month": month}, {"_id.year": year} ] } },
+		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
+	]
+
+	n2_plus_50_part.aggregate(options, callback);
+}
+
+
 module.exports.getMonthChartValues = function(year, month, callback){
 	let options = [
 		{

@@ -26,6 +26,7 @@ import { get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
 import { isChanged, isObEmpty } from '../../../../../is-empty';
 import NumberFormat from 'react-number-format';
+import  SelectAppBar  from './SelectAppBar';
 
 const styles = theme =>({
 	lookupEditCell: {
@@ -418,7 +419,6 @@ class ViewTable extends Component{
 	}
 	
 	componentDidMount(){
-
 		const { machine } = this.props;
 		if(machine === "N2"){
 			this.props.get_N2();
@@ -427,7 +427,6 @@ class ViewTable extends Component{
 		}else if(machine === "N2_plus_50"){
 			this.props.get_N2_plus_50();
 		}
-		
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState){		
@@ -521,7 +520,7 @@ class ViewTable extends Component{
 
 	
 	render(){
-		const { classes } = this.props;
+		const { classes, machine } = this.props;
 		const { 
 			rows,
 			columns,
@@ -543,6 +542,8 @@ class ViewTable extends Component{
 		} = this.state;
 				
 		return(
+		<div>
+		<SelectAppBar machine={machine}/>
 		<Paper>
 			<Grid
 			  rows={rows}
@@ -681,7 +682,7 @@ class ViewTable extends Component{
         </Dialog>
 		
 		</Paper>
-		
+		</div>	
 		)
 		
 	}

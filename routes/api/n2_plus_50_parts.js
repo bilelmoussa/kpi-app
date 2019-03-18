@@ -151,7 +151,7 @@ router.get('/week_chart/:year/:month/:week', (req, res, next)=>{
 			let month = parseInt(req.params.month);
 			let week = parseInt(req.params.week);
 			
-			N2_plus_50_Part.getChartValues(year, month, week, (err, data)=>{
+			N2_plus_50_Part.getWeekChartValues(year, month, week, (err, data)=>{
 				if(err){
 					res.status(400).json({errors: err});
 				}

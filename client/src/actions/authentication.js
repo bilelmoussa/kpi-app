@@ -513,3 +513,22 @@ export const N2Plus50YearChartData = (year) => dispatch =>{
 		})
 		.catch(err=>{console.log(err)})
 }
+
+export const ClearChartData = (machine) => dispatch =>{
+	if(machine === "N2"){
+		dispatch({
+			type: N2_WEEK_CHART_DATA,
+			payload: []
+		})
+	}else if(machine === "N2Plus150"){
+		dispatch({
+			type: N2_PLUS_150_WEEK_CHART_DATA,
+			payload: []
+		})
+	}else if(machine === "N2Plus50"){
+		dispatch({
+			type: N2_PLUS_50_WEEK_CHART_DATA,
+			payload: []
+		})
+	}
+}

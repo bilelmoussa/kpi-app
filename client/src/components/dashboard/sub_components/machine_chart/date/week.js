@@ -20,8 +20,10 @@ import {
 	get_n2_plus_50_weeks,
 	N2WeekChartData,
 	N2PLUS150WeekChartData,
-	N2PLUS50WeekChartData
+	N2PLUS50WeekChartData,
+	ClearChartData
 } from '../../../../../actions/authentication';
+
 import { empty } from '../../../../../is-empty';
 
 const styles = theme => ({
@@ -64,10 +66,13 @@ componentDidMount(){
 	const { machine } = this.props;
 	if(machine === "N2"){
 		this.props.get_n2_years();
+		this.props.ClearChartData("N2");
 	}else if(machine === "N2Plus150"){
 		this.props.get_n2_plus_150_years();
+		this.props.ClearChartData("N2Plus150");
 	}else if(machine === "N2Plus50"){
 		this.props.get_n2_plus_50_years();
+		this.props.ClearChartData("N2Plus50");
 	}
 	
 }
@@ -265,30 +270,37 @@ componentDidUpdate(prevProps, prevState) {
 handleChange = event => {
 	const { machine } = this.props;
 	const { year, month } = this.state;
-
 	this.setState({ [event.target.name]: event.target.value });
 	if(machine === "N2"){
 		if(event.target.name === "year"){
+			this.props.ClearChartData("N2");
 			this.props.get_n2_months(event.target.value);
 		}else if(event.target.name === "month"){
+			this.props.ClearChartData("N2");
 			this.props.get_n2_weeks(year, event.target.value);
 		}else if(event.target.name === "week"){
 			this.props.N2WeekChartData(year, month, event.target.value)
 		}
 	}
 	else if(machine === "N2Plus150"){
+		this.props.ClearChartData("N2Plus150");
 		if(event.target.name === "year"){
+			this.props.ClearChartData("N2");
 			this.props.get_n2_plus_150_months(event.target.value);
 		}else if(event.target.name === "month"){
+			this.props.ClearChartData("N2");
 			this.props.get_n2_plus_150_weeks(year, event.target.value);
 		}else if(event.target.name === "week"){
 			this.props.N2PLUS150WeekChartData(year, month, event.target.value)
 		}
 	}
 	else if(machine === "N2Plus50"){
+		this.props.ClearChartData("N2Plus50");
 		if(event.target.name === "year"){
+			this.props.ClearChartData("N2");
 			this.props.get_n2_plus_50_months(event.target.value);
 		}else if(event.target.name === "month"){
+			this.props.ClearChartData("N2");
 			this.props.get_n2_plus_50_weeks(year, event.target.value);
 		}else if(event.target.name === "week"){
 			this.props.N2PLUS50WeekChartData(year, month, event.target.value)
@@ -407,7 +419,8 @@ Week.propTypes = {
 	get_n2_plus_50_weeks: PropTypes.func.isRequired,
 	N2WeekChartData: PropTypes.func.isRequired,
 	N2PLUS150WeekChartData: PropTypes.func.isRequired,
-	N2PLUS50WeekChartData: PropTypes.func.isRequired, 
+	N2PLUS50WeekChartData: PropTypes.func.isRequired,
+	ClearChartData: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -416,4 +429,4 @@ const mapStateToProps = (state) => ({
 	N2_Plus_50: state.N2_Plus_50
 });
 
-export default connect(mapStateToProps, { get_n2_years, get_n2_months, get_n2_weeks, get_n2_plus_150_years, get_n2_plus_150_months, get_n2_plus_150_weeks, get_n2_plus_50_years , get_n2_plus_50_months, get_n2_plus_50_weeks, N2WeekChartData, N2PLUS150WeekChartData, N2PLUS50WeekChartData  })(withStyles(styles)(Week))
+export default connect(mapStateToProps, { get_n2_years, get_n2_months, get_n2_weeks, get_n2_plus_150_years, get_n2_plus_150_months, get_n2_plus_150_weeks, get_n2_plus_50_years , get_n2_plus_50_months, get_n2_plus_50_weeks, N2WeekChartData, N2PLUS150WeekChartData, N2PLUS50WeekChartData, ClearChartData  })(withStyles(styles)(Week))

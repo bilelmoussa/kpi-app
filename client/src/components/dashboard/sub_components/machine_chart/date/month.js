@@ -18,7 +18,6 @@ import {
 
  } from '../../../../../actions/authentication';
 import { empty } from '../../../../../is-empty';
-import { Chart } from '@devexpress/dx-react-chart';
 
 const styles = theme => ({
 	root: {
