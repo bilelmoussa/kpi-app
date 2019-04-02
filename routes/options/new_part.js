@@ -6,11 +6,9 @@ function new_parts(req){
         workingHours: req.body.workingHours,
         timeAndDate: validate_date(req.body.timeAndDate),
         finishingTime: validate_date(req.body.finishingTime),
-		dayNumber: req.body.dayNumber,
 		failureCoef: req.body.failureCoef,
 		actualWh: req.body.actualWh,
         Remarks: req.body.Remarks,
-		Date:validate_date(req.body.Date),
 		client_id: req.body.client_id,
     }
     return new_part;

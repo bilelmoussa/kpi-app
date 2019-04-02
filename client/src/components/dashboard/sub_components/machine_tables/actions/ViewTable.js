@@ -2,8 +2,8 @@ import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { empty } from '../../../../../is-empty'
-import { EditingState, IntegratedSorting,  PagingState, SortingState, CustomPaging, } from '@devexpress/dx-react-grid';
-import { Grid, Table, TableHeaderRow, TableEditRow, TableEditColumn, TableFixedColumns, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
+import { EditingState, IntegratedSorting, SortingState } from '@devexpress/dx-react-grid';
+import { Grid, Table, TableHeaderRow, TableEditRow, TableEditColumn, TableFixedColumns } from '@devexpress/dx-react-grid-material-ui';
 import Paper from '@material-ui/core/Paper';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -22,7 +22,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { withStyles } from '@material-ui/core/styles';
-import { get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50, delete_N2 , delete_N2_plus_150, delete_N2_plus_50  } from '../../../../../actions/authentication';
+import { N2WeekTableData, N2Plus150WeekTableData, N2Plus50WeekTableData,  put_N2, put_N2_plus_150, put_N2_plus_50, delete_N2 , delete_N2_plus_150, delete_N2_plus_50, ClearTableData } from '../../../../../actions/authentication';
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
 import { isChanged, isObEmpty } from '../../../../../is-empty';
 import NumberFormat from 'react-number-format';
@@ -118,7 +118,7 @@ export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })
 
 function validate_cell(data){
 	
-	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime) ||  empty(data.dayNumber) ||  empty(data.failureCoef) ||  empty(data.actualWh) || empty(data.Date)){
+	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime)  ||  empty(data.failureCoef) ||  empty(data.actualWh)){
 		return true 
 	}else{
 		return false;
@@ -146,7 +146,6 @@ const EditCell = (props) => {
 
 
 
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3');
 
 
 const DateTimeFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/, '$1/$2/$3  $4:$5');
@@ -168,17 +167,7 @@ const Time = ({ value, onValueChange }) => (
 )
 
 
-const DateEditor = ({ value, onValueChange }) => (
-	 <TextField
-		input={<Input />}
-        type="date"
-        value={value}
-		onChange={event => onValueChange(event.target.value)}
-		InputLabelProps={{
-          shrink: true,
-        }}
-      />
-)
+
 
 const DateTime = ({ value, onValueChange }) => (
 	 <TextField
@@ -193,12 +182,7 @@ const DateTime = ({ value, onValueChange }) => (
 )
 
 
-const DateTypeProvider = props => (
-  <DataTypeProvider
-    editorComponent={DateEditor}
-	formatterComponent={DateFormatter}
-    {...props}
-  />)
+
 
 const DateTimeTypeProvider = props => (
 	<DataTypeProvider
@@ -224,35 +208,40 @@ class ViewTable extends Component{
 	constructor(){
 		super();
 		this.state = {
+				week: 0,
+  			month: 0,
+  			year: 0,
 				data: [],
 				rows:[],
+				smallTableColumns: [
+					{ name: 'Efficiency', title: 'Efficiency %' },
+					{ name: 'FailRate', title: 'Fail Rate' },
+					{ name: 'PlanningEfficiency', title: 'Planning Efficiency %' },
+					{ name: 'AvgPrinting', title: 'Average Printing Hours Per Day' },
+				],
+				smallTableColumnsOrder: ['Efficiency', 'FailRate', 'PlanningEfficiency', 'AvgPrinting'],
 				columns:[
 				  { name: 'printedPart', title: 'Printed Part' },
 				  { name: 'workingHours', title: 'Working Hours' },
 				  { name: 'timeAndDate', title: 'Time and date' },
 				  { name: 'finishingTime', title: 'Finishing Time', dataType: 'datetime-local' },
-				  { name: 'dayNumber', title: 'Day Number' },
 				  { name: 'failureCoef', title: 'Failure Coef'},
 				  { name : 'actualWh', title: 'Actual Wh' },
 				  { name: 'Remarks', title: 'Remarks'},
-				  { name: 'Date', title: 'Date', dataType:'date'}
 				],
 				tableColumnExtensions:[
 					{ columnName: 'printedPart', width: 180},
 					{ columnName: 'workingHours', width: 180},
 					{ columnName: 'timeAndDate', width: 250},
 					{ columnName: 'finishingTime', width: 250},
-					{ columnName: 'dayNumber', width: 180},
 					{ columnName: 'failureCoef', width: 180},
 					{ columnName: 'actualWh', width: 180},
 					{ columnName: 'Remarks', width: 180},
-					{ columnName: 'Date', width: 180},
 				],
 				defaultSorting: [{ columnName: 'timeAndDate', direction: 'asc' }],
 				sortingStateColumnExtensions: [
 				{ columnName: 'timeAndDate', sortingEnabled: false },
 				],
-				dateColumns: ['Date'],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
 				TimeColumns: ['workingHours', 'actualWh'],
 				editingRowIds: [],
@@ -260,10 +249,7 @@ class ViewTable extends Component{
 				rowChanges: {},
 				deletingRows: [],
 				empty_row: [],
-				totalCount: 1,
-				pageSize: 1,
-				currentPage: 0,
-				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'dayNumber', 'failureCoef', 'actualWh', 'Remarks', 'Date'],
+				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'failureCoef', 'actualWh', 'Remarks'],
 				leftFixedColumns: [TableEditColumn.COLUMN_TYPE],
 		};
 
@@ -280,19 +266,7 @@ class ViewTable extends Component{
 		
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.changeEditingRowIds = editingRowIds => this.setState({ editingRowIds });
-		this.changeCurrentPage = (currentPage) => {  
-			this.setState({ currentPage }); 
-			if(this.props.machine === "N2"){
-				this.setState({ rows: this.props.N2.Get_n2[currentPage].rows })
-			}else if(this.props.machine === "N2_plus_150"){
-				this.setState({ rows: this.props.N2_Plus_150.Get_n2_plus_150[currentPage].rows })
-			}else if(this.props.machine === "N2_plus_50"){
-				this.setState({ rows: this.props.N2_Plus_50.Get_n2_plus_50[currentPage].rows })
-			}else{
-				return null;
-			}
-			
-		}; 
+ 
 	
 		this.changeAddedRows = addedRows => this.setState({
 				addedRows: addedRows.map(row => (Object.keys(row).length ? row : {
@@ -300,18 +274,16 @@ class ViewTable extends Component{
 				workingHours: "00:00",
 				timeAndDate: '',
 				finishingTime: '',
-				dayNumber: '',
 				failureCoef: '',
 				actualWh: "00:00",
 				Remarks: '',
-				Date: '',
 			})),
 		});
 
 		this.changeRowChanges = rowChanges => this.setState({ rowChanges });
 
 		this.commitChanges = ({ added, changed, deleted }) => {
-			let { rows } = this.state;
+			let { rows, year, month, week } = this.state;
 			const { machine } = this.props;
 			
 			if (changed) {
@@ -332,11 +304,9 @@ class ViewTable extends Component{
 						workingHours: time_to_numb(rows[row_id].workingHours),
 						timeAndDate: rows[row_id].timeAndDate,
 						finishingTime: rows[row_id].finishingTime,
-						dayNumber: rows[row_id].dayNumber,
 						failureCoef: rows[row_id].failureCoef,
 						actualWh: time_to_numb(rows[row_id].actualWh),
 						Remarks: rows[row_id].Remarks,
-						Date: rows[row_id].Date,
 						_id: rows[row_id]._id,
 					};
 					
@@ -370,13 +340,13 @@ class ViewTable extends Component{
 						
 						if(machine === "N2"){
 							this.props.put_N2(query);
-							this.props.get_N2();
+							this.props.N2WeekTableData(year, month, week);
 						}else if(machine === "N2_plus_150"){
 							this.props.put_N2_plus_150(query);
-							this.props.get_N2_plus_150();
+							this.props.N2Plus150WeekTableData(year, month, week);
 						}else if(machine === "N2_plus_50"){
 							this.props.put_N2_plus_50(query);
-							this.props.get_N2_plus_50();
+							this.props.N2Plus50WeekTableData(year, month, week);
 						}
 						
 						rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
@@ -396,18 +366,19 @@ class ViewTable extends Component{
 		
 		this.deleteRows = () => {
 			const rows = getStateRows().slice();
+			const {year, month, week } = this.state;
 			getStateDeletingRows().forEach((rowId) => {
 				let index = rows.findIndex(row => row.id === rowId);
 				let query = {_id: rows[index]._id };
 				if(this.props.machine === "N2"){
 					this.props.delete_N2(query);
-					this.props.get_N2();
+					this.props.N2WeekTableData(year, month, week);
 				}else if(this.props.machine === "N2_plus_150"){
 					this.props.delete_N2_plus_150(query);
-					this.props.get_N2_plus_150();
+					this.props.N2Plus150WeekTableData(year, month, week);
 				}else if(this.props.machine === "N2_plus_50"){
 					this.props.delete_N2_plus_50(query);
-					this.props.get_N2_plus_50();
+					this.props.N2Plus50WeekTableData(year, month, week);
 				}
 				if (index > -1) {
 					rows.splice(index, 1);
@@ -420,12 +391,13 @@ class ViewTable extends Component{
 	
 	componentDidMount(){
 		const { machine } = this.props;
+		
 		if(machine === "N2"){
-			this.props.get_N2();
+			this.props.ClearTableData("N2");
 		}else if(machine === "N2_plus_150"){
-			this.props.get_N2_plus_150();
+			this.props.ClearTableData("N2Plus150");
 		}else if(machine === "N2_plus_50"){
-			this.props.get_N2_plus_50();
+			this.props.ClearTableData("N2Plus50");
 		}
 	}
 
@@ -433,26 +405,26 @@ class ViewTable extends Component{
 		const { machine } = nextProps;
 		if(machine === "N2"){
 			if(nextProps.N2!==prevState.N2){
-				if(empty(nextProps.N2.Get_n2)){
-					return { data: [] };
+				if(empty(nextProps.N2.WeekTableData)){
+					return { data: [], rows:[], year: 0, month: 0, week: 0 };
 				}else{
-				return { data: nextProps.N2.Get_n2,  totalCount: nextProps.N2.Get_n2.length };
+				return { data: nextProps.N2.WeekTableData, rows: nextProps.N2.WeekTableData[0].rows, year: nextProps.N2.WeekTableData[0]._id.year, month: nextProps.N2.WeekTableData[0]._id.month, week: nextProps.N2.WeekTableData[0]._id.week  };
 				}
 			}else { return null };
 		}else if(machine === "N2_plus_150"){
 			if(nextProps.N2_Plus_150!==prevState.N2_Plus_150 ){
-				if(empty(nextProps.N2_Plus_150.Get_n2_plus_150)){
-					return { data: [] };
+				if(empty(nextProps.N2_Plus_150.WeekTableData)){
+					return { data: [], rows:[], year: 0, month: 0, week: 0 };
 				}else{
-					return { data: nextProps.N2_Plus_150.Get_n2_plus_150, totalCount: nextProps.N2_Plus_150.length };
+					return { data: nextProps.N2_Plus_150.WeekTableData, rows: nextProps.N2_Plus_150.WeekTableData[0].rows, year: nextProps.N2_Plus_150.WeekTableData[0]._id.year, month: nextProps.N2_Plus_150.WeekTableData[0]._id.month, week: nextProps.N2_Plus_150.WeekTableData[0]._id.week };
 				}
 			}else { return null };
 		}else if(machine === "N2_plus_50"){
 			if(nextProps.N2_Plus_50!==prevState.N2_Plus_50 ){
-				if(empty(nextProps.N2_Plus_50.Get_n2_plus_50)){
-					return { data: [] };
+				if(empty(nextProps.N2_Plus_50.WeekTableData)){
+					return { data: [], rows:[], year: 0, month: 0, week: 0 };
 				}else{
-					return { data: nextProps.N2_Plus_50.Get_n2_plus_50,  totalCount: nextProps.N2_Plus_50.length };
+					return { data: nextProps.N2_Plus_50.WeekTableData,  rows: nextProps.N2_Plus_50.WeekTableData[0].rows, year: nextProps.N2_Plus_50.WeekTableData[0]._id.year, month: nextProps.N2_Plus_50.WeekTableData[0]._id.month, week: nextProps.N2_Plus_50.WeekTableData[0]._id.week  };
 				}
 			}else { return null };
 		}
@@ -461,20 +433,24 @@ class ViewTable extends Component{
     
 	componentDidUpdate(prevProps, prevState) {
 		const { machine } = this.props;
-		const { currentPage } = this.state;
 		
 		if(machine === "N2"){
 			if(prevProps.N2!==this.props.N2  ){
-				if(empty(this.props.N2.Get_n2)){
+				if(empty(this.props.N2.WeekTableData)){
 					this.setState({
 						data: [],
 						rows: [],
+						year: 0,
+						month: 0,
+						week: 0
 					})
 				}else{
 					this.setState({
-						data: this.props.N2.Get_n2,
-						totalCount: this.props.N2.Get_n2.length,
-						rows: this.props.N2.Get_n2[currentPage].rows
+						data: this.props.N2.WeekTableData,
+						rows: this.props.N2.WeekTableData[0].rows,
+						year: this.props.N2.WeekTableData[0]._id.year,
+						month: this.props.N2.WeekTableData[0]._id.month,
+						week: this.props.N2.WeekTableData[0]._id.week,
 					});
 				}
 			}else{
@@ -482,16 +458,21 @@ class ViewTable extends Component{
 			}
 		}else if(machine === "N2_plus_150"){
 			if(prevProps.N2_Plus_150!==this.props.N2_Plus_150){
-				if(empty(this.props.N2_Plus_150.Get_n2_plus_150)){
+				if(empty(this.props.N2_Plus_150.WeekTableData)){
 					this.setState({
 						rows: [],
 						data: [],
+						year: 0,
+						month: 0,
+						week: 0
 					})
 				}else{
 					this.setState({
-						data: this.props.N2_Plus_150.Get_n2_plus_150,
-						totalCount: this.props.N2_Plus_150.Get_n2_plus_150.length,
-						rows: this.props.N2_Plus_150.Get_n2_plus_150[currentPage].rows,
+						data: this.props.N2_Plus_150.WeekTableData,
+						rows: this.props.N2_Plus_150.WeekTableData[0].rows,
+						year: this.props.N2_Plus_150.WeekTableData[0]._id.year,
+						month: this.props.N2_Plus_150.WeekTableData[0]._id.month,
+						week: this.props.N2_Plus_150.WeekTableData[0]._id.week,
 					});
 				}
 			}else{
@@ -499,16 +480,21 @@ class ViewTable extends Component{
 			}
 		}else if(machine === "N2_plus_50"){
 			if(prevProps.N2_Plus_50!==this.props.N2_Plus_50){
-				if(empty(this.props.N2_Plus_50.Get_n2_plus_50)){
+				if(empty(this.props.N2_Plus_50.WeekTableData)){
 					this.setState({
 						rows: [],
 						data: [],
+						year: 0,
+						month: 0,
+						week: 0
 					})
 				}else{
 					this.setState({
-						data: this.props.N2_Plus_50.Get_n2_plus_50,
-						totalCount: this.props.N2_Plus_50.Get_n2_plus_50.length,
-						rows: this.props.N2_Plus_50.Get_n2_plus_50[currentPage].rows,
+						data: this.props.N2_Plus_50.WeekTableData,
+						rows: this.props.N2_Plus_50.WeekTableData[0].rows,
+						year: this.props.N2_Plus_50.WeekTableData[0]._id.year,
+						month: this.props.N2_Plus_50.WeekTableData[0]._id.month,
+						week: this.props.N2_Plus_50.WeekTableData[0]._id.week,
 					});
 				}
 			}else{
@@ -521,7 +507,8 @@ class ViewTable extends Component{
 	
 	render(){
 		const { classes, machine } = this.props;
-		const { 
+		const {
+			data, 
 			rows,
 			columns,
 			tableColumnExtensions,
@@ -532,15 +519,22 @@ class ViewTable extends Component{
 			deletingRows,
 			leftFixedColumns,
 			empty_row,
-			dateColumns,
 			dateTimeColumns,
 			sortingStateColumnExtensions,
 			TimeColumns,
-			pageSize, 
-			currentPage, 
-			totalCount 
+			smallTableColumns,
 		} = this.state;
-				
+
+		const small_table = [
+		{
+			Efficiency: empty(data) ? "" : data[0].Efficiency * 100,
+			FailRate: empty(data) ? "" : data[0].FailRate * 100,
+			PlanningEfficiency: empty(data) ? "" : data[0].PlanningEfficiency * 100,
+			AvgPrinting: empty(data) ? "" : data[0].AvgPrinting,
+		}
+	]
+
+
 		return(
 		<div>
 		<SelectAppBar machine={machine}/>
@@ -550,16 +544,7 @@ class ViewTable extends Component{
 			  columns={columns}
 			  getRowId={getRowId}
 			>
-			<PagingState
-				currentPage={currentPage}
-				onCurrentPageChange={this.changeCurrentPage}
-				pageSize={pageSize}
-			/>
-			
-			<CustomPaging
-				totalCount={totalCount}
-			/>
-			
+	
 			<SortingState
 				defaultSorting={defaultSorting}
 				onSortingChange={this.changeSorting}
@@ -581,9 +566,7 @@ class ViewTable extends Component{
 			<TimeProvider 
 				for={TimeColumns}
 			/>
-			<DateTypeProvider
-				for={dateColumns}
-			/>
+			
 			<DateTimeTypeProvider
 				for={dateTimeColumns}
 			/>
@@ -609,7 +592,6 @@ class ViewTable extends Component{
             leftColumns={leftFixedColumns}
 			/>
 			
-			<PagingPanel />
 			</Grid>
 			<Dialog
 				open={!!deletingRows.length}
@@ -633,9 +615,7 @@ class ViewTable extends Component{
 					<TimeProvider 
 						for={TimeColumns}
 					/>
-					<DateTypeProvider
-						for={dateColumns}
-					/>
+					
 					<DateTimeTypeProvider
 						for={dateTimeColumns}
 					/>
@@ -680,7 +660,16 @@ class ViewTable extends Component{
             </Button>
           </DialogActions>
         </Dialog>
-		
+
+		<Grid
+		rows={small_table}
+		columns={smallTableColumns}
+		>
+			<Table
+			style={{paddingBottom: 15}}
+			/>
+			<TableHeaderRow />
+		</Grid>
 		</Paper>
 		</div>	
 		)
@@ -693,13 +682,14 @@ class ViewTable extends Component{
 ViewTable.propTypes = {
 	auth: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
-	get_N2: PropTypes.func.isRequired,
 	put_N2: PropTypes.func.isRequired,
-	get_N2_plus_150: PropTypes.func.isRequired,
-	get_N2_plus_50: PropTypes.func.isRequired,
 	put_N2_plus_150: PropTypes.func.isRequired,
 	put_N2_plus_50: PropTypes.func.isRequired,
+	N2WeekTableData: PropTypes.func.isRequired,
 	delete_N2: PropTypes.func.isRequired,
+	N2Plus150WeekTableData: PropTypes.func.isRequired,
+	N2Plus50WeekTableData: PropTypes.func.isRequired,
+	ClearTableData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -710,6 +700,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default  connect(mapStateToProps, {  get_N2, put_N2, get_N2_plus_150, get_N2_plus_50, put_N2_plus_150, put_N2_plus_50, delete_N2, delete_N2_plus_150, delete_N2_plus_50 } )(withStyles(styles)(ViewTable));
+export default  connect(mapStateToProps, { put_N2, put_N2_plus_150, put_N2_plus_50, delete_N2, delete_N2_plus_150, delete_N2_plus_50, N2WeekTableData, N2Plus150WeekTableData, N2Plus50WeekTableData, ClearTableData } )(withStyles(styles)(ViewTable));
 
 

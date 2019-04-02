@@ -6,26 +6,8 @@ import Select from '@material-ui/core/Select';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import CHART from '../CHART';
 import { connect } from 'react-redux';
-import { 
-	get_n2_months,
-	get_n2_years,
-	get_n2_weeks,
-	get_n2_plus_150_years,
-	get_n2_plus_150_months,
-	get_n2_plus_150_weeks,
-	get_n2_plus_50_years,
-	get_n2_plus_50_months,
-	get_n2_plus_50_weeks,
-	N2WeekChartData,
-	N2PLUS150WeekChartData,
-	N2PLUS50WeekChartData,
-	ClearChartData,
-	ClearSelectMonths,
-	ClearSelectWeeks
-} from '../../../../../actions/authentication';
-
+import { get_n2_months, get_n2_years, get_n2_weeks, get_n2_plus_150_years, get_n2_plus_150_months, get_n2_plus_150_weeks, get_n2_plus_50_years,  get_n2_plus_50_months, get_n2_plus_50_weeks, N2WeekTableData, N2Plus150WeekTableData, N2Plus50WeekTableData, ClearTableData, ClearSelectMonths, ClearSelectWeeks } from "../../../../../actions/authentication";
 import { empty } from '../../../../../is-empty';
 
 const styles = theme => ({
@@ -46,15 +28,13 @@ const styles = theme => ({
   },	
 });
 
-
-class Week extends Component {
-constructor(){
+class SelectAppBar extends Component {
+  constructor(){
     super();
     this.state = {
+				weeks: [],
 				years: [],
 				months: [],
-				weeks: [],
-				chartData: [],
     		week: 0,
   			month: 0,
   			year: 0,
@@ -68,16 +48,13 @@ componentDidMount(){
 	const { machine } = this.props;
 	if(machine === "N2"){
 		this.props.get_n2_years();
-		this.props.ClearChartData("N2");
-	}else if(machine === "N2Plus150"){
+	}else if(machine === "N2_plus_150"){
 		this.props.get_n2_plus_150_years();
-		this.props.ClearChartData("N2Plus150");
-	}else if(machine === "N2Plus50"){
+	}else if(machine === "N2_plus_50"){
 		this.props.get_n2_plus_50_years();
-		this.props.ClearChartData("N2Plus50");
 	}
-	
 }
+
 
 static getDerivedStateFromProps(nextProps, prevState){
 	const  { machine } = nextProps;
@@ -95,16 +72,16 @@ static getDerivedStateFromProps(nextProps, prevState){
 			else if(!empty(nextProps.N2.Months) && !empty(nextProps.N2.Years) && empty(nextProps.N2.Weeks)){
 				return { months: nextProps.N2.Months, years: nextProps.N2.Years, weeks:  nextProps.N2.Weeks};
 			}		
-			else if(!empty(nextProps.N2.Months) && !empty(nextProps.N2.Years) && !empty(nextProps.N2.Weeks) && empty(nextProps.N2.WeekChartData)){
-				return { months: nextProps.N2.Months, years: nextProps.N2.Years, weeks:  nextProps.N2.Weeks, chartData:  [] };
+			else if(!empty(nextProps.N2.Months) && !empty(nextProps.N2.Years) && !empty(nextProps.N2.Weeks)){
+				return { months: nextProps.N2.Months, years: nextProps.N2.Years, weeks:  nextProps.N2.Weeks };
 			}	
 			else{
-				return { years: nextProps.N2.Years, months: nextProps.N2.Months, weeks: nextProps.N2.Weeks, chartData: nextProps.N2.WeekChartData };
+				return { years: nextProps.N2.Years, months: nextProps.N2.Months, weeks: nextProps.N2.Weeks };
 			}
 			
 		}else { return null };
 	}
-	else if(machine === "N2Plus150"){
+	else if(machine === "N2_plus_150"){
 			if(nextProps.N2_Plus_150!==prevState.N2_Plus_150){
 				if(empty(nextProps.N2_Plus_150.Years)){
 					return { years: [] };
@@ -118,16 +95,16 @@ static getDerivedStateFromProps(nextProps, prevState){
 				else if(!empty(nextProps.N2_Plus_150.Months) && !empty(nextProps.N2_Plus_150.Years) && empty(nextProps.N2_Plus_150.Weeks)){
 					return { months: nextProps.N2_Plus_150.Months, years: nextProps.N2_Plus_150.Years, weeks:  nextProps.N2_Plus_150.Weeks};
 				}		
-				else if(!empty(nextProps.N2_Plus_150.Months) && !empty(nextProps.N2_Plus_150.Years) && !empty(nextProps.N2_Plus_150.Weeks) && empty(nextProps.N2_Plus_150.WeekChartData)){
-					return { months: nextProps.N2_Plus_150.Months, years: nextProps.N2_Plus_150.Years, weeks:  nextProps.N2_Plus_150.Weeks, chartData:  [] };
+				else if(!empty(nextProps.N2_Plus_150.Months) && !empty(nextProps.N2_Plus_150.Years) && !empty(nextProps.N2_Plus_150.Weeks)){
+					return { months: nextProps.N2_Plus_150.Months, years: nextProps.N2_Plus_150.Years, weeks:  nextProps.N2_Plus_150.Weeks };
 				}	
 				else{
-					return { years: nextProps.N2_Plus_150.Years, months: nextProps.N2_Plus_150.Months, weeks: nextProps.N2_Plus_150.Weeks, chartData: nextProps.N2_Plus_150.WeekChartData };
+					return { years: nextProps.N2_Plus_150.Years, months: nextProps.N2_Plus_150.Months, weeks: nextProps.N2_Plus_150.Weeks };
 				}
 				
 			}else { return null };	
 	}	
-	else if(machine === "N2Plus50"){
+	else if(machine === "N2_plus_50"){
 		if(nextProps.N2_Plus_50!==prevState.N2_Plus_50){
 			if(empty(nextProps.N2_Plus_50.Years)){
 				return { years: [] };
@@ -141,11 +118,11 @@ static getDerivedStateFromProps(nextProps, prevState){
 			else if(!empty(nextProps.N2_Plus_50.Months) && !empty(nextProps.N2_Plus_50.Years) && empty(nextProps.N2_Plus_50.Weeks)){
 				return { months: nextProps.N2_Plus_50.Months, years: nextProps.N2_Plus_50.Years, weeks:  nextProps.N2_Plus_50.Weeks};
 			}		
-			else if(!empty(nextProps.N2_Plus_50.Months) && !empty(nextProps.N2_Plus_50.Years) && !empty(nextProps.N2_Plus_50.Weeks) && empty(nextProps.N2_Plus_50.WeekChartData)){
-				return { months: nextProps.N2_Plus_50.Months, years: nextProps.N2_Plus_50.Years, weeks:  nextProps.N2_Plus_50.Weeks, chartData:  [] };
+			else if(!empty(nextProps.N2_Plus_50.Months) && !empty(nextProps.N2_Plus_50.Years) && !empty(nextProps.N2_Plus_50.Weeks)){
+				return { months: nextProps.N2_Plus_50.Months, years: nextProps.N2_Plus_50.Years, weeks:  nextProps.N2_Plus_50.Weeks };
 			}	
 			else{
-				return { years: nextProps.N2_Plus_50.Years, months: nextProps.N2_Plus_50.Months, weeks: nextProps.N2_Plus_50.Weeks, chartData: nextProps.N2_Plus_50.WeekChartData };
+				return { years: nextProps.N2_Plus_50.Years, months: nextProps.N2_Plus_50.Months, weeks: nextProps.N2_Plus_50.Weeks };
 			}
 			
 		}else { return null };	
@@ -176,25 +153,23 @@ componentDidUpdate(prevProps, prevState) {
 					years: this.props.N2.Years,
 				})
 			}
-			else if(empty(this.props.N2.WeekChartData) && !empty(this.props.N2.Weeks) && !empty(this.props.N2.Months) && !empty(this.props.N2.Years)){
+			else if(!empty(this.props.N2.Weeks) && !empty(this.props.N2.Months) && !empty(this.props.N2.Years)){
 				this.setState({
 					weeks: this.props.N2.Weeks,
 					years: this.props.N2.Years,
-					months: this.props.N2.Months,
-					chartData: []
+					months: this.props.N2.Months
 				})
 			}else{
 				this.setState({
 					weeks: this.props.N2.Weeks,
 					years: this.props.N2.Years,
-					months: this.props.N2.Months,
-					chartData:  this.props.N2.WeekChartData,
+					months: this.props.N2.Months
 				})
 			}
 		
 		}else{ return null; }
 	}
-	else if(machine === "N2Plus150"){
+	else if(machine === "N2_plus_150"){
 			if(prevProps.N2_Plus_150!==this.props.N2_Plus_150){
 				if(empty(this.props.N2_Plus_150.Years)){
 					this.setState({
@@ -212,25 +187,23 @@ componentDidUpdate(prevProps, prevState) {
 						years: this.props.N2_Plus_150.Years,
 					})
 				}
-				else if(empty(this.props.N2_Plus_150.WeekChartData) && !empty(this.props.N2_Plus_150.Weeks) && !empty(this.props.N2_Plus_150.Months) && !empty(this.props.N2_Plus_150.Years)){
+				else if(!empty(this.props.N2_Plus_150.Weeks) && !empty(this.props.N2_Plus_150.Months) && !empty(this.props.N2_Plus_150.Years)){
 					this.setState({
 						weeks: this.props.N2_Plus_150.Weeks,
 						years: this.props.N2_Plus_150.Years,
 						months: this.props.N2_Plus_150.Months,
-						chartData: []
 					})
 				}else{
 					this.setState({
 						weeks: this.props.N2_Plus_150.Weeks,
 						years: this.props.N2_Plus_150.Years,
 						months: this.props.N2_Plus_150.Months,
-						chartData:  this.props.N2_Plus_150.WeekChartData,
 					})
 				}
 			
 			}else{ return null; }
 	}
-	else if(machine === "N2Plus50"){
+	else if(machine === "N2_plus_50"){
 		if(prevProps.N2_Plus_50!==this.props.N2_Plus_50){
 			if(empty(this.props.N2_Plus_50.Years)){
 				this.setState({
@@ -248,19 +221,17 @@ componentDidUpdate(prevProps, prevState) {
 					years: this.props.N2_Plus_50.Years,
 				})
 			}
-			else if(empty(this.props.N2_Plus_50.WeekChartData) && !empty(this.props.N2_Plus_50.Weeks) && !empty(this.props.N2_Plus_50.Months) && !empty(this.props.N2_Plus_50.Years)){
+			else if(!empty(this.props.N2_Plus_50.Weeks) && !empty(this.props.N2_Plus_50.Months) && !empty(this.props.N2_Plus_50.Years)){
 				this.setState({
 					weeks: this.props.N2_Plus_50.Weeks,
 					years: this.props.N2_Plus_50.Years,
 					months: this.props.N2_Plus_50.Months,
-					chartData: []
 				})
 			}else{
 				this.setState({
 					weeks: this.props.N2_Plus_50.Weeks,
 					years: this.props.N2_Plus_50.Years,
 					months: this.props.N2_Plus_50.Months,
-					chartData:  this.props.N2_Plus_50.WeekChartData,
 				})
 			}
 		
@@ -270,60 +241,61 @@ componentDidUpdate(prevProps, prevState) {
 }
 
 
-
 handleChange = event => {
 	const { machine } = this.props;
-	const { year, month } = this.state;
-	this.setState({ [event.target.name]: event.target.value });
+	const { year, month, } = this.state;
+
+  this.setState({ [event.target.name]: event.target.value });
+  
 	if(machine === "N2"){
 		if(event.target.name === "year"){
-			this.props.ClearChartData("N2");
+			this.props.ClearTableData("N2");
 			this.props.ClearSelectMonths("N2");
 			this.props.ClearSelectWeeks("N2");
-			this.setState({week: 0, month: 0, chartData: []});
+			this.setState({week: 0, month: 0});
 			this.props.get_n2_months(event.target.value);
 		}else if(event.target.name === "month"){
-			this.props.ClearChartData("N2");
+			this.props.ClearTableData("N2");
 			this.props.ClearSelectWeeks("N2");
-			this.setState({week: 0, chartData: []});
+			this.setState({week: 0});
 			this.props.get_n2_weeks(year, event.target.value);
 		}else if(event.target.name === "week"){
-			this.props.ClearChartData("N2");
-			this.props.N2WeekChartData(year, month, event.target.value)
+			this.props.ClearTableData("N2");
+			this.props.N2WeekTableData(year, month, event.target.value)
 		}
 	}
-	else if(machine === "N2Plus150"){
+	else if(machine === "N2_plus_150"){
 		if(event.target.name === "year"){
-			this.props.ClearChartData("N2Plus150");
+			this.props.ClearTableData("N2Plus150");
 			this.props.ClearSelectMonths("N2Plus150");
 			this.props.ClearSelectWeeks("N2Plus150");
-			this.setState({week: 0, month: 0, chartData: []});
+			this.setState({week: 0, month: 0});
 			this.props.get_n2_plus_150_months(event.target.value);
 		}else if(event.target.name === "month"){
-			this.props.ClearChartData("N2Plus150");
+			this.props.ClearTableData("N2Plus150");
 			this.props.ClearSelectWeeks("N2Plus150");
-			this.setState({week: 0, chartData: []});
+			this.setState({week: 0});
 			this.props.get_n2_plus_150_weeks(year, event.target.value);
 		}else if(event.target.name === "week"){
-			this.props.ClearChartData("N2Plus150");
-			this.props.N2PLUS150WeekChartData(year, month, event.target.value)
+			this.props.ClearTableData("N2Plus150");
+			this.props.N2Plus150WeekTableData(year, month, event.target.value);
 		}
 	}
-	else if(machine === "N2Plus50"){
+	else if(machine === "N2_plus_50"){
 		if(event.target.name === "year"){
-			this.props.ClearChartData("N2Plus50");
+			this.props.ClearTableData("N2Plus50");
 			this.props.ClearSelectMonths("N2Plus50");
 			this.props.ClearSelectWeeks("N2Plus50");
-			this.setState({week: 0, month: 0, chartData: []});
+			this.setState({week: 0, month: 0});
 			this.props.get_n2_plus_50_months(event.target.value);
 		}else if(event.target.name === "month"){
-			this.props.ClearChartData("N2Plus50");
+			this.props.ClearTableData("N2Plus50");
 			this.props.ClearSelectWeeks("N2Plus50");
-			this.setState({week: 0, chartData: []});
+			this.setState({week: 0});
 			this.props.get_n2_plus_50_weeks(year, event.target.value);
 		}else if(event.target.name === "week"){
-			this.props.ClearChartData("N2Plus50");
-			this.props.N2PLUS50WeekChartData(year, month, event.target.value)
+			this.props.ClearTableData("N2Plus50");
+			this.props.N2Plus50WeekTableData(year, month, event.target.value)
 		}
 	}
 
@@ -338,24 +310,24 @@ handleOpenMonth = () => {this.setState({ openMonth: true })}
 handleOpenWeek = () => {this.setState({ openWeek: true })}
 
 render() {
-  const { classes, machine } = this.props;
-	const { openWeek, openMonth, openYear, week,  month, year, months, years, weeks, chartData } = this.state;
+    const { classes } = this.props;
+		const { openWeek, openMonth, openYear, week,  month, year, years, months, weeks } = this.state;
 
-	let YearList = () =>{
-		return years.map((year, i) => { return <MenuItem key={i} value={year}>Year {year}</MenuItem> });
-	}
+    let YearList = () =>{
+      return years.map((year, i) => { return <MenuItem key={i} value={year}>Year {year}</MenuItem> });
+    }
+  
+    let MonthList = () =>{
+      return months.map((month, i) => { return <MenuItem key={i} value={month}>Month {month}</MenuItem> })
+    }
+    
+    let WeekList = () =>{
+      return weeks.map((week, i) => { return <MenuItem key={i} value={week}>Week {week}</MenuItem> })
+    }
 
-	let MonthList = () =>{
-		return months.map((month, i) => { return <MenuItem key={i} value={month}>Month {month}</MenuItem> })
-	}
-	
-	let WeekList = () =>{
-		return weeks.map((week, i) => { return <MenuItem key={i} value={week}>Week {week}</MenuItem> })
-	}
 
     return (
-		
-    <div className={classes.root}>
+      <div className={classes.root}>
 			<AppBar className={classes.app_nav}  position="static">
 				<form autoComplete="off">
 					<FormControl className={classes.formControl} >
@@ -372,7 +344,7 @@ render() {
 							}}
 						>
 
-								{WeekList()}
+						{WeekList()}
 
 					  </Select>
 					</FormControl>
@@ -391,7 +363,7 @@ render() {
 							}}
 						>
 
-							{MonthList()}
+							{MonthList()}	
 
 						</Select>
 					</FormControl>
@@ -410,7 +382,7 @@ render() {
 							}}
 						>
 
-              	{YearList()}
+              {YearList()}
 
 						</Select>
 					</FormControl>
@@ -418,15 +390,12 @@ render() {
       	    </form>
 		</AppBar>
 				
-        <CHART machine={machine} ChartData={chartData} Target="week" />
-
 	</div>
-
     )
   }
 }
 
-Week.propTypes = {
+SelectAppBar.propTypes = {
 	classes: PropTypes.object.isRequired,
 	get_n2_years: PropTypes.func.isRequired,
 	get_n2_months: PropTypes.func.isRequired,
@@ -437,12 +406,12 @@ Week.propTypes = {
 	get_n2_plus_50_years: PropTypes.func.isRequired,
 	get_n2_plus_50_months: PropTypes.func.isRequired,
 	get_n2_plus_50_weeks: PropTypes.func.isRequired,
-	N2WeekChartData: PropTypes.func.isRequired,
-	N2PLUS150WeekChartData: PropTypes.func.isRequired,
-	N2PLUS50WeekChartData: PropTypes.func.isRequired,
-	ClearChartData: PropTypes.func.isRequired,
-	ClearSelectMonths: PropTypes.func.isRequired,
+	N2WeekTableData: PropTypes.func.isRequired,
+	N2Plus150WeekTableData: PropTypes.func.isRequired,
+	N2Plus50WeekTableData: PropTypes.func.isRequired,
+	ClearTableData: PropTypes.func.isRequired,
 	ClearSelectWeeks: PropTypes.func.isRequired,
+	ClearSelectMonths: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -451,4 +420,5 @@ const mapStateToProps = (state) => ({
 	N2_Plus_50: state.N2_Plus_50
 });
 
-export default connect(mapStateToProps, { get_n2_years, get_n2_months, get_n2_weeks, get_n2_plus_150_years, get_n2_plus_150_months, get_n2_plus_150_weeks, get_n2_plus_50_years , get_n2_plus_50_months, get_n2_plus_50_weeks, N2WeekChartData, N2PLUS150WeekChartData, N2PLUS50WeekChartData, ClearChartData, ClearSelectMonths, ClearSelectWeeks  })(withStyles(styles)(Week))
+export default connect(mapStateToProps, {get_n2_years, get_n2_months, get_n2_weeks, get_n2_plus_150_years, get_n2_plus_150_months, get_n2_plus_150_weeks, get_n2_plus_50_years, get_n2_plus_50_months, get_n2_plus_50_weeks, N2WeekTableData, N2Plus150WeekTableData, N2Plus50WeekTableData, ClearTableData, ClearSelectWeeks, ClearSelectMonths })(withStyles(styles)(SelectAppBar))
+

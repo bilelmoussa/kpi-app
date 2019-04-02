@@ -37,24 +37,7 @@ router.delete('/deleteparts',(req, res, next)=>{
   })(req, res, next)
 });
 
-router.get('/findparts', (req, res, next)=>{
-	passport.authenticate('jwt', {session: false}, function(err, user){
-		if (err) { return next(err); }
-		if (!user) { return res.json('Unauthorised user not found !'); }
-		if(user){
-			N2_Part.get_by_date((err, parts)=>{
-				if(err){
-					res.status(400).json({errors: err});
-				}
-				if(parts){
-					res.json({success: true, parts: parts})
-				}
-			})
-		}else{
-			return res.status(401).json('Unauthorised')
-		}
-	})(req, res, next)
-});
+
 
 //get Years
 router.get('/years', (req, res, next)=>{
@@ -185,6 +168,29 @@ router.get('/year_chart/:year', (req, res, next)=>{
 		if(user){
 			let year = parseInt(req.params.year);
 			N2_Part.getYearChartValues(year, (err, data)=>{
+				if(err){
+					res.status(400).json({errors: err});
+				}
+				if(data){
+					res.json({success: true, data: data})
+				}
+			})
+		}else{
+			return res.status(401).json('Unauthorised')
+		}
+	})(req, res, next)
+})
+
+//GET DATA FOR WEEEK TABLE
+router.get('/week_table/:year/:month/:week', (req, res, next)=>{
+	passport.authenticate('jwt', {session: false}, function(err, user){
+		if (err) { return next(err); }
+		if (!user) { return res.json('Unauthorised user not found !'); }
+		if(user){
+			let year = parseInt(req.params.year);
+			let month = parseInt(req.params.month);
+			let week = parseInt(req.params.week);
+			N2_Part.getWeekTableValues(year, month, week, (err, data)=>{
 				if(err){
 					res.status(400).json({errors: err});
 				}

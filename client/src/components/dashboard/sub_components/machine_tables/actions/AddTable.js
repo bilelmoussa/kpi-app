@@ -26,7 +26,7 @@ import { post_N2, put_N2, post_N2_plus_150, post_N2_plus_50, put_N2_plus_150, pu
 import { DataTypeProvider } from '@devexpress/dx-react-grid';
 import { isChanged, isObEmpty } from '../../../../../is-empty';
 import { ObjectId } from '../../../../../ObjectID';
-import {  get_date_format, get_dateTime_format } from '../../../../../date_validation'
+import { get_dateTime_format } from '../../../../../date_validation'
 import NumberFormat from 'react-number-format';
 
 const styles = theme =>({
@@ -130,7 +130,7 @@ export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })
 
 function validate_cell(data){
 	
-	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime) ||  empty(data.dayNumber) ||  empty(data.failureCoef) ||  empty(data.actualWh) || empty(data.Date)){
+	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime) || empty(data.failureCoef) ||  empty(data.actualWh) ){
 		return true 
 	}else{
 		return false;
@@ -155,7 +155,6 @@ const EditCell = (props) => {
   return <TableEditRow.Cell {...props} />;
 };
 
-const DateFormatter = ({ value }) => get_date_format(value);
 const DateTimeFormatter = ({ value }) => get_dateTime_format(value);
 
 
@@ -167,17 +166,7 @@ const TimeFormatter = ({ value }) =>{
 
 
 
-const DateEditor = ({ value, onValueChange }) => (
-	 <TextField
-		input={<Input />}
-        type="date"
-        value={value}
-		onChange={event => onValueChange(event.target.value)}
-		InputLabelProps={{
-          shrink: true,
-        }}
-      />
-)
+
 
 const DateTime = ({ value, onValueChange }) => (
 	 <TextField
@@ -214,12 +203,7 @@ const TimeProvider = props =>(
 	/>
 )
 
-const DateTypeProvider = props => (
-  <DataTypeProvider
-    editorComponent={DateEditor}
-	formatterComponent={DateFormatter}
-    {...props}
-  />)
+
 
 const DateTimeTypeProvider = props => (
 	<DataTypeProvider
@@ -243,24 +227,19 @@ class AddTable extends Component{
 				  { name: 'workingHours', title: 'Working Hours', dataType: 'number'},
 				  { name: 'timeAndDate', title: 'Time and date',  dataType: 'datetime-local' },
 				  { name: 'finishingTime', title: 'Finishing Time', dataType: 'datetime-local' },
-				  { name: 'dayNumber', title: 'Day Number' },
 				  { name: 'failureCoef', title: 'Failure Coef'},
 				  { name : 'actualWh', title: 'Actual Wh', dataType: 'number'},
 				  { name: 'Remarks', title: 'Remarks'},
-				  { name: 'Date', title: 'Date', dataType:'date'}
 				],
 				tableColumnExtensions:[
 					{ columnName: 'printedPart', width: 180},
 					{ columnName: 'workingHours', width: 180},
 					{ columnName: 'timeAndDate', width: 250},
 					{ columnName: 'finishingTime', width: 250},
-					{ columnName: 'dayNumber', width: 180},
 					{ columnName: 'failureCoef', width: 180},
 					{ columnName: 'actualWh', width: 180},
 					{ columnName: 'Remarks', width: 180},
-					{ columnName: 'Date', width: 180},
 				],
-				dateColumns: ['Date'],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
 				TimeColumns: ['workingHours', "actualWh"],
 				editingRowIds: [],
@@ -268,7 +247,7 @@ class AddTable extends Component{
 				rowChanges: {},
 				deletingRows: [],
 				empty_row: [],
-				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'dayNumber', 'failureCoef', 'actualWh', 'Remarks', 'Date'],
+				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'failureCoef', 'actualWh', 'Remarks'],
 				leftFixedColumns: [TableEditColumn.COLUMN_TYPE],
 		};
 
@@ -292,11 +271,9 @@ class AddTable extends Component{
 					workingHours: '00:00',
 					timeAndDate: '',
 					finishingTime: '',
-					dayNumber: '',
 					failureCoef: '',
 					actualWh: '00:00',
 					Remarks: '',
-					Date: ''
 				}));
 			this.setState({ addedRows: default_row });
 		};
@@ -316,11 +293,9 @@ class AddTable extends Component{
 						workingHours: time_to_numb(added[0].workingHours),
 						timeAndDate: added[0].timeAndDate,
 						finishingTime: added[0].finishingTime,
-						dayNumber: added[0].dayNumber,
 						failureCoef: added[0].failureCoef,
 						actualWh: time_to_numb(added[0].actualWh),
 						Remarks: added[0].Remarks,
-						Date: added[0].Date,
 						client_id: clientId
 					};
 				
@@ -371,11 +346,9 @@ class AddTable extends Component{
 						workingHours: time_to_numb(rows[row_id].workingHours),
 						timeAndDate: rows[row_id].timeAndDate,
 						finishingTime: rows[row_id].finishingTime,
-						dayNumber: rows[row_id].dayNumber,
 						failureCoef: rows[row_id].failureCoef,
 						actualWh: time_to_numb(rows[row_id].actualWh),
 						Remarks: rows[row_id].Remarks,
-						Date: rows[row_id].Date,
 						client_id: rows[row_id].client_id,
 					};
 					
@@ -492,7 +465,6 @@ class AddTable extends Component{
 			deletingRows,
 			leftFixedColumns,
 			empty_row,
-			dateColumns,
 			dateTimeColumns,
 			TimeColumns,
 		} = this.state;
@@ -519,9 +491,7 @@ class AddTable extends Component{
 			for={TimeColumns}
 			/>
 			
-			<DateTypeProvider
-            for={dateColumns}
-			/>
+		
 			<DateTimeTypeProvider
             for={dateTimeColumns}
 			/>
@@ -569,9 +539,7 @@ class AddTable extends Component{
 			for={TimeColumns}
 			/>
 			
-			<DateTypeProvider
-            for={dateColumns}
-			/>
+	
 			<DateTimeTypeProvider
             for={dateTimeColumns}
 			/>

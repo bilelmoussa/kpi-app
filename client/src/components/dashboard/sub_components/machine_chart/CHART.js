@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import  { empty } from '../../../../is-empty';
-import { Chart, Series, CommonSeriesSettings, ValueAxis, Title, Export,  Label, Format, ArgumentAxis, Legend } from 'devextreme-react/chart';
+import { Chart, Series, CommonSeriesSettings, ValueAxis, Title, Export, ArgumentAxis, Legend } from 'devextreme-react/chart';
 
 
 
@@ -46,9 +46,7 @@ export default class CHART extends Component {
                 barPadding={0.5}
                 hoverMode={"none"}
               >
-                <Label visible={true}  backgroundColor={'red'} >
-                  <Format type={'fixedPoint'} precision={0}/>
-                </Label>
+              
               </CommonSeriesSettings>
               <Series
                 argumentField={'Date'}
