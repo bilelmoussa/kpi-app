@@ -118,7 +118,7 @@ export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })
 
 function validate_cell(data){
 	
-	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime)  ||  empty(data.failureCoef) ||  empty(data.actualWh)){
+	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime)  ||  empty(data.failureCoef) ||  empty(data.actualWh) ||  empty(data.weight) ||  empty(data.template)){
 		return true 
 	}else{
 		return false;
@@ -226,7 +226,9 @@ class ViewTable extends Component{
 				  { name: 'timeAndDate', title: 'Time and date' },
 				  { name: 'finishingTime', title: 'Finishing Time', dataType: 'datetime-local' },
 				  { name: 'failureCoef', title: 'Failure Coef'},
-				  { name : 'actualWh', title: 'Actual Wh' },
+					{ name : 'actualWh', title: 'Actual Wh' },
+					{ name : 'weight', title: 'Weight' },
+					{ name: 'template', title: 'Template' },
 				  { name: 'Remarks', title: 'Remarks'},
 				],
 				tableColumnExtensions:[
@@ -236,6 +238,8 @@ class ViewTable extends Component{
 					{ columnName: 'finishingTime', width: 250},
 					{ columnName: 'failureCoef', width: 180},
 					{ columnName: 'actualWh', width: 180},
+					{ columnName: 'weight', width: 180 },
+					{ columnName: 'template', width: 180 },
 					{ columnName: 'Remarks', width: 180},
 				],
 				defaultSorting: [{ columnName: 'timeAndDate', direction: 'asc' }],
@@ -249,7 +253,7 @@ class ViewTable extends Component{
 				rowChanges: {},
 				deletingRows: [],
 				empty_row: [],
-				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'failureCoef', 'actualWh', 'Remarks'],
+				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'failureCoef', 'actualWh', 'weight', 'template', 'Remarks'],
 				leftFixedColumns: [TableEditColumn.COLUMN_TYPE],
 		};
 
@@ -271,11 +275,13 @@ class ViewTable extends Component{
 		this.changeAddedRows = addedRows => this.setState({
 				addedRows: addedRows.map(row => (Object.keys(row).length ? row : {
 				printedPart: '',
-				workingHours: "00:00",
+				workingHours: "--:--",
 				timeAndDate: '',
 				finishingTime: '',
 				failureCoef: '',
-				actualWh: "00:00",
+				actualWh: "--:--",
+				weight: '',
+				template: '',
 				Remarks: '',
 			})),
 		});
@@ -306,6 +312,8 @@ class ViewTable extends Component{
 						finishingTime: rows[row_id].finishingTime,
 						failureCoef: rows[row_id].failureCoef,
 						actualWh: time_to_numb(rows[row_id].actualWh),
+						weight:  rows[row_id].weight,
+						template:  rows[row_id].template,
 						Remarks: rows[row_id].Remarks,
 						_id: rows[row_id]._id,
 					};

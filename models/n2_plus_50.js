@@ -140,6 +140,8 @@ module.exports.getWeekTableValues = function(year, month, week, callback){
 					   finishingTime: "$finishingTime",
 					   failureCoef: "$failureCoef",
 					   actualWh: "$actualWh",
+					   weight: "$weight",
+					   template: "$template",
 					   Remarks: "$Remarks",
 					   client_id: "$client_id"
 				   } 

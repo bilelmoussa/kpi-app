@@ -22,9 +22,9 @@ const styles = theme => ({
 
 function TabContainer(props) {
   return (
-    <Card component="div" style={{overflow: 'auto', margin: '0', width: '100%'  }}>
+    <div  style={{overflow: 'auto', margin: '0', width: '100%'  }}>
       {props.children}
-    </Card>
+    </div>
   );
 }
 

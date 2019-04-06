@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import  { empty } from '../../../../is-empty';
-import { Chart, Series, CommonSeriesSettings, ValueAxis, Title, Export, ArgumentAxis, Legend } from 'devextreme-react/chart';
+import { Chart, Series, CommonSeriesSettings, ValueAxis, Title, Export, ArgumentAxis, Legend, Label, Format } from 'devextreme-react/chart';
 
-
-
-
-
+ 
 function to_date(data){
   let date = new Date(data);
   let new_form_d = date.getDate();
@@ -38,22 +35,23 @@ export default class CHART extends Component {
     const renderChart = () => { 
       if(!empty(ChartData)){
       return (
-             <Chart id={'chart'} dataSource={test} theme={"generic.dark"} palette={"Default"} >
-              <Title text="Machine Working Hours" font={{color: "#b3b3b3"}}/>
+             <Chart id={'chart'} dataSource={test} theme={"generic.dark"}  >
+              <Title text="Machine Working Hours" />
               <CommonSeriesSettings
                 argumentField={'state'}
                 type={'bar'}
                 barPadding={0.5}
                 hoverMode={"none"}
               >
-              
+              <Label visible={true} backgroundColor={"rgb(29, 178, 245, 0)"}   font={{ Size: "16px", weight: "600"}}>
+                <Format type={'fixedPoint'} precision={0} />
+              </Label>
               </CommonSeriesSettings>
               <Series
                 argumentField={'Date'}
                 valueField={'workingHours'}
                 name={'KPI'}
                 type={'bar'}
-                color={'#42a5f5'}
                 />
               <ValueAxis position={'left'} >
                 <Title text={'Working Hours'}  font={{size: 20}}/>
@@ -62,7 +60,7 @@ export default class CHART extends Component {
                 <Title text={'Days'}  font={{size: 20}}  />
               </ArgumentAxis>
               <Legend verticalAlignment={'bottom'} horizontalAlignment={'center'} visible={false}></Legend>
-              <Export enabled={true} backgroundColor="#ffffff"/>
+              <Export enabled={true} />
             </Chart>
       )
       }else{

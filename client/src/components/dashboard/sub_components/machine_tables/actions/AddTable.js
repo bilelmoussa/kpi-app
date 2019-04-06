@@ -130,7 +130,7 @@ export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })
 
 function validate_cell(data){
 	
-	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime) || empty(data.failureCoef) ||  empty(data.actualWh) ){
+	if(empty(data.printedPart) || empty(data.workingHours) || empty(data.timeAndDate) ||  empty(data.finishingTime) || empty(data.failureCoef) ||  empty(data.actualWh)  ||  empty(data.weight) ||  empty(data.template)){
 		return true 
 	}else{
 		return false;
@@ -163,16 +163,11 @@ const TimeFormatter = ({ value }) =>{
 };
 
 
-
-
-
-
-
 const DateTime = ({ value, onValueChange }) => (
 	 <TextField
 		input={<Input />}
-        type="datetime-local"
-        value={value}
+    type="datetime-local"
+    value={value}
 		onChange={event => onValueChange(event.target.value)}
 		InputLabelProps={{
           shrink: true,
@@ -228,7 +223,9 @@ class AddTable extends Component{
 				  { name: 'timeAndDate', title: 'Time and date',  dataType: 'datetime-local' },
 				  { name: 'finishingTime', title: 'Finishing Time', dataType: 'datetime-local' },
 				  { name: 'failureCoef', title: 'Failure Coef'},
-				  { name : 'actualWh', title: 'Actual Wh', dataType: 'number'},
+					{ name : 'actualWh', title: 'Actual Wh', dataType: 'number'},
+					{ name : 'weight', title: 'Weight' },
+					{ name: 'template', title: 'Template' },
 				  { name: 'Remarks', title: 'Remarks'},
 				],
 				tableColumnExtensions:[
@@ -238,6 +235,8 @@ class AddTable extends Component{
 					{ columnName: 'finishingTime', width: 250},
 					{ columnName: 'failureCoef', width: 180},
 					{ columnName: 'actualWh', width: 180},
+					{ columnName: 'weight', width: 180 },
+					{ columnName: 'template', width: 180 },
 					{ columnName: 'Remarks', width: 180},
 				],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
@@ -247,7 +246,7 @@ class AddTable extends Component{
 				rowChanges: {},
 				deletingRows: [],
 				empty_row: [],
-				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'failureCoef', 'actualWh', 'Remarks'],
+				columnOrder: ['printedPart','workingHours','timeAndDate', 'finishingTime', 'failureCoef', 'actualWh','weight', 'template', 'Remarks'],
 				leftFixedColumns: [TableEditColumn.COLUMN_TYPE],
 		};
 
@@ -268,11 +267,13 @@ class AddTable extends Component{
 		this.changeAddedRows = addedrow =>{
 			let default_row = addedrow.map(row => (Object.keys(row).length ? row : {
 					printedPart: '',
-					workingHours: '00:00',
+					workingHours: '--:--',
 					timeAndDate: '',
 					finishingTime: '',
 					failureCoef: '',
-					actualWh: '00:00',
+					actualWh: '--:--',
+					weight: '',
+					template: '',
 					Remarks: '',
 				}));
 			this.setState({ addedRows: default_row });
@@ -295,10 +296,11 @@ class AddTable extends Component{
 						finishingTime: added[0].finishingTime,
 						failureCoef: added[0].failureCoef,
 						actualWh: time_to_numb(added[0].actualWh),
+						weight: added[0].weight,
+						template: added[0].template,
 						Remarks: added[0].Remarks,
 						client_id: clientId
 					};
-				
 				
 				if(validate_cell(added[0])){
 					this.setState({empty_row: Object.values(added)});
@@ -348,6 +350,8 @@ class AddTable extends Component{
 						finishingTime: rows[row_id].finishingTime,
 						failureCoef: rows[row_id].failureCoef,
 						actualWh: time_to_numb(rows[row_id].actualWh),
+						weight:  rows[row_id].weight,
+						template:  rows[row_id].template,
 						Remarks: rows[row_id].Remarks,
 						client_id: rows[row_id].client_id,
 					};

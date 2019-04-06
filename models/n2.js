@@ -96,12 +96,31 @@ module.exports.getMonthChartValues = function(year, month, callback){
 		  },
 		  { $project: { _id: 1, workingHours: 1, timeAndDate: 1, count: 1 } },
 		  { $match: { $and: [{"_id.month": month}, {"_id.year": year} ] } },
-		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
+		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : 1,   } }
 	]
 
 	n2_part.aggregate(options, callback);
 }
 
+n2_part.getMonthChartValues(2019, 2, (err, data)=>{
+	if(err) throw err;
+	if(data){
+		function getSum(total, num) {
+			return total + num;
+		  }
+
+		let newData = {
+			workingHourWeekly: [],
+			Date : []
+		}
+		data.forEach((d, i)=>{
+			newData.Date.push(d._id.week);
+			let workinhoursWeekly = d.workingHours.reduce(getSum) / 7;
+			newData.workingHourWeekly.push(workinhoursWeekly)
+		})
+		console.log(newData)
+	}
+})
 
 module.exports.getYearChartValues = function(year, callback){
 	let options = [
@@ -138,6 +157,8 @@ module.exports.getWeekTableValues = function(year, month, week, callback){
 					   finishingTime: "$finishingTime",
 					   failureCoef: "$failureCoef",
 					   actualWh: "$actualWh",
+					   weight: "$weight",
+					   template: "$template",
 					   Remarks: "$Remarks",
 					   client_id: "$client_id"
 				   } 

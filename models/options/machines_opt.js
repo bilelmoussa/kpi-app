@@ -1,4 +1,3 @@
-
 const Joi = require('joi');
 
 
@@ -9,6 +8,8 @@ let options = Joi.object({
     finishingTime: Joi.date().required(),
     failureCoef: Joi.number().required(),
     actualWh: Joi.number().required(),
+    weight: Joi.string().required(),
+    template: Joi.string().required(),
     Remarks: Joi.string().allow(''),
     created_at: Joi.date().default(Date.now()).required(),
     update_at: Joi.date().default(Date.now()).required(),

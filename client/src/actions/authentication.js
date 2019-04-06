@@ -117,9 +117,9 @@ export const post_N2_plus_50 = (Part) => dispatch =>{
 			})
 }
 
+
 function to_date(data){
 	let date = new Date(data);
-	date.setHours(date.getHours() +1);
 	let new_form_d = date.toISOString().substring(0, 16);
 	return new_form_d;
 }
@@ -459,7 +459,6 @@ export const N2WeekTableData = (year, month, week) => dispatch =>{
 				})
 				new_rows.push(part);
 			});
-			console.log(new_rows);
 			dispatch({
 				type: N2_WEEK_TABLE_DATA,
 				payload: new_rows
