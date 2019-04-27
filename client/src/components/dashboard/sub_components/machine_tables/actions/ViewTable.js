@@ -172,13 +172,8 @@ const Time = ({ value, onValueChange }) => (
 const DateTime = ({ value, onValueChange }) => (
 	 <TextField
 		input={<Input />}
-<<<<<<< HEAD
     type="datetime-local"
     value={value}
-=======
-        type="datetime-local"
-        value={value}
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 		onChange={event => onValueChange(event.target.value)}
 		InputLabelProps={{
           shrink: true,
@@ -219,21 +214,12 @@ class ViewTable extends Component{
 				data: [],
 				rows:[],
 				smallTableColumns: [
-<<<<<<< HEAD
 					{ name: 'TimeEfficiency', title: 'Time Efficiency %' },
 					{ name: 'FailRate', title: 'Fail Rate %' },
 					{ name: 'TemplateEfficiency', title: 'Template Efficiency %' },
 					{ name: 'FilamantComsumption', title: 'Filamant Comsumption Per Week' },
 				],
 				smallTableColumnsOrder: ['TimeEfficiency', 'FailRate', 'TemplateEfficiency', 'FilamantComsumption'],
-=======
-					{ name: 'Efficiency', title: 'Efficiency %' },
-					{ name: 'FailRate', title: 'Fail Rate' },
-					{ name: 'PlanningEfficiency', title: 'Planning Efficiency %' },
-					{ name: 'AvgPrinting', title: 'Average Printing Hours Per Day' },
-				],
-				smallTableColumnsOrder: ['Efficiency', 'FailRate', 'PlanningEfficiency', 'AvgPrinting'],
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				columns:[
 				  { name: 'printedPart', title: 'Printed Part' },
 				  { name: 'workingHours', title: 'Working Hours' },
@@ -241,13 +227,8 @@ class ViewTable extends Component{
 				  { name: 'finishingTime', title: 'Finishing Time', dataType: 'datetime-local' },
 				  { name: 'failureCoef', title: 'Failure Coef'},
 					{ name : 'actualWh', title: 'Actual Wh' },
-<<<<<<< HEAD
 					{ name : 'weight', title: 'Weight (g)' },
 					{ name: 'template', title: 'Standard Template' },
-=======
-					{ name : 'weight', title: 'Weight' },
-					{ name: 'template', title: 'Template' },
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				  { name: 'Remarks', title: 'Remarks'},
 				],
 				tableColumnExtensions:[
@@ -266,11 +247,7 @@ class ViewTable extends Component{
 				{ columnName: 'timeAndDate', sortingEnabled: false },
 				],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
-<<<<<<< HEAD
 				TimeColumns: ['workingHours', 'actualWh', 'template'],
-=======
-				TimeColumns: ['workingHours', 'actualWh'],
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				editingRowIds: [],
 				addedRows: [],
 				rowChanges: {},
@@ -304,11 +281,7 @@ class ViewTable extends Component{
 				failureCoef: '',
 				actualWh: "--:--",
 				weight: '',
-<<<<<<< HEAD
 				template: '--:--',
-=======
-				template: '',
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				Remarks: '',
 			})),
 		});
@@ -340,11 +313,7 @@ class ViewTable extends Component{
 						failureCoef: rows[row_id].failureCoef,
 						actualWh: time_to_numb(rows[row_id].actualWh),
 						weight:  rows[row_id].weight,
-<<<<<<< HEAD
 						template:  time_to_numb(rows[row_id].template),
-=======
-						template:  rows[row_id].template,
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 						Remarks: rows[row_id].Remarks,
 						_id: rows[row_id]._id,
 					};
@@ -360,11 +329,7 @@ class ViewTable extends Component{
 						this.setState({empty_row: Object.values(changed)});
 					}else if(validate_cell(rows[row_id])){
 						this.setState({empty_row: Object.values(changed)});
-<<<<<<< HEAD
 					}else if(!/(\d{2}):(\d{2})/.test(String(rows[row_id].workingHours)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].actualWh)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].template))){
-=======
-					}else if(!/(\d{2}):(\d{2})/.test(String(rows[row_id].workingHours)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].actualWh))){
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 						this.setState({empty_row: Object.values(changed)});
 					}
 					else{
@@ -570,7 +535,6 @@ class ViewTable extends Component{
 
 		const small_table = [
 		{
-<<<<<<< HEAD
 			TimeEfficiency: empty(data) ? "" : (data[0].TimeEfficiency * 100).toFixed(2),
 			FailRate: empty(data) ? "" : data[0].FailRate * 100,
 			TemplateEfficiency: empty(data) ? "" : data[0].TemplateEfficiency * 100,
@@ -578,16 +542,6 @@ class ViewTable extends Component{
 		}
 	]
 
-=======
-			Efficiency: empty(data) ? "" : data[0].Efficiency * 100,
-			FailRate: empty(data) ? "" : data[0].FailRate * 100,
-			PlanningEfficiency: empty(data) ? "" : data[0].PlanningEfficiency * 100,
-			AvgPrinting: empty(data) ? "" : data[0].AvgPrinting,
-		}
-	]
-
-
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 		return(
 		<div>
 		<SelectAppBar machine={machine}/>

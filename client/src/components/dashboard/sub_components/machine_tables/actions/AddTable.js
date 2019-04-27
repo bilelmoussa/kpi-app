@@ -224,13 +224,8 @@ class AddTable extends Component{
 				  { name: 'finishingTime', title: 'Finishing Time', dataType: 'datetime-local' },
 				  { name: 'failureCoef', title: 'Failure Coef'},
 					{ name : 'actualWh', title: 'Actual Wh', dataType: 'number'},
-<<<<<<< HEAD
 					{ name : 'weight', title: 'Weight (g)' },
 					{ name: 'template', title: 'Standard Template' },
-=======
-					{ name : 'weight', title: 'Weight' },
-					{ name: 'template', title: 'Template' },
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				  { name: 'Remarks', title: 'Remarks'},
 				],
 				tableColumnExtensions:[
@@ -245,11 +240,7 @@ class AddTable extends Component{
 					{ columnName: 'Remarks', width: 180},
 				],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
-<<<<<<< HEAD
 				TimeColumns: ['workingHours', "actualWh", "template"],
-=======
-				TimeColumns: ['workingHours', "actualWh"],
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				editingRowIds: [],
 				addedRows: [],
 				rowChanges: {},
@@ -282,11 +273,7 @@ class AddTable extends Component{
 					failureCoef: '',
 					actualWh: '--:--',
 					weight: '',
-<<<<<<< HEAD
 					template: '--:--',
-=======
-					template: '',
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 					Remarks: '',
 				}));
 			this.setState({ addedRows: default_row });
@@ -310,11 +297,7 @@ class AddTable extends Component{
 						failureCoef: added[0].failureCoef,
 						actualWh: time_to_numb(added[0].actualWh),
 						weight: added[0].weight,
-<<<<<<< HEAD
 						template: time_to_numb(added[0].template),
-=======
-						template: added[0].template,
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 						Remarks: added[0].Remarks,
 						client_id: clientId
 					};
@@ -322,11 +305,7 @@ class AddTable extends Component{
 				if(validate_cell(added[0])){
 					this.setState({empty_row: Object.values(added)});
 					added[0].added = false;
-<<<<<<< HEAD
 				}else if(!/(\d{2}):(\d{2})/.test(String(added[0].workingHours)) || !/(\d{2}):(\d{2})/.test(String(added[0].actualWh)) || !/(\d{2}):(\d{2})/.test(String(added[0].template))){
-=======
-				}else if(!/(\d{2}):(\d{2})/.test(String(added[0].workingHours)) || !/(\d{2}):(\d{2})/.test(String(added[0].actualWh))){
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 					this.setState({empty_row: Object.values(added)});
 					added[0].added = false;
 				}
@@ -372,11 +351,7 @@ class AddTable extends Component{
 						failureCoef: rows[row_id].failureCoef,
 						actualWh: time_to_numb(rows[row_id].actualWh),
 						weight:  rows[row_id].weight,
-<<<<<<< HEAD
 						template:  time_to_numb(rows[row_id].template),
-=======
-						template:  rows[row_id].template,
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 						Remarks: rows[row_id].Remarks,
 						client_id: rows[row_id].client_id,
 					};
@@ -394,11 +369,7 @@ class AddTable extends Component{
 					}
 					else if(validate_cell(rows[row_id])){
 						this.setState({empty_row: Object.values(changed)});
-<<<<<<< HEAD
 					}else if(!/(\d{2}):(\d{2})/.test(String(rows[row_id].workingHours)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].actualWh)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].template)) ){
-=======
-					}else if(!/(\d{2}):(\d{2})/.test(String(rows[row_id].workingHours)) || !/(\d{2}):(\d{2})/.test(String(rows[row_id].actualWh))){
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 						this.setState({empty_row: Object.values(changed)});
 					}else{
 						if(rows[row_id].added){
@@ -524,17 +495,10 @@ class AddTable extends Component{
 			for={TimeColumns}
 			/>
 			
-<<<<<<< HEAD
 			<DateTimeTypeProvider
             for={dateTimeColumns}
 			/>
 
-=======
-		
-			<DateTimeTypeProvider
-            for={dateTimeColumns}
-			/>
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			<Table
 			style={{paddingBottom: 15}}
 			columnExtensions={tableColumnExtensions} 

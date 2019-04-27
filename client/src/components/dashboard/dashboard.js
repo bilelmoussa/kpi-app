@@ -20,10 +20,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Dashboard from '@material-ui/icons/Dashboard';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-<<<<<<< HEAD
-=======
-import Typography from '@material-ui/core/Typography';
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 import Avatar from '@material-ui/core/Avatar';
 import { Route, Switch, Link } from 'react-router-dom';
 import profile from './sub_components/profile';
@@ -31,12 +27,8 @@ import chart from './sub_components/chart';
 import table from './sub_components/table';
 import dash_home from './sub_components/dash_home';
 import users from './sub_components/users';
-<<<<<<< HEAD
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import { ButtonBase } from '@material-ui/core';
-=======
-
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 
 const styles = {
   list: {
@@ -55,7 +47,6 @@ const styles = {
 	  backgroundColor: '#2196f3',
   },
   grow: {
-<<<<<<< HEAD
 		flexGrow: 1,
 		display: "flex",
 		flexDirection: 'row',
@@ -67,9 +58,6 @@ const styles = {
 		textShadow: "1px 1px 1px #f9f9f9",
 		width: 230,
 		justifyContent: "start"
-=======
-    flexGrow: 1,
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
   },
   menuButton: {
     marginLeft: -12,
@@ -83,7 +71,6 @@ const styles = {
 	width: 100,
 	height: 100,
 	margin: '20px auto'
-<<<<<<< HEAD
 	},
 	smlAvatar:{
 		width: 40,
@@ -97,20 +84,6 @@ const styles = {
 		width: "100%"
 	}
   
-=======
-  },
-  ul_list:{
-	margin: '20px 0'  
-  },
-  header:{
-	letterSpacing: '7px',
-	fontFamily: 'monospace',
-    fontWeight: 'bold',
-    fontSize: 27,
-    textTransform: 'uppercase',
-    textShadow: "1px 1px 1px #f9f9f9"
-  }
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 }
 
 const pagenotfound = ({ location }) => (
@@ -200,11 +173,7 @@ class dashboard extends Component {
 	 const sideList = (
 			<div className={classes.list}>
 				<Avatar 
-<<<<<<< HEAD
 					src={require('../../static/download.jpg')} 
-=======
-					src="http://www.chercheinfo.com/uploads/0-d902dd0108.jpg" 
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 					className={classes.bigAvatar}
 				/>
 				<Divider />
@@ -246,7 +215,6 @@ class dashboard extends Component {
 					<IconButton onClick={this.toggleDrawer('left', true)}  className={classes.menuButton} color="inherit" aria-label="Menu">
 					<MenuIcon />
 					</IconButton>
-<<<<<<< HEAD
 					<div className={classes.TitleContainer}>
 					<ButtonBase className={classes.grow} component={Link} to={`/dashboard`}  >
 					<Avatar
@@ -259,19 +227,11 @@ class dashboard extends Component {
 					</ButtonBase>
 					</div>
 					
-=======
-					<Typography classes={{'h6': classes.header}} variant="h6" color="inherit" className={classes.grow}>
-						3dWave
-					</Typography>
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 					<Button 
 						color="inherit"
 						onClick={this.onLogout.bind(this)}
 						>
-<<<<<<< HEAD
 						<ExitToApp />
-=======
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 						Logout
 					</Button>
 				</Toolbar>

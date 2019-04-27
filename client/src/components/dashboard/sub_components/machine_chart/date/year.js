@@ -8,7 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CHART from '../CHART';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
 import { 
 	get_n2_years,
 	get_n2_plus_150_years,
@@ -18,9 +17,6 @@ import {
 	N2Plus50YearChartData,
 	ClearChartData
 	 } from '../../../../../actions/authentication';
-=======
-import { get_n2_years, get_n2_plus_150_years, get_n2_plus_50_years } from '../../../../../actions/authentication';
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 import { empty } from '../../../../../is-empty';
 
 const styles = theme => ({
@@ -48,12 +44,8 @@ constructor(){
     this.state = {
 				years: [],
         year: 0,
-<<<<<<< HEAD
 				openYear: false,
 				ChartData: 	[],
-=======
-        openYear: false,
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
     }
 }
 
@@ -61,7 +53,6 @@ componentDidMount(){
 	const { machine } = this.props;
 	if(machine === "N2"){
 		this.props.get_n2_years();
-<<<<<<< HEAD
 		this.props.ClearChartData("N2", "Year");
 	}
 	else if(machine === "N2Plus150"){
@@ -71,14 +62,6 @@ componentDidMount(){
 	else if(machine === "N2Plus50"){
 		this.props.get_n2_plus_50_years();
 		this.props.ClearChartData("N2Plus50", "Year");
-=======
-	}
-	else if(machine === "N2Plus150"){
-		this.props.get_n2_plus_150_years();
-	}
-	else if(machine === "N2Plus50"){
-		this.props.get_n2_plus_50_years();
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 	}
 	
 }
@@ -89,7 +72,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 		if(nextProps.N2!==prevState.N2){
 			if(empty(nextProps.N2.Years)){
 				return { years: [] };
-<<<<<<< HEAD
 			}			
 			else if(!empty(nextProps.N2.Years)){
 				return { years: nextProps.N2.Years };
@@ -99,10 +81,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 			}	
 			else{
 				return { years: nextProps.N2.Years,  chartData: nextProps.N2.YearChartData };
-=======
-			}else{
-				return { years: nextProps.N2.Years };
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			}
 			
 		}else { return null };
@@ -111,7 +89,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 		if(nextProps.N2_Plus_150!==prevState.N2_Plus_150){
 			if(empty(nextProps.N2_Plus_150.Years)){
 				return { years: [] };
-<<<<<<< HEAD
 			}			
 			else if(!empty(nextProps.N2_Plus_150.Years)){
 				return {  years: nextProps.N2_Plus_150.Years };
@@ -121,10 +98,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 			}	
 			else{
 				return { years: nextProps.N2_Plus_150.Years, chartData: nextProps.N2_Plus_150.YearChartData };
-=======
-			}else{
-				return { years: nextProps.N2_Plus_150.Years };
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			}
 			
 		}else { return null };
@@ -133,7 +106,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 		if(nextProps.N2_Plus_50!==prevState.N2_Plus_50){
 			if(empty(nextProps.N2_Plus_50.Years)){
 				return { years: [] };
-<<<<<<< HEAD
 			}			
 			else if(!empty(nextProps.N2_Plus_50.Years)){
 				return { years: nextProps.N2_Plus_50.Years };
@@ -143,10 +115,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 			}	
 			else{
 				return { years: nextProps.N2_Plus_50.Years, chartData: nextProps.N2_Plus_50.YearChartData };
-=======
-			}else{
-				return { years: nextProps.N2_Plus_50.Years };
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			}
 			
 		}else { return null };
@@ -165,7 +133,6 @@ componentDidUpdate(prevProps, prevState) {
 					years: [],
 				})
 			}
-<<<<<<< HEAD
 			else if(empty(this.props.N2.YearChartData) &&  !empty(this.props.N2.Years)){
 				this.setState({
 					years: this.props.N2.Years,
@@ -176,12 +143,6 @@ componentDidUpdate(prevProps, prevState) {
 					years: this.props.N2.Years,
 					chartData:  this.props.N2.YearChartData,
 				})
-=======
-			else{
-				this.setState({
-					years: this.props.N2.Years,
-				});
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			}
 		
 		}else{
@@ -195,7 +156,6 @@ componentDidUpdate(prevProps, prevState) {
 					years: [],
 				})
 			}
-<<<<<<< HEAD
 			else if(empty(this.props.N2_Plus_150.YearChartData) && !empty(this.props.N2_Plus_150.Years)){
 				this.setState({
 					years: this.props.N2_Plus_150.Years,
@@ -206,12 +166,6 @@ componentDidUpdate(prevProps, prevState) {
 					years: this.props.N2_Plus_150.Years,
 					chartData:  this.props.N2_Plus_150.YearChartData,
 				})
-=======
-			else{
-				this.setState({
-					years: this.props.N2_Plus_150.Years,
-				});
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			}
 		
 		}else{
@@ -225,7 +179,6 @@ componentDidUpdate(prevProps, prevState) {
 					years: [],
 				})
 			}
-<<<<<<< HEAD
 			else if(empty(this.props.N2_Plus_50.YearChartData) && !empty(this.props.N2_Plus_50.Years)){
 				this.setState({
 					years: this.props.N2_Plus_50.Years,
@@ -236,12 +189,6 @@ componentDidUpdate(prevProps, prevState) {
 					years: this.props.N2_Plus_50.Years,
 					chartData:  this.props.N2_Plus_50.YearChartData,
 				})
-=======
-			else{
-				this.setState({
-					years: this.props.N2_Plus_50.Years,
-				});
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			}
 		
 		}else{
@@ -253,7 +200,6 @@ componentDidUpdate(prevProps, prevState) {
 
 handleChange = event => {
 	this.setState({ [event.target.name]: event.target.value });
-<<<<<<< HEAD
 	const { machine } = this.props;
 
 	this.setState({ [event.target.name]: event.target.value });
@@ -276,9 +222,6 @@ handleChange = event => {
 	}
 };
 }
-=======
-};
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 
 handleCloseYear = () => {this.setState({ openYear: false })}
 
@@ -286,17 +229,10 @@ handleOpenYear = () => {this.setState({ openYear: true })}
 
 
 render() {
-<<<<<<< HEAD
     const { classes, machine } = this.props;
 		const { openYear, year, years, chartData } = this.state;
 		
 		
-=======
-    const { classes } = this.props;
-    const { openYear, year, years } = this.state;
-
-    
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
     let YearList = () =>{
             return years.map((year, i) => { return <MenuItem key={i} value={year}>Year {year}</MenuItem> });
     }
@@ -330,11 +266,7 @@ render() {
       	    </form>
 		</AppBar>
 				
-<<<<<<< HEAD
         <CHART machine={machine} ChartData={chartData} Target="Year" />
-=======
-        <CHART Target="Year" />
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 
 	</div>
 
@@ -347,13 +279,10 @@ Year.propTypes = {
 		get_n2_years: PropTypes.func.isRequired,
 		get_n2_plus_150_years: PropTypes.func.isRequired,
 		get_n2_plus_50_years: PropTypes.func.isRequired,
-<<<<<<< HEAD
 		N2YearChartData: PropTypes.func.isRequired,
 		N2Plus150YearChartData: PropTypes.func.isRequired,
 		N2Plus50YearChartData: PropTypes.func.isRequired,
 		ClearChartData: PropTypes.func.isRequired,
-=======
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 }
 
 const mapStateToProps = (state) => ({
@@ -362,8 +291,4 @@ const mapStateToProps = (state) => ({
 	N2_Plus_50: state.N2_Plus_50
 });
 
-<<<<<<< HEAD
 export default connect(mapStateToProps, { get_n2_years, get_n2_plus_150_years, get_n2_plus_50_years, N2YearChartData, N2Plus150YearChartData,  N2Plus50YearChartData, ClearChartData })(withStyles(styles)(Year))
-=======
-export default connect(mapStateToProps, { get_n2_years, get_n2_plus_150_years, get_n2_plus_50_years })(withStyles(styles)(Year))
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779

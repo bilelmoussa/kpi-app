@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -181,14 +180,3 @@ const mapStateToProps = (state) => ({
 })
 
 export default  connect(mapStateToProps, {getAllMachineRatio})(withStyles(styles)(dash_home));
-=======
-
-
-export default class dash_home extends Component {
-	render(){
-		return(
-			<div>Dashboard</div>
-		)
-	}
-}
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779

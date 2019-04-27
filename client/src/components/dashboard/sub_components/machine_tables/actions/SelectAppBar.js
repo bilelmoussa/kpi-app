@@ -412,10 +412,6 @@ SelectAppBar.propTypes = {
 	ClearTableData: PropTypes.func.isRequired,
 	ClearSelectWeeks: PropTypes.func.isRequired,
 	ClearSelectMonths: PropTypes.func.isRequired,
-<<<<<<< HEAD
-
-=======
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 }
 
 const mapStateToProps = (state) => ({

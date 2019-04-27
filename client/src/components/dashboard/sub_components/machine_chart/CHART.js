@@ -18,7 +18,6 @@ export default class CHART extends Component {
     }
   }
 
-<<<<<<< HEAD
  
   render() {
     const { ChartData, machine, Target } = this.props;
@@ -106,44 +105,20 @@ export default class CHART extends Component {
         })
       }
     }
-=======
-  render() {
-    const { ChartData } = this.props;
-    let test = []
-
-    if(!empty(ChartData)){
-      ChartData.forEach((d)=>{
-        for(let i = 0; i < d.Date.length; i++){
-          let date_workingH = { Date: String(to_date(d.Date[i])), workingHours: Number(d.workingHours[i].toFixed(2)) };
-          test.push(date_workingH);
-        }
-      })
-    }
-    test.sort((a, b) => {return a.Date - b.Date});
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 
     const renderChart = () => { 
       if(!empty(ChartData)){
       return (
-<<<<<<< HEAD
              <Chart id={'chart'} dataSource={test} >
               {ChartTitle()}
               >
-=======
-             <Chart id={'chart'} dataSource={test} theme={"generic.dark"}  >
-              <Title text="Machine Working Hours" />
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
               <CommonSeriesSettings
                 argumentField={'state'}
                 type={'bar'}
                 barPadding={0.5}
                 hoverMode={"none"}
               >
-<<<<<<< HEAD
               <Label visible={true} backgroundColor={"rgb(29, 178, 245, 0)"}   font={{ color: '#f00', Size: "16px", weight: "600"}}>
-=======
-              <Label visible={true} backgroundColor={"rgb(29, 178, 245, 0)"}   font={{ Size: "16px", weight: "600"}}>
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
                 <Format type={'fixedPoint'} precision={0} />
               </Label>
               </CommonSeriesSettings>
@@ -154,17 +129,10 @@ export default class CHART extends Component {
                 type={'bar'}
                 />
               <ValueAxis position={'left'} >
-<<<<<<< HEAD
                 {TitleChartYAxis()}
               </ValueAxis>
               <ArgumentAxis position={'bottom'} >
                 {TitleChartXAxis()}
-=======
-                <Title text={'Working Hours'}  font={{size: 20}}/>
-              </ValueAxis>
-              <ArgumentAxis position={'bottom'} >
-                <Title text={'Days'}  font={{size: 20}}  />
->>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
               </ArgumentAxis>
               <Legend verticalAlignment={'bottom'} horizontalAlignment={'center'} visible={false}></Legend>
               <Export enabled={true} />
