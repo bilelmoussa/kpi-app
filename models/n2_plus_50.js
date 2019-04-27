@@ -56,7 +56,11 @@ module.exports.get_weeks = function(year, month, callback){
 				_id: 1,
 			}
 		},
+<<<<<<< HEAD
 		{ $match: { $and: [ {"_id.year": year}, {"_id.month": month } ]} },
+=======
+		{ $match: { "_id.month": year, "_id.month": month  } },
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 		{ $sort : { "_id.year": -1, "_id.month" : -1, "_id.week": -1 } }
 	];
 
@@ -72,7 +76,11 @@ module.exports.getWeekChartValues = function(year, month, week, callback){
 		{
 			$group : {
 			   _id : { year: { $year: "$timeAndDate" }, month: { $month: "$timeAndDate" }, week: { $isoWeek: "$timeAndDate" } },
+<<<<<<< HEAD
 			   workingHours : { $push: "$actualWh" },
+=======
+			   workingHours : { $push: "$workingHours" },
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			   Date: { $push: "$timeAndDate" },
 			   count: { $sum: 1 }
 			}
@@ -91,14 +99,22 @@ module.exports.getMonthChartValues = function(year, month, callback){
 		{
 			$group : {
 			   _id : { year: { $year: "$timeAndDate" }, month: { $month: "$timeAndDate" }, week: { $isoWeek: "$timeAndDate" } },
+<<<<<<< HEAD
 			   workingHours : { $push: "$actualWh" },
+=======
+			   workingHours : { $push: "$workingHours" },
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			   timeAndDate: { $push: "$timeAndDate" },
 			   count: { $sum: 1 }
 			}
 		  },
 		  { $project: { _id: 1, workingHours: 1, timeAndDate: 1, count: 1 } },
 		  { $match: { $and: [{"_id.month": month}, {"_id.year": year} ] } },
+<<<<<<< HEAD
 		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : 1,   } }
+=======
+		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 	]
 
 	n2_plus_50_part.aggregate(options, callback);
@@ -109,14 +125,22 @@ module.exports.getYearChartValues = function(year, callback){
 		{
 			$group : {
 			   _id : { year: { $year: "$timeAndDate" }, month: { $month: "$timeAndDate" }, week: { $isoWeek: "$timeAndDate" } },
+<<<<<<< HEAD
 			   workingHours : { $push: "$actualWh" },
+=======
+			   workingHours : { $push: "$workingHours" },
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			   timeAndDate: { $push: "$timeAndDate" },
 			   count: { $sum: 1 }
 			}
 		  },
 		  { $project: { _id: 1, workingHours: 1, timeAndDate: 1, count: 1 } },
 		  { $match: { $and: [ {"_id.year": year} ] } },
+<<<<<<< HEAD
 		  { $sort : { "_id.year": -1, "_id.month": 1,  "_id.week" : 1,   } }
+=======
+		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 	]
 
 	n2_plus_50_part.aggregate(options, callback);
@@ -149,17 +173,27 @@ module.exports.getWeekTableValues = function(year, month, week, callback){
 			   workingHours_Total: { $sum: "$workingHours" },
 			   actualWh_Total : { $sum: "$actualWh" },
 			   Faillure_Total: { $sum: "$failureCoef" },
+<<<<<<< HEAD
 			   FilamantComsumption: {$sum: "$weight"},
 			   Template_Total: { $sum: "$template" },
 			   count: { $sum: 1 }
 			}
 		  },
 		  { $project: { _id: 1, rows: 1, workingHours_Total: 1, Template_Total: 1,  actualWh_Total: 1, Faillure_Total: 1,  count: 1,  TimeEfficiency: { $divide: [ "$actualWh_Total", 168 ] },  FailRate: { $subtract: [ 1, {$divide: ["$Faillure_Total", "$count"] } ] },  FilamantComsumption: 1 }  },
+=======
+			   count: { $sum: 1 }
+			}
+		  },
+		  { $project: { _id: 1, rows: 1, workingHours_Total: 1,  actualWh_Total: 1, Faillure_Total: 1,  count: 1,  Efficiency: { $divide: [ "$actualWh_Total", 168 ] }, FailRate: { $subtract: [ 1, {$divide: ["$Faillure_Total", "$count"] } ] }, PlanningEfficiency: { $divide: [ "$workingHours_Total", 168 ] }, AvgPrinting: { $divide: [ "$actualWh_Total", 7 ] }  }  },
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 		  { $match: { $and: [{"_id.week": week}, {"_id.month": month}, {"_id.year": year} ] } },
 		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
 	]
 
 	n2_plus_50_part.aggregate(options, callback);
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779

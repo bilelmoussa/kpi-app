@@ -43,10 +43,17 @@ export default class App extends Component {
           <Router>
             <div id="content">
               <Switch>
+<<<<<<< HEAD
 					<Route path='/' exact component={home} />
 					<Route path='/dashboard' component={dashboard} />
 					<Route path="/login" component={ login }/>
 					<Route path="/register" component={ register } />
+=======
+					<Route exact path='/' component={home} />
+					<Route path='/dashboard' component={dashboard} />
+					<Route exact path="/login" component={ login }/>
+					<Route exact path="/register" component={ register } />
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 					<Route component={pagenotfound}/>
               </Switch>
             </div>

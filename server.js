@@ -6,7 +6,10 @@ const helmet = require('helmet');
 const cors = require("cors");
 const passport = require("passport");
 const os = require('os');
+<<<<<<< HEAD
 const path = require('path');
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 
 
 let  address;
@@ -25,7 +28,10 @@ for (let dev in ifaces) {
 const N2 = require('./routes/api/n2_parts');
 const N2_plus_50 = require('./routes/api/n2_plus_50_parts');
 const N2_plus_150 = require('./routes/api/n2_plus_150_parts');
+<<<<<<< HEAD
 const All_Machines = require('./routes/api/allMachines');
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 
 //user api 
 const user = require('./routes/api/users');
@@ -67,9 +73,12 @@ mongoose
     .catch(err=>{console.log('Error: ',  err)});
 
 
+<<<<<<< HEAD
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 //passport auth
 app.use(passport.initialize());
 app.use(passport.session());
@@ -79,6 +88,7 @@ require('./config/passport')(passport);
 app.use('/api/N2', N2);
 app.use('/api/N2_plus_50', N2_plus_50);
 app.use('/api/N2_plus_150', N2_plus_150);
+<<<<<<< HEAD
 app.use('/api/All_Machines', All_Machines);
 app.use('/api/user', user);
 
@@ -117,6 +127,14 @@ var x = setInterval(function() {
 
 // Port    
 const port = process.env.port || 80;
+=======
+app.use('/api/user', user);
+
+
+
+// Port    
+const port = process.env.port || 5000;
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 const hostname = '3dwave.fr'
 app.get('/server', function(req, res) {
     res.json('yaaaaaaa');

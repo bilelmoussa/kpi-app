@@ -22,11 +22,15 @@ import {
 	N2_PLUS_50_YEAR_CHART_DATA,
 	N2_WEEK_TABLE_DATA,
 	N2_PLUS_150_WEEK_TABLE_DATA,
+<<<<<<< HEAD
 	N2_PLUS_50_WEEK_TABLE_DATA,
 	RATIOS,
 	N2_SELECT_DATE,
 	N2_PLUS_150_SELECT_DATE,
 	N2_PLUS_50_SELECT_DATE,
+=======
+	N2_PLUS_50_WEEK_TABLE_DATA 
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -155,6 +159,14 @@ function time_hours(value){
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 export const put_N2 = (query) => dispatch =>{
 	axios.put('/api/N2/updateparts', query)
 			.catch(err => {
@@ -287,7 +299,10 @@ export const get_n2_plus_50_months = (year) => dispatch =>{
 export const get_n2_weeks = (year, month) => dispatch =>{
 	axios.get(`/api/N2/weeks/${year}/${month}`)
 		.then(res=>{
+<<<<<<< HEAD
 			console.log(res)
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 			dispatch({
 				type: N2_WEEKS,
 				payload: res.data.weeks
@@ -424,6 +439,7 @@ export const N2Plus50YearChartData = (year) => dispatch =>{
 		.catch(err=>{console.log(err)})
 }
 
+<<<<<<< HEAD
 export const ClearChartData = (machine, target) => dispatch =>{
 	if(machine === "N2"){
 		if(target === "week"){
@@ -479,6 +495,24 @@ export const ClearChartData = (machine, target) => dispatch =>{
 			})
 		}
 
+=======
+export const ClearChartData = (machine) => dispatch =>{
+	if(machine === "N2"){
+		dispatch({
+			type: N2_WEEK_CHART_DATA,
+			payload: []
+		})
+	}else if(machine === "N2Plus150"){
+		dispatch({
+			type: N2_PLUS_150_WEEK_CHART_DATA,
+			payload: []
+		})
+	}else if(machine === "N2Plus50"){
+		dispatch({
+			type: N2_PLUS_50_WEEK_CHART_DATA,
+			payload: []
+		})
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 	}
 }
 
@@ -487,19 +521,28 @@ export const ClearChartData = (machine, target) => dispatch =>{
 export const N2WeekTableData = (year, month, week) => dispatch =>{
 	axios.get(`/api/N2/week_table/${year}/${month}/${week}`)
 		.then(res=>{
+<<<<<<< HEAD
 			console.log(res)
 			let new_rows = [];
 			res.data.data.forEach((part, index)=>{
 				part.FilamantComsumption = Number(part.FilamantComsumption).toFixed(2);
 				part.FailRate = Number(part.FailRate).toFixed(4);
 				part.TemplateEfficiency = Number(part.TemplateEfficiency).toFixed(4);
+=======
+			let new_rows = [];
+			res.data.data.forEach((part, index)=>{
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				part.rows.forEach((row, i)=>{
 					row.id = i;
 					row.timeAndDate = to_date(row.timeAndDate);
 					row.finishingTime = to_date(row.finishingTime);
 					row.workingHours = time_hours(row.workingHours);
+<<<<<<< HEAD
 					row.actualWh = time_hours(row.actualWh);
 					row.template = time_hours(row.template);						
+=======
+					row.actualWh = time_hours(row.actualWh);						
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				})
 				new_rows.push(part);
 			});
@@ -515,16 +558,23 @@ export const N2Plus150WeekTableData = (year, month, week) => dispatch =>{
 		.then(res=>{
 			let new_rows = [];
 			res.data.data.forEach((part, index)=>{
+<<<<<<< HEAD
 				part.FilamantComsumption = part.FilamantComsumption.toFixed(2);
 				part.FailRate = part.FailRate.toFixed(4);
 				part.TemplateEfficiency = part.TemplateEfficiency.toFixed(4);
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				part.rows.forEach((row, i)=>{
 					row.id = i;
 					row.timeAndDate = to_date(row.timeAndDate);
 					row.finishingTime = to_date(row.finishingTime);
 					row.workingHours = time_hours(row.workingHours);
+<<<<<<< HEAD
 					row.actualWh = time_hours(row.actualWh);
 					row.template = time_hours(row.template)						
+=======
+					row.actualWh = time_hours(row.actualWh);						
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				})
 				new_rows.push(part);
 			});
@@ -540,16 +590,23 @@ export const N2Plus50WeekTableData = (year, month, week) => dispatch =>{
 		.then(res=>{
 			let new_rows = [];
 			res.data.data.forEach((part, index)=>{
+<<<<<<< HEAD
 				part.FilamantComsumption = part.FilamantComsumption.toFixed(2);
 				part.FailRate = part.FailRate.toFixed(4);
 				part.TemplateEfficiency = part.TemplateEfficiency.toFixed(4);
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				part.rows.forEach((row, i)=>{
 					row.id = i;
 					row.timeAndDate = to_date(row.timeAndDate);
 					row.finishingTime = to_date(row.finishingTime);
 					row.workingHours = time_hours(row.workingHours);
+<<<<<<< HEAD
 					row.actualWh = time_hours(row.actualWh);
 					row.template = time_hours(row.template)						
+=======
+					row.actualWh = time_hours(row.actualWh);						
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				})
 				new_rows.push(part);
 			});
@@ -619,6 +676,7 @@ export const ClearSelectWeeks = (machine) => dispatch =>{
 			payload: []
 		})
 	}
+<<<<<<< HEAD
 }
 
 //GET 4 Ratio
@@ -686,3 +744,6 @@ export const Save_N2_Plus_50_Date = (value) => dispatch =>{
 	}, 1000);
 }
 
+=======
+}
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779

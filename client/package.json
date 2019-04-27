@@ -15,12 +15,20 @@
     "devextreme": "^18.2.7",
     "devextreme-react": "^18.2.6",
     "jwt-decode": "^2.2.0",
+<<<<<<< HEAD
+=======
+    "material-ui-time-picker": "^1.1.0",
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-material-ui-form-validator": "^2.0.6",
+<<<<<<< HEAD
+=======
+    "react-moment": "^0.8.4",
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
     "react-number-format": "^4.0.6",
     "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
@@ -45,5 +53,9 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+<<<<<<< HEAD
   "proxy": "http://localhost:80"
+=======
+  "proxy": "http://localhost:5000"
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 }

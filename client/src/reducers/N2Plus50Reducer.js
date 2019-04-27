@@ -5,8 +5,12 @@ import {
     N2_PLUS_50_WEEK_CHART_DATA,
     N2_PLUS_50_MONTH_CHART_DATA,
     N2_PLUS_50_YEAR_CHART_DATA,
+<<<<<<< HEAD
     N2_PLUS_50_WEEK_TABLE_DATA,
     N2_PLUS_50_SELECT_DATE,
+=======
+    N2_PLUS_50_WEEK_TABLE_DATA
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
     } from '../actions/types';
 
 const initialState = {
@@ -17,7 +21,10 @@ const initialState = {
     MonthChartData: {},
     YearChartData: {},
     WeekTableData: {},
+<<<<<<< HEAD
     N2Plus50_selectedDate: {},
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 };
 
 export default function(state = initialState, action ) {
@@ -36,9 +43,13 @@ export default function(state = initialState, action ) {
         case N2_PLUS_50_YEAR_CHART_DATA:
             return { ...state, YearChartData: action.payload };
         case N2_PLUS_50_WEEK_TABLE_DATA:
+<<<<<<< HEAD
             return { ...state, WeekTableData: action.payload }; 
         case N2_PLUS_50_SELECT_DATE:
             return { ...state, N2Plus50_selectedDate: action.payload};           
+=======
+            return { ...state, WeekTableData: action.payload };        
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
         default: 
             return state;
     }

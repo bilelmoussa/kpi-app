@@ -5,6 +5,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Week from './date/week';
 import Month from './date/month';
 import Year from './date/year';
+<<<<<<< HEAD
+=======
+import Card from '@material-ui/core/Card';
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 

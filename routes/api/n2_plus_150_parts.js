@@ -154,6 +154,7 @@ router.get('/month_chart/:year/:month', (req, res, next)=>{
 					res.status(400).json({errors: err});
 				}
 				if(data){
+<<<<<<< HEAD
 					function getSum(total, num) {
 						return total + num;
 					  }
@@ -170,6 +171,9 @@ router.get('/month_chart/:year/:month', (req, res, next)=>{
 						newData[0]._id = d._id
 					})
 					res.json({success: true, data: newData})
+=======
+					res.json({success: true, data: data})
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				}
 			})
 		}else{
@@ -190,6 +194,7 @@ router.get('/year_chart/:year', (req, res, next)=>{
 					res.status(400).json({errors: err});
 				}
 				if(data){
+<<<<<<< HEAD
 					function getSum(total, num) {
 						return total + num;
 					  }
@@ -233,6 +238,9 @@ router.get('/year_chart/:year', (req, res, next)=>{
 					})
 					
 					res.json({success: true, data: correctData})
+=======
+					res.json({success: true, data: data})
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 				}
 			})
 		}else{
@@ -256,6 +264,7 @@ router.get('/week_table/:year/:month/:week', (req, res, next)=>{
 					res.status(400).json({errors: err});
 				}
 				if(data){
+<<<<<<< HEAD
 					data.forEach((d)=>{
 						if(d.Template_Total === 0){
 							d.Template_Total = d.workingHours_Total;
@@ -269,6 +278,8 @@ router.get('/week_table/:year/:month/:week', (req, res, next)=>{
 					})
 					
 					
+=======
+>>>>>>> db856b56b2962c830cd56d69f13a13c8fd4c7779
 					res.json({success: true, data: data})
 				}
 			})
