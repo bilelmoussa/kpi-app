@@ -7,14 +7,13 @@ import FormControl from '@material-ui/core/FormControl';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
-import { Save_N2_Date, Save_N2_Plus_150_Date, Save_N2_Plus_50_Date } from '../../../../actions/authentication';
+import { Save_N2_Date, Save_N2_Plus_150_Date, Save_N2_Plus_50_Date, StopTimer_N2,StopTimer_N2_Plus_150, StopTimer_N2_Plus_50  } from '../../../../actions/authentication';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { empty } from '../../../../is-empty';
-
 const styles = theme =>({
     nav_h:{
 		padding: "15px 0",
@@ -109,6 +108,21 @@ class AddTime extends Component {
         }
     }
 
+    StopN2Timer = (event) =>{
+        event.preventDefault();
+        this.props.StopTimer_N2();
+    }
+
+    StopN2Plus150Timer = (event) =>{
+        event.preventDefault();
+        this.props.StopTimer_N2_Plus_150()
+    }
+
+    StopN2Plus50Timer = (event) =>{
+        event.preventDefault();
+        this.props.StopTimer_N2_Plus_50()
+    }
+
     exitDialog = () => this.setState({ emptyDate : false });
 
     render(){
@@ -131,6 +145,7 @@ class AddTime extends Component {
                             />
                         </FormControl>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton}>Add</Button>
+                        <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.StopN2Timer}>Stop</Button>
                     </form>
             </div>
 
@@ -148,6 +163,7 @@ class AddTime extends Component {
                                 />
                         </FormControl>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton}>Add</Button>
+                        <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.StopN2Plus150Timer}>Stop</Button>
                     </form>
                           
             </div>
@@ -165,6 +181,7 @@ class AddTime extends Component {
                                     />
                         </FormControl>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton}>Add</Button>
+                        <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.StopN2Plus50Timer}>Stop</Button>
                     </form>   
             </div>
             
@@ -204,7 +221,10 @@ AddTime.propTypes = {
     Save_N2_Plus_50_Date: PropTypes.func.isRequired,
     N2: PropTypes.object.isRequired,
     N2_Plus_150: PropTypes.object.isRequired,
-    N2_Plus_50: PropTypes.object.isRequired
+    N2_Plus_50: PropTypes.object.isRequired,
+    StopTimer_N2: PropTypes.func.isRequired,
+    StopTimer_N2_Plus_150: PropTypes.func.isRequired,
+    StopTimer_N2_Plus_50: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -213,5 +233,5 @@ const mapStateToProps = (state) => ({
     N2_Plus_50: state.N2_Plus_50
 });
 
-export default connect(mapStateToProps, {Save_N2_Date, Save_N2_Plus_150_Date, Save_N2_Plus_50_Date})(withStyles(styles)(AddTime));
+export default connect(mapStateToProps, {Save_N2_Date, Save_N2_Plus_150_Date, Save_N2_Plus_50_Date, StopTimer_N2, StopTimer_N2_Plus_150, StopTimer_N2_Plus_50})(withStyles(styles)(AddTime));
 

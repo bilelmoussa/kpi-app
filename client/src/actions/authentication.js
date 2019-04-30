@@ -515,9 +515,9 @@ export const N2Plus150WeekTableData = (year, month, week) => dispatch =>{
 		.then(res=>{
 			let new_rows = [];
 			res.data.data.forEach((part, index)=>{
-				part.FilamantComsumption = part.FilamantComsumption.toFixed(2);
-				part.FailRate = part.FailRate.toFixed(4);
-				part.TemplateEfficiency = part.TemplateEfficiency.toFixed(4);
+				part.FilamantComsumption = Number(part.FilamantComsumption).toFixed(2);
+				part.FailRate = Number(part.FailRate).toFixed(4);
+				part.TemplateEfficiency = Number(part.TemplateEfficiency).toFixed(4);
 				part.rows.forEach((row, i)=>{
 					row.id = i;
 					row.timeAndDate = to_date(row.timeAndDate);
@@ -540,9 +540,9 @@ export const N2Plus50WeekTableData = (year, month, week) => dispatch =>{
 		.then(res=>{
 			let new_rows = [];
 			res.data.data.forEach((part, index)=>{
-				part.FilamantComsumption = part.FilamantComsumption.toFixed(2);
-				part.FailRate = part.FailRate.toFixed(4);
-				part.TemplateEfficiency = part.TemplateEfficiency.toFixed(4);
+				part.FilamantComsumption = Number(part.FilamantComsumption).toFixed(2);
+				part.FailRate = Number(part.FailRate).toFixed(4);
+				part.TemplateEfficiency = Number(part.TemplateEfficiency).toFixed(4);
 				part.rows.forEach((row, i)=>{
 					row.id = i;
 					row.timeAndDate = to_date(row.timeAndDate);
@@ -633,32 +633,159 @@ export const getAllMachineRatio = (year) => dispatch =>{
 	})
 }
 
-//TIMER
-export const Save_N2_Date = (value) => dispatch =>{
-	let seconds = value * 3600;
+
+let Timer_N2 = 0;
+let Timer_N2_Plus_150 = 0;
+let Timer_N2_Plus_50 = 0;
+
+
+
+export const AddClientTimer = (machine, values) => dispatch =>{
+	if(machine === "N2"){
+		let  seconds = values * 3600;
+		clearInterval(Timer_N2);
+		dispatch({
+			type: N2_SELECT_DATE,
+			payload: 0
+		});
+		Timer_N2 = setInterval(function(){
+			let nextSeconds = seconds--
+			if(nextSeconds === 0 ){
+				clearInterval(Timer_N2)
+				nextSeconds = 0;
+			}
 	
-	let timer = setInterval(function(){
+			dispatch({
+				type: N2_SELECT_DATE,
+				payload: nextSeconds
+			});
+	
+		}, 1000);
+	}
+	else if(machine === "N2Plus150"){
+		let  seconds = values * 3600;
+		clearInterval(Timer_N2_Plus_150);
+		dispatch({
+			type: N2_PLUS_150_SELECT_DATE,
+			payload: 0
+		});
+		Timer_N2_Plus_150 = setInterval(function(){
+			let nextSeconds = seconds--;
+			if(nextSeconds === 0 ){
+				clearInterval(Timer_N2_Plus_150)
+				nextSeconds = 0;
+			}
+			dispatch({
+				type: N2_PLUS_150_SELECT_DATE,
+				payload: nextSeconds
+			})
+		}, 1000);
+	}
+	else if(machine === "N2Plus50"){
+		let  seconds = values * 3600;
+		clearInterval(Timer_N2_Plus_50);
+		dispatch({
+			type: N2_PLUS_50_SELECT_DATE,
+			payload: 0
+		});
+		Timer_N2_Plus_50 = setInterval(function(){
+			let nextSeconds = seconds--;
+			if(nextSeconds === 0 ){
+				clearInterval(Timer_N2_Plus_50)
+				nextSeconds = 0;
+			}
+			dispatch({
+				type: N2_PLUS_50_SELECT_DATE,
+				payload: nextSeconds
+			})
+		}, 1000);
+	}
+}
+
+
+export const  AddTimer_N2 = (values, dispatch) =>{
+	let seconds = values * 3600;
+
+	axios.post('/api/timer/start_n2_timer', {values: seconds})
+	.then(res=>{
+		console.log(res.data)
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+
+	Timer_N2 = setInterval(function(){
 		let nextSeconds = seconds--
 		if(nextSeconds === 0 ){
-			clearInterval(timer)
+			clearInterval(Timer_N2)
 			nextSeconds = 0;
 		}
+
 		dispatch({
 			type: N2_SELECT_DATE,
 			payload: nextSeconds
 		});
+
 	}, 1000);
 
 	
 }
 
-export const Save_N2_Plus_150_Date = (value) => dispatch =>{
-	let seconds = value * 3600;
+export const  StopTimer_N2 = () => dispatch =>{
+	axios.get('/api/timer/stop_n2_timer')
+	.then(res=>{
+		console.log(res.data)
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+	clearInterval(Timer_N2);
+	dispatch({
+		type: N2_SELECT_DATE,
+		payload: 0
+	});
+}
 
-	let timer = setInterval(function(){
+export const Save_N2_Date = (value) => dispatch =>{
+	clearInterval(Timer_N2);
+	dispatch({
+		type: N2_SELECT_DATE,
+		payload: 0
+	});
+	AddTimer_N2(value, dispatch);
+}
+
+export const Get_N2_Timer  = () => dispatch =>{
+	axios.get('/api/timer/get_n2_timer')
+	.then(res=>{
+		console.log(res.data);
+		dispatch({
+			type: N2_SELECT_DATE,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+}
+
+
+
+export const  AddTimer_N2_Plus_150 = (values, dispatch) =>{
+	let seconds = values * 3600;
+
+	axios.post('/api/timer/start_n2plus150_timer', {values: seconds})
+	.then(res=>{
+		console.log(res.data)
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+
+	 Timer_N2_Plus_150 = setInterval(function(){
 		let nextSeconds = seconds--;
 		if(nextSeconds === 0 ){
-			clearInterval(timer)
+			clearInterval(Timer_N2_Plus_150)
 			nextSeconds = 0;
 		}
 		dispatch({
@@ -670,13 +797,60 @@ export const Save_N2_Plus_150_Date = (value) => dispatch =>{
 }
 
 
-export const Save_N2_Plus_50_Date = (value) => dispatch =>{
-	let seconds = value * 3600;
 
-	let timer = setInterval(function(){
-		let nextSeconds = seconds--
+export const  StopTimer_N2_Plus_150 = () => dispatch =>{
+	axios.get('/api/timer/stop_n2plus150_timer')
+	.then(res=>{
+		console.log(res.data)
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+	clearInterval(Timer_N2_Plus_150);
+	dispatch({
+		type: N2_PLUS_150_SELECT_DATE,
+		payload: 0
+	});
+}
+
+export const Save_N2_Plus_150_Date = (value) => dispatch =>{
+	clearInterval(Timer_N2_Plus_150);
+	dispatch({
+		type: N2_PLUS_150_SELECT_DATE,
+		payload: 0
+	});
+	AddTimer_N2_Plus_150(value, dispatch)
+}
+
+export const Get_N2_Plus_150_Timer  = () => dispatch =>{
+	axios.get('/api/timer/get_n2plus150_timer')
+	.then(res=>{
+		console.log(res.data);
+		dispatch({
+			type: N2_PLUS_150_SELECT_DATE,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+}
+
+export const  AddTimer_N2_Plus_50 = (values, dispatch)  =>{
+	let seconds = values * 3600;
+
+	axios.post('/api/timer/start_n2plus50_timer', {values: seconds})
+	.then(res=>{
+		console.log(res.data)
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+
+	Timer_N2_Plus_50 = setInterval(function(){
+		let nextSeconds = seconds--;
 		if(nextSeconds === 0 ){
-			clearInterval(timer)
+			clearInterval(Timer_N2_Plus_50)
 			nextSeconds = 0;
 		}
 		dispatch({
@@ -684,5 +858,43 @@ export const Save_N2_Plus_50_Date = (value) => dispatch =>{
 			payload: nextSeconds
 		})
 	}, 1000);
+
 }
 
+export const  StopTimer_N2_Plus_50 = () => dispatch =>{
+	axios.get('/api/timer/stop_n2plus50_timer')
+	.then(res=>{
+		console.log(res.data)
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+	clearInterval(Timer_N2_Plus_50);
+	dispatch({
+		type: N2_PLUS_50_SELECT_DATE,
+		payload: 0
+	});
+}
+
+export const Save_N2_Plus_50_Date = (value) => dispatch =>{
+	clearInterval(Timer_N2_Plus_50);
+	dispatch({
+		type: N2_PLUS_50_SELECT_DATE,
+		payload: 0
+	});
+	AddTimer_N2_Plus_50(value, dispatch);
+}
+
+export const Get_N2_Plus_50_Timer  = () => dispatch =>{
+	axios.get('/api/timer/get_n2plus50_timer')
+	.then(res=>{
+		console.log(res.data);
+		dispatch({
+			type: N2_PLUS_50_SELECT_DATE,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err)
+	})
+}

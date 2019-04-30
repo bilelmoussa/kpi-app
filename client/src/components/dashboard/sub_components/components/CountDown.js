@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import  { empty } from '../../../../is-empty';
 import MachineTimer from './MachineTimer';
-
+import { Get_N2_Timer, Get_N2_Plus_150_Timer, Get_N2_Plus_50_Timer } from '../../../../actions/authentication';
 
 
 class CountDown extends Component {
@@ -17,7 +17,10 @@ class CountDown extends Component {
     }
 
     componentDidMount(){
-  
+        this.props.Get_N2_Timer();
+        this.props.Get_N2_Plus_150_Timer();
+        this.props.Get_N2_Plus_50_Timer();
+
         if(empty(this.props.N2.N2_selectedDate)){
             this.setState({
                 N2_selectedDate: 0,
@@ -31,6 +34,7 @@ class CountDown extends Component {
                 N2Plus50_selectedDate: this.props.N2_Plus_50.N2Plus50_selectedDate,
             })
         }  
+        
     }
 
     
@@ -117,6 +121,9 @@ CountDown.propTypes = {
     N2: PropTypes.object.isRequired,
     N2_Plus_150: PropTypes.object.isRequired,
     N2_Plus_50: PropTypes.object.isRequired,
+    Get_N2_Timer: PropTypes.func.isRequired,
+    Get_N2_Plus_150_Timer: PropTypes.func.isRequired,
+    Get_N2_Plus_50_Timer: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -125,4 +132,4 @@ const mapStateToProps = (state) => ({
     N2_Plus_50: state.N2_Plus_50
 });
 
-export default connect(mapStateToProps)(CountDown);
+export default connect(mapStateToProps, {Get_N2_Timer, Get_N2_Plus_150_Timer, Get_N2_Plus_50_Timer})(CountDown);

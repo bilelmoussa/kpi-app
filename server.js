@@ -26,6 +26,8 @@ const N2 = require('./routes/api/n2_parts');
 const N2_plus_50 = require('./routes/api/n2_plus_50_parts');
 const N2_plus_150 = require('./routes/api/n2_plus_150_parts');
 const All_Machines = require('./routes/api/allMachines');
+const Timer = require('./routes/api/timer');
+
 
 //user api 
 const user = require('./routes/api/users');
@@ -68,7 +70,7 @@ mongoose
 
 
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+//app.use(express.static(path.join(__dirname, 'client/build')));
 
 //passport auth
 app.use(passport.initialize());
@@ -80,43 +82,18 @@ app.use('/api/N2', N2);
 app.use('/api/N2_plus_50', N2_plus_50);
 app.use('/api/N2_plus_150', N2_plus_150);
 app.use('/api/All_Machines', All_Machines);
+app.use('/api/timer', Timer);
 app.use('/api/user', user);
 
-
+/*
 app.get('*', (req,res) =>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
-
-
-var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
-
-// Update the count down every 1 second
-var x = setInterval(function() {
-
-  // Get todays date and time
-  var now = new Date().getTime();
-    
-  // Find the distance between now and the count down date
-  var distance = countDownDate - now;
-    
-  // Time calculations for days, hours, minutes and seconds
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-  // Output the result in an element with id="demo"
-    //console.log(days + "/" + hours + ":" + minutes + ":" + seconds + "s")
-
-  // If the count down is over, write some text 
-  if (distance < 0) {
-    clearInterval(x);
-  }
-}, 1000);
+*/
 
 
 // Port    
-const port = process.env.port || 80;
+const port = process.env.port || 5000;
 const hostname = '3dwave.fr'
 app.get('/server', function(req, res) {
     res.json('yaaaaaaa');

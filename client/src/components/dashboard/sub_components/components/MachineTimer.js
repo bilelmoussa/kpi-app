@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import  { empty } from '../../../../is-empty';
 
+
 const styles = theme =>({
 	nav_h:{
 		padding: "15px 0",
@@ -24,9 +25,6 @@ class MachineTimer extends Component {
             seconds: 0,
             MachineName: "",
         };
-        //this.timer = 0;
-        //this.startTimer = this.startTimer.bind(this);
-        //this.countDown = this.countDown.bind(this);
     }
 
     secondsToTime(secs){
@@ -49,32 +47,9 @@ class MachineTimer extends Component {
 
     componentDidMount(){
         this.setState({seconds: this.props.data, MachineName: this.props.MachineName});
-        //let timeLeftVar = this.secondsToTime(this.state.seconds);
-        //this.setState({ time: timeLeftVar }); 
     }
 
-    /*
-    countDown() {
-        // Remove one second, set state so a re-render happens.
-        let seconds = this.state.seconds - 1;
-        this.setState({
-          time: this.secondsToTime(seconds),
-          seconds: seconds,
-        });
-        
-        // Check if we're at zero.
-        if (seconds === 0) { 
-          clearInterval(this.timer);
-        }
-    }
-*/
-    /*
-    startTimer() {
-        if (this.timer === 0 && this.state.seconds > 0) {
-          this.timer = setInterval(this.countDown, 1000);
-        }   
-    }
-    */
+
 
     static getDerivedStateFromProps(nextProps, prevState){
         if(nextProps !== prevState){
@@ -195,6 +170,7 @@ class MachineTimer extends Component {
         )
     }
 }
+
 
 MachineTimer.propTypes = {
     classes: PropTypes.object.isRequired,
