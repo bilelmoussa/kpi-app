@@ -214,13 +214,14 @@ handleChange = event => {
 			this.props.ClearChartData("N2Plus150", "Year");
 			this.props.N2Plus150YearChartData(event.target.value)
 		}
+	}
 	else if(machine === "N2Plus50"){
 		if(event.target.name === "year"){
 			this.props.ClearChartData("N2Plus50", "Year");
 			this.props.N2Plus50YearChartData(event.target.value)
 		}
 	}
-};
+
 }
 
 handleCloseYear = () => {this.setState({ openYear: false })}

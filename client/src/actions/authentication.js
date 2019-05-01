@@ -287,7 +287,6 @@ export const get_n2_plus_50_months = (year) => dispatch =>{
 export const get_n2_weeks = (year, month) => dispatch =>{
 	axios.get(`/api/N2/weeks/${year}/${month}`)
 		.then(res=>{
-			console.log(res)
 			dispatch({
 				type: N2_WEEKS,
 				payload: res.data.weeks
@@ -487,7 +486,6 @@ export const ClearChartData = (machine, target) => dispatch =>{
 export const N2WeekTableData = (year, month, week) => dispatch =>{
 	axios.get(`/api/N2/week_table/${year}/${month}/${week}`)
 		.then(res=>{
-			console.log(res)
 			let new_rows = [];
 			res.data.data.forEach((part, index)=>{
 				part.FilamantComsumption = Number(part.FilamantComsumption).toFixed(2);
@@ -625,7 +623,6 @@ export const ClearSelectWeeks = (machine) => dispatch =>{
 export const getAllMachineRatio = (year) => dispatch =>{
 	axios.get(`/api/All_Machines/stat/${year}`)
 	.then(res=>{
-		console.log(res)
 		dispatch({
 			type: RATIOS,
 			payload: res.data
@@ -722,7 +719,6 @@ export const AddServerTimer = (machine, values) => () => {
 
 		axios.post('/api/timer/start_n2_timer', {values: seconds})
 			.then(res=>{
-				console.log(res.data)
 			})
 			.catch(err=>{
 				console.log(err)
@@ -733,7 +729,6 @@ export const AddServerTimer = (machine, values) => () => {
 
 		axios.post('/api/timer/start_n2plus150_timer', {values: seconds})
 			.then(res=>{
-				console.log(res.data)
 			})
 			.catch(err=>{
 				console.log(err)
@@ -744,7 +739,6 @@ export const AddServerTimer = (machine, values) => () => {
 
 		axios.post('/api/timer/start_n2plus50_timer', {values: seconds})
 			.then(res=>{
-				console.log(res.data)
 			})
 			.catch(err=>{
 				console.log(err)
@@ -759,7 +753,6 @@ export const AddServerTimer = (machine, values) => () => {
 export const  StopTimer_N2 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2_timer')
 	.then(res=>{
-		console.log(res.data)
 	})
 	.catch(err=>{
 		console.log(err)
@@ -805,7 +798,6 @@ export const Get_N2_Timer  = () => dispatch =>{
 export const  StopTimer_N2_Plus_150 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2plus150_timer')
 	.then(res=>{
-		console.log(res.data)
 	})
 	.catch(err=>{
 		console.log(err)
@@ -849,7 +841,6 @@ export const Get_N2_Plus_150_Timer  = () => dispatch =>{
 export const  StopTimer_N2_Plus_50 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2plus50_timer')
 	.then(res=>{
-		console.log(res.data)
 	})
 	.catch(err=>{
 		console.log(err)
