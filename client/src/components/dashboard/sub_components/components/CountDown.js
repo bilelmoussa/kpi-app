@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import  { empty } from '../../../../is-empty';
 import MachineTimer from './MachineTimer';
-import { Get_N2_Timer, Get_N2_Plus_150_Timer, Get_N2_Plus_50_Timer } from '../../../../actions/authentication';
+import { Get_N2_Timer, Get_N2_Plus_150_Timer, Get_N2_Plus_50_Timer, AddClientTimer  } from '../../../../actions/authentication';
+
 
 
 class CountDown extends Component {
@@ -21,6 +22,7 @@ class CountDown extends Component {
         this.props.Get_N2_Plus_150_Timer();
         this.props.Get_N2_Plus_50_Timer();
 
+
         if(empty(this.props.N2.N2_selectedDate)){
             this.setState({
                 N2_selectedDate: 0,
@@ -33,7 +35,7 @@ class CountDown extends Component {
                 N2Plus150_selectedDate: this.props.N2_Plus_150.N2Plus150_selectedDate,
                 N2Plus50_selectedDate: this.props.N2_Plus_50.N2Plus50_selectedDate,
             })
-        }  
+        }
         
     }
 
@@ -43,7 +45,7 @@ class CountDown extends Component {
     static getDerivedStateFromProps(nextProps, prevState){
 		if(nextProps.N2 !== prevState.N2){
 			if(empty(nextProps.N2.N2_selectedDate)){
-				return { N2_selectedDate: 0 };
+				return {N2_selectedDate: 0};
 			}else{
 				return { N2_selectedDate: nextProps.N2.N2_selectedDate };
 			}
@@ -70,25 +72,26 @@ class CountDown extends Component {
     }
     
     componentDidUpdate(prevProps, prevState){
+
 		if(prevProps.N2 !== this.props.N2){
 			if(empty(this.props.N2.N2_selectedDate)){
                 this.setState({N2_selectedDate: 0 });
 			}else{
-				this.setState({N2_selectedDate: this.props.N2.N2_selectedDate});
+                this.setState({N2_selectedDate: this.props.N2.N2_selectedDate});
 			}
         }
         if(prevProps.N2_Plus_150 !== this.props.N2_Plus_150){
 			if(empty(this.props.N2_Plus_150.N2Plus150_selectedDate)){
                 this.setState({N2Plus150_selectedDate: 0 });
 			}else{
-				this.setState({N2Plus150_selectedDate: this.props.N2_Plus_150.N2Plus150_selectedDate});
+                this.setState({N2Plus150_selectedDate: this.props.N2_Plus_150.N2Plus150_selectedDate});
 			}
         }
         if(prevProps.N2_Plus_50 !== this.props.N2_Plus_50){
 			if(empty(this.props.N2_Plus_50.N2Plus50_selectedDate)){
                 this.setState({N2Plus50_selectedDate: 0 });
 			}else{
-				this.setState({N2Plus50_selectedDate: this.props.N2_Plus_50.N2Plus50_selectedDate});
+                this.setState({N2Plus50_selectedDate: this.props.N2_Plus_50.N2Plus50_selectedDate});
 			}
         }else{
             return null;
@@ -96,11 +99,11 @@ class CountDown extends Component {
         
 	}
 
-   
+
 
     render(){
         const { N2_selectedDate, N2Plus150_selectedDate, N2Plus50_selectedDate } = this.state;
-        
+
         const selectDate = {
             N2_selectedDate: N2_selectedDate || 0,
             N2Plus150_selectedDate: N2Plus150_selectedDate || 0,
@@ -108,11 +111,13 @@ class CountDown extends Component {
         }
 
         return(
+
             <div id="Timer">
                     <MachineTimer data={selectDate.N2_selectedDate} MachineName={"N2"}/>
                     <MachineTimer data={selectDate.N2Plus150_selectedDate} MachineName={"N2 Plus 150"}/>
                     <MachineTimer data={selectDate.N2Plus50_selectedDate} MachineName={"N2 Plus 50"}/>
             </div>
+
         )
     }
 }
@@ -124,6 +129,7 @@ CountDown.propTypes = {
     Get_N2_Timer: PropTypes.func.isRequired,
     Get_N2_Plus_150_Timer: PropTypes.func.isRequired,
     Get_N2_Plus_50_Timer: PropTypes.func.isRequired,
+    AddClientTimer: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -132,4 +138,4 @@ const mapStateToProps = (state) => ({
     N2_Plus_50: state.N2_Plus_50
 });
 
-export default connect(mapStateToProps, {Get_N2_Timer, Get_N2_Plus_150_Timer, Get_N2_Plus_50_Timer})(CountDown);
+export default connect(mapStateToProps, { Get_N2_Timer, Get_N2_Plus_150_Timer, Get_N2_Plus_50_Timer, AddClientTimer })(CountDown);

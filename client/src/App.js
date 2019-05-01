@@ -10,7 +10,7 @@ import store from './store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authentication';
-
+import { SnackbarProvider } from 'notistack';
 
 
 
@@ -39,19 +39,21 @@ export default class App extends Component {
   render() {
     return (
 	<Provider store = { store }>
-      <div className="App">
-          <Router>
-            <div id="content">
-              <Switch>
-					<Route path='/' exact component={home} />
-					<Route path='/dashboard' component={dashboard} />
-					<Route path="/login" component={ login }/>
-					<Route path="/register" component={ register } />
-					<Route component={pagenotfound}/>
-              </Switch>
-            </div>
-          </Router>
-      </div>
+      <SnackbarProvider maxSnack={3}>
+          <div className="App">
+              <Router>
+                <div id="content">
+                  <Switch>
+                      <Route path='/' exact component={home} />
+                      <Route path='/dashboard' component={dashboard} />
+                      <Route path="/login" component={ login }/>
+                      <Route path="/register" component={ register } />
+                      <Route component={pagenotfound}/>
+                  </Switch>
+                </div>
+              </Router>
+          </div>
+      </SnackbarProvider>
 	</Provider>  
     );   
 

@@ -33,6 +33,7 @@ const  AddTimer_N2 = (values) =>{
 
 const StopTimer_N2 = () =>{
 	clearInterval(Timer_N2);
+	N2_Time = 0;
 }
 
 const Save_N2_Date = (value) =>{
@@ -97,7 +98,7 @@ router.get('/get_n2_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
 				let msgs = N2_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
-				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Time})
+				res.status(200).json({success: true, msg: msgs, value: N2_Time})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -129,6 +130,7 @@ const  AddTimer_N2_Plus_150 = (values) =>{
 
 const StopTimer_N2_Plus_150 = () =>{
 	clearInterval(Timer_N2_Plus_150);
+	N2_Plus_150_Time = 0;
 }
 
 const Save_N2Plus150_Date = (value) =>{
@@ -225,6 +227,7 @@ const  AddTimer_N2_Plus_50 = (values) =>{
 
 const StopTimer_N2_Plus_50 = () =>{
 	clearInterval(Timer_N2_Plus_50);
+	N2_Plus_50_Time = 0;
 }
 
 const Save_N2Plus50_Date = (value) =>{
