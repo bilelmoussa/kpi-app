@@ -51,7 +51,7 @@ router.post('/start_n2_timer',  (req, res, next)=> {
 			res.status(404).json("Unauthorised !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "write"){
 				let vals = req.body.values;
 				Save_N2_Date(vals);
 				res.status(200).json({success: true, msg: "counter has started"})
@@ -74,7 +74,7 @@ router.get('/stop_n2_timer',  (req, res, next)=> {
 			res.status(404).json("Unauthorised !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "write"){
 				StopTimer_N2();
 				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Time})
 			}else{
@@ -96,7 +96,7 @@ router.get('/get_n2_timer',  (req, res, next)=> {
 			res.status(404).json("Unauthorised !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "write"){
 				let msgs = N2_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
 				res.status(200).json({success: true, msg: msgs, value: N2_Time})
 			}else{

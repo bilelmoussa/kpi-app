@@ -69,14 +69,25 @@ class CircleChart extends Component {
 
 
         const  class_name = () =>{
-            if(val < 40){
-                r_color = "red";
-            }
-            else if(val > 40 && val < 60){
-                r_color = "yellow";
+            if(title === "Fail Rate"){
+                if(val < 40){
+                    r_color = "green";
+                }
+                else if(val > 40 && val < 60){
+                    r_color = "yellow";
+                }else{
+                    r_color = "red";
+                }                
             }else{
-                r_color = "green";
-            }
+                if(val < 40){
+                    r_color = "red";
+                }
+                else if(val > 40 && val < 60){
+                    r_color = "yellow";
+                }else{
+                    r_color = "green";
+                }
+            }  
         }
 
         const TextValue = () =>{

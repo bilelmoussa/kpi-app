@@ -94,7 +94,6 @@ app.get('*', (req,res) =>{
 
 // Port    
 const port = process.env.port || 5000;
-const hostname = '3dwave.fr'
 app.get('/server', function(req, res) {
     res.json('yaaaaaaa');
   });
@@ -103,6 +102,6 @@ app.get('/server', function(req, res) {
 app.listen(port, ()=>{console.log('\x1b[36m%s\x1b[0m', 'Server Started on:')
                       console.log('\x1b[36m%s\x1b[0m', `             Local: http://localhost:${port}`);
                       console.log('\x1b[36m%s\x1b[0m', `             External: http://${address}:${port}`);
-                      console.log('\x1b[36m%s\x1b[0m', `             Public: http://${hostname}:${port}`);
+              
                     });
 

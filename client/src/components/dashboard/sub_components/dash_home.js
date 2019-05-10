@@ -68,21 +68,44 @@ class dash_home extends Component {
 				FailRate: 0,
 				TemplateEfficiency: 0,
 				FilamantComsumption: 0,
-			}
+			},
+			writer_auth: false,
+			role: 'read'
 		}
 	}
 
 	componentDidMount() {
-		this.props.getAllMachineRatio(2019)
+		this.props.getAllMachineRatio(2019);
+		if(!empty(this.props.auth.user)){
+			if(this.props.auth.user.role === "admin" || this.props.auth.user.role === "write"){
+				this.setState({
+					writer_auth: true,
+					role : 	this.props.auth.user.role
+				})
+			}
+		}else{
+			return null;
+		}
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState){
 		if(nextProps.Ratios !== prevState.Ratios){
-			if(empty(nextProps.Ratios.data)){
-				return null;
-			}else{
+			if(!empty(nextProps.Ratios.data)){
 				return { data: nextProps.Ratios.data };
 			}
+			else if(!empty(nextProps.auth.user)){
+
+				if(nextProps.auth.user.role === 'write' || nextProps.auth.user.role === 'admin'){
+					return { role: nextProps.auth.user.role, writer_auth: true}
+				}else{
+					return null;
+				}
+				
+			}
+			else{
+				return null
+			}
+
 		}else{
 			return null
 		}
@@ -90,9 +113,21 @@ class dash_home extends Component {
 
 	componentDidUpdate(prevProps, prevState){
 		if(prevProps.Ratios !== this.props.Ratios){
-			if(empty(this.props.Ratios)){
-			}else{
+			if(!empty(this.props.Ratios)){
 				this.setState({data: this.props.Ratios});
+			}
+			else if(!empty(this.props.auth.user)){
+				if(this.props.auth.user.role === 'write' || this.props.auth.user.role === 'admin'){
+					this.setState({
+						role: this.props.auth.user.role,
+						writer_auth: true,
+					})
+				}else{
+					return null;
+				}
+			}
+			else{
+				return null
 			}
 		}else{
 			return null;
@@ -102,6 +137,30 @@ class dash_home extends Component {
 	handleChange = (event, value) => {
 		this.setState({ value });
 	};
+
+	protectCounter(classes, value){
+		if(this.state.writer_auth && (this.state.role === 'admin' || this.state.role === 'write')){
+			return(
+				<div className="countDown">
+					<AppBar className={classes.app_nav}  position="static">
+						<Typography variant="h5" className={classes.nav_h}>Timer</Typography>
+					</AppBar>
+					<AppBar className={classes.app_nav}  position="static">
+						<Tabs value={value} onChange={this.handleChange}>
+							<Tab icon={<Visibility />} />
+							<Tab icon={<AddCircle />} />
+						</Tabs>
+					</AppBar>
+					{value === 0 && <TabContainer><CountDown /></TabContainer>}
+					{value === 1 && <TabContainer><AddTime /></TabContainer>}
+				
+				</div>
+			)
+		}
+		else{
+			return null;
+		}
+	}
 
 	render(){
 		const { classes } = this.props;
@@ -146,20 +205,9 @@ class dash_home extends Component {
 						
 					</Card>
 				</div>
-				<div className="countDown">
-					<AppBar className={classes.app_nav}  position="static">
-						<Typography variant="h5" className={classes.nav_h}>Timer</Typography>
-					</AppBar>
-					<AppBar className={classes.app_nav}  position="static">
-						<Tabs value={value} onChange={this.handleChange}>
-							<Tab icon={<Visibility />} />
-							<Tab icon={<AddCircle />} />
-						</Tabs>
-					</AppBar>
-					{value === 0 && <TabContainer><CountDown /></TabContainer>}
-					{value === 1 && <TabContainer><AddTime /></TabContainer>}
-				
-				</div>
+
+				{this.protectCounter(classes, value)}
+
 			</div>
 			</MuiThemeProvider>
 

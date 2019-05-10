@@ -29,6 +29,9 @@ import dash_home from './sub_components/dash_home';
 import users from './sub_components/users';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import { ButtonBase } from '@material-ui/core';
+import AttachMoney from '@material-ui/icons/AttachMoney';
+import CommercialRates from './sub_components/CommercialRates'
+
 
 const styles = {
   list: {
@@ -153,6 +156,7 @@ class dashboard extends Component {
 		 return(null);
 		}
 	}
+
 	ProtectedUsers(classes){
 		if(this.state.writer_auth && this.state.role === 'admin'){
 			return(
@@ -168,6 +172,22 @@ class dashboard extends Component {
 		}
 	}
 	
+	ProtectedCommercialRates(classes){
+		if(this.state.writer_auth){
+			return(
+				<ListItem component={Link} to={`/dashboard/CommercialRates`}  button>
+						<ListItemIcon>
+							<AttachMoney style={styles.account_circle}/>
+						</ListItemIcon>
+						<ListItemText primary={'Commercial Rates'} classes={{ primary: classes.list_text }}/>
+				</ListItem>
+			)
+		}else{
+			return null;
+		}
+	}
+
+
   render() {
 	const { classes } = this.props;
 	 const sideList = (
@@ -202,6 +222,8 @@ class dashboard extends Component {
 						<ListItemText primary={'chart'} classes={{ primary: classes.list_text }}/>
 					</ListItem>
 					
+					{this.ProtectedCommercialRates(classes)}
+
 					{this.ProtectedUsers(classes)}
 					
 					
@@ -248,12 +270,13 @@ class dashboard extends Component {
 			</Drawer>
 			<div id="sub_routes">
 				<Switch>
-					<Route exact path={`/dashboard`} component={dash_home} />
-					<Route exact path={`/dashboard/profile`} component={profile} />
-					<Route exact path={`/dashboard/table`} component={table} auth={this.props.auth} />
-					<Route exact path={`/dashboard/chart`} component={chart} />
-					<Route exact path={`/dashboard/users`} component={users} />
-					<Route component={pagenotfound}/>
+						<Route exact path={`/dashboard`} component={dash_home} />
+						<Route exact path={`/dashboard/profile`} component={profile} />
+						<Route exact path={`/dashboard/table`} component={table} auth={this.props.auth} />
+						<Route exact path={`/dashboard/chart`} component={chart} />
+						<Route exact path={`/dashboard/CommercialRates`} component={CommercialRates} />
+						<Route exact path={`/dashboard/users`} component={users} />
+						<Route component={pagenotfound}/>
 				</Switch>
 			</div>
 		</Grid>
