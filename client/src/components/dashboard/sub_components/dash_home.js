@@ -18,7 +18,7 @@ import CountDown from './components/CountDown';
 
 const theme = createMuiTheme({
 	palette: {
-	  type: 'dark', // Switching the dark mode on is a single property value change.
+	  type: 'dark', 
 	},
 	typography: {
 		useNextVariants: true,

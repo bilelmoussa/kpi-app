@@ -15,7 +15,7 @@ ul{
 }
 
 body{
-    background-color: #101010;
+  background-color: #101010;
 	overflow-x: hidden
 }
 
@@ -31,9 +31,9 @@ body{
 }
 
 .forms{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 	background-image: url('./static/military_3d_printers-wallpaper-1920x1200.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -42,8 +42,8 @@ body{
 #login{
     height: 100vh;
     min-height: 600px;
-
 }
+
 #register{
 	height: 100vh;
     min-height: 750px;
@@ -72,11 +72,12 @@ table{
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color: #585858;
 }
+
 #chart {
     height: 700px;
-    padding: 20px 0;
-    
+    padding: 20px 0;   
 }
+
 .card  {
     margin: 10px;
     background-color: #161414 !important;
@@ -118,6 +119,7 @@ table{
     margin : 40px 10px !important;
     text-align: center;
   }
+
   .dash_page{
       display: flex;
       flex-direction: column;
@@ -192,6 +194,7 @@ table{
     flex-direction: column;
     margin: 20px 0;
   }
+
 
   .container {
     display: flex;
@@ -356,6 +359,10 @@ table{
   100% {
       transform: rotateX(-90deg);
   }
+}
+
+.CR_Container{
+  text-align: center;
 }
 
 
