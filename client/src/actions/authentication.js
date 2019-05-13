@@ -27,6 +27,12 @@ import {
 	N2_SELECT_DATE,
 	N2_PLUS_150_SELECT_DATE,
 	N2_PLUS_50_SELECT_DATE,
+	QUOTES_NUMBER,
+	CLIENTS,
+	TURNOVER,
+	QUOTES_NUMBER_ERROR,
+	CLIENTS_ERROR,
+	TURNOVER_ERROR,
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -878,4 +884,109 @@ export const Get_N2_Plus_50_Timer  = () => dispatch =>{
 		})
 	}
 
+}
+
+
+//QuotesNumber
+export const AddQuotesNumber = (value) => dispatch =>{
+	axios.post('/api/CR/AddQuotesNumber', {QuotesNumber: value})
+	.then(res=>{
+		dispatch({
+			type: QUOTES_NUMBER,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err);
+		dispatch({
+			type: QUOTES_NUMBER_ERROR,
+			payload: err
+		})
+	})
+}
+
+export const GetQuotesNumber = () => dispatch =>{
+	axios.get('/api/CR/GetQuotesNumber')
+	.then(res=>{
+		dispatch({
+			type: QUOTES_NUMBER,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err)
+		dispatch({
+			type: QUOTES_NUMBER_ERROR,
+			payload: err
+		})
+	})
+}
+
+//Clients
+export const AddClients = (value) => dispatch =>{
+	axios.post('/api/CR/AddClients', {Clients: value})
+	.then(res=>{
+		dispatch({
+			type: CLIENTS,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		dispatch({
+			type: CLIENTS_ERROR,
+			payload: err
+		})
+	})
+}
+
+export const GetClients = () => dispatch =>{
+	axios.get('/api/CR/GetClients')
+	.then(res=>{
+		dispatch({
+			type: CLIENTS,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err)
+		dispatch({
+			type: CLIENTS_ERROR,
+			payload: err
+		})
+	})
+}
+
+//Turnover
+export const AddTurnover = (value) => dispatch =>{
+	axios.post('/api/CR/AddTurnover', {Turnover: value})
+	.then(res=>{
+		dispatch({
+			type: TURNOVER,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err)
+		dispatch({
+			type: TURNOVER_ERROR,
+			payload: err
+		})
+	})
+}
+
+export const GetTurnover = () => dispatch =>{
+	axios.get('/api/CR/GetTurnover')
+	.then(res=>{
+		dispatch({
+			type: TURNOVER,
+			payload: res.data.value
+		})
+	})
+	.catch(err=>{
+		console.log(err);
+		dispatch({
+			type: TURNOVER_ERROR,
+			payload: err
+		})
+	})
 }

@@ -44,4 +44,16 @@ export const RATIOS = "RATIOS";
 //DATES
 export const N2_SELECT_DATE = "N2_SELECT_DATE";
 export const N2_PLUS_150_SELECT_DATE = "N2_PLUS_150_SELECT_DATE";
-export const N2_PLUS_50_SELECT_DATE = "N2_PLUS_50_SELECT_DATE"
+export const N2_PLUS_50_SELECT_DATE = "N2_PLUS_50_SELECT_DATE";
+
+// Commercial Rates Values
+export const QUOTES_NUMBER = "QUOTES_NUMBER";
+export const CLIENTS = "CLIENTS";
+export const TURNOVER = "TURNOVER";
+
+//Errors Commercial Rates Values
+export const QUOTES_NUMBER_ERROR = "QUOTES_NUMBER_ERROR";
+export const CLIENTS_ERROR = "CLIENTS_ERROR";
+export const TURNOVER_ERROR = "TURNOVER_ERROR";
+
+

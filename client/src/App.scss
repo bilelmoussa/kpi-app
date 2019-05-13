@@ -82,6 +82,7 @@ table{
     margin: 10px;
     background-color: #161414 !important;
     color: #ffffff !important;
+    height: 270px;
 }
 
 .circular-chart {
@@ -102,9 +103,9 @@ table{
     fill: none;
     stroke-width: 2.8;
     stroke-linecap: round;
-    animation: progress 1s ease-out forwards;
+    animation: progress 4s linear 0.5s ;
   }
-
+  
   .SingleChartTitle{
     color: #fff !important;
     letter-spacing: 4px !important;
@@ -116,7 +117,7 @@ table{
   .Card_item{
     width: 15% !important;
     min-width: 200px !important;
-    margin : 40px 10px !important;
+    margin : 40px 30px !important;
     text-align: center;
   }
 

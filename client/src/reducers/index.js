@@ -5,6 +5,9 @@ import N2Reducer from './N2Reducer';
 import N2Plus150Reducer from './N2Plus150Reducer';
 import N2Plus50Reducer from './N2Plus50Reducer';
 import Ratio from './Ratio';
+import QuotesNumberReducer from './QuotesNumberReducer';
+import ClientsReducer from './ClientsReducer';
+import TurnoverReducer from './TurnoverReducer';
 
 export default combineReducers({
     errors: errorReducer,
@@ -12,5 +15,8 @@ export default combineReducers({
 	N2: N2Reducer,
 	N2_Plus_150: N2Plus150Reducer,
 	N2_Plus_50: N2Plus50Reducer,
-	Ratios: Ratio
+	Ratios: Ratio,
+	QuotesNumber: QuotesNumberReducer,
+	Clients: ClientsReducer,
+	Turnover: TurnoverReducer,
 });

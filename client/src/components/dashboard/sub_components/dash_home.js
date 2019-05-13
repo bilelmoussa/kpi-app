@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CircleChart from './components/circleChart';
-import {getAllMachineRatio} from '../../../actions/authentication';
+import {getAllMachineRatio, GetQuotesNumber, GetClients, GetTurnover} from '../../../actions/authentication';
 import { empty } from '../../../is-empty';
 import AppBar from '@material-ui/core/AppBar';
 import Card from '@material-ui/core/Card';
@@ -69,6 +69,9 @@ class dash_home extends Component {
 				TemplateEfficiency: 0,
 				FilamantComsumption: 0,
 			},
+			QuotesNumber: 0,
+			Clients: 0,
+			Turnover: 0,
 			writer_auth: false,
 			role: 'read'
 		}
@@ -76,6 +79,10 @@ class dash_home extends Component {
 
 	componentDidMount() {
 		this.props.getAllMachineRatio(2019);
+		this.props.GetQuotesNumber();
+		this.props.GetClients();
+		this.props.GetTurnover();
+		
 		if(!empty(this.props.auth.user)){
 			if(this.props.auth.user.role === "admin" || this.props.auth.user.role === "write"){
 				this.setState({
@@ -90,18 +97,31 @@ class dash_home extends Component {
 
 	static getDerivedStateFromProps(nextProps, prevState){
 		if(nextProps.Ratios !== prevState.Ratios){
-			if(!empty(nextProps.Ratios.data)){
+			if(!empty(nextProps.Ratios.data) &&  empty(nextProps.QuotesNumber) && empty(nextProps.Clients) && empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
 				return { data: nextProps.Ratios.data };
 			}
-			else if(!empty(nextProps.auth.user)){
+			
+			else if(!empty(nextProps.QuotesNumber) && !empty(nextProps.QuotesNumber) && empty(nextProps.Clients) && empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
+				return {data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber}
+			}
+			else if(!empty(nextProps.Ratios.data) && !empty(nextProps.QuotesNumber) && !empty(nextProps.Clients) && empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
+				return {data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber, Clients: nextProps.Clients.Clients}
+			}
+			
+			else if(!empty(nextProps.Ratios.data) && !empty(nextProps.QuotesNumber) && !empty(nextProps.Clients) && !empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
+				return {data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber, Clients: nextProps.Clients.Clients, Turnover: nextProps.Turnover.Turnover}
+			}
+			
+			else if(!empty(nextProps.Ratios.data) && !empty(nextProps.QuotesNumber) && !empty(nextProps.Clients) && !empty(nextProps.Turnover) &&  !empty(nextProps.auth.user)){
 
 				if(nextProps.auth.user.role === 'write' || nextProps.auth.user.role === 'admin'){
-					return { role: nextProps.auth.user.role, writer_auth: true}
+					return { data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber, Clients: nextProps.Clients.Clients, Turnover: nextProps.Turnover.Turnover, role: nextProps.auth.user.role, writer_auth: true}
 				}else{
 					return null;
 				}
 				
 			}
+			
 			else{
 				return null
 			}
@@ -110,15 +130,27 @@ class dash_home extends Component {
 			return null
 		}
 	}
+	
 
+	
 	componentDidUpdate(prevProps, prevState){
 		if(prevProps.Ratios !== this.props.Ratios){
-			if(!empty(this.props.Ratios)){
+			if(!empty(this.props.Ratios) && empty(this.props.QuotesNumber) && empty(this.props.Clients) && empty(this.props.Turnover) && empty(this.props.auth.user)){
 				this.setState({data: this.props.Ratios});
 			}
-			else if(!empty(this.props.auth.user)){
+			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && empty(this.props.Clients) && empty(this.props.Turnover) && empty(this.props.auth.user)){
+				this.setState({data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber})
+			}
+			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && !empty(this.props.Clients) && empty(this.props.Turnover) && empty(this.props.auth.user)){
+				this.setState({ data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients })
+			}
+			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && !empty(this.props.Clients) && !empty(this.props.Turnover) && empty(this.props.auth.user)){
+				this.setState({ data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients, Turnover: this.props.Turnover.Turnover })
+			}
+			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && !empty(this.props.Clients) && !empty(this.props.Turnover) && !empty(this.props.auth.user)){
 				if(this.props.auth.user.role === 'write' || this.props.auth.user.role === 'admin'){
 					this.setState({
+						data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients, Turnover: this.props.Turnover.Turnover,
 						role: this.props.auth.user.role,
 						writer_auth: true,
 					})
@@ -133,6 +165,8 @@ class dash_home extends Component {
 			return null;
 		}
 	}
+
+	
 
 	handleChange = (event, value) => {
 		this.setState({ value });
@@ -164,7 +198,7 @@ class dash_home extends Component {
 
 	render(){
 		const { classes } = this.props;
-		const { data } = this.state;
+		const { data, QuotesNumber, Clients, Turnover } = this.state;
 		const { value } = this.state;
 
 		const time_data = {
@@ -187,7 +221,20 @@ class dash_home extends Component {
 			val: (data.FilamantComsumption).toFixed(0) 
 		}
 
+		const quotes_number = {
+			title: 'Quotes Number',
+			val: QuotesNumber
+		}
 
+		const clients_ = {
+			title: 'Clients',
+			val: Clients
+		}
+
+		const turnover_ = {
+			title: 'Turnover',
+			val: Turnover
+		}
 
 		return(
 			<MuiThemeProvider theme={theme}>
@@ -202,7 +249,10 @@ class dash_home extends Component {
 						<CircleChart data={fail_data}/>
 						<CircleChart data={Template_data}/>
 						<CircleChart data={Filamant_data}/>
-						
+						<CircleChart data={quotes_number}/>
+						<CircleChart data={clients_}/>
+						<CircleChart data={turnover_}/>
+
 					</Card>
 				</div>
 
@@ -219,12 +269,21 @@ class dash_home extends Component {
 dash_home.propTypes = {
 	classes: PropTypes.object.isRequired,
 	auth: PropTypes.object.isRequired,
+	QuotesNumber: PropTypes.object.isRequired,
+	Clients: PropTypes.object.isRequired,
+	Turnover: PropTypes.object.isRequired,
 	getAllMachineRatio: PropTypes.func.isRequired,
+	GetQuotesNumber: PropTypes.func.isRequired,
+	GetClients: PropTypes.func.isRequired,
+	GetTurnover: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
 	Ratios: state.Ratios,
+	QuotesNumber: state.QuotesNumber,
+	Clients: state.Clients,
+	Turnover: state.Turnover
 })
 
-export default  connect(mapStateToProps, {getAllMachineRatio})(withStyles(styles)(dash_home));
+export default  connect(mapStateToProps, {getAllMachineRatio, GetQuotesNumber, GetClients, GetTurnover})(withStyles(styles)(dash_home));

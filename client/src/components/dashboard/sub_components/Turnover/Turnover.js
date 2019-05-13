@@ -14,6 +14,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { withSnackbar } from 'notistack';
 import { empty } from '../../../../is-empty';
+import { AddTurnover } from '../../../../actions/authentication'
+
 
 const styles = theme =>({
   nav_h:{
@@ -59,7 +61,7 @@ class Turnover extends Component {
         this.setState({emptyValue: true});
       }else{
         let value = this.state.TurnoverValue;
-        console.log(value)
+        this.props.AddTurnover(value)
       }
   }
 
@@ -127,10 +129,11 @@ Turnover.propTypes = {
 	auth: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired,
+  AddTurnover: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(withSnackbar(Turnover)));
+export default connect(mapStateToProps, {AddTurnover})(withStyles(styles)(withSnackbar(Turnover)));

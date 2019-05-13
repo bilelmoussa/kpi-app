@@ -47,9 +47,6 @@ router.post('/start_n2_timer',  (req, res, next)=> {
 			console.log(err);
 			res.status(400).json("Server Error !")
 		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
-		}
 		else if(user){
 			if(user.role === "admin" || user.role === "write"){
 				let vals = req.body.values;
@@ -70,9 +67,6 @@ router.get('/stop_n2_timer',  (req, res, next)=> {
 			console.log(err);
 			res.status(400).json("Server Error !")
 		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
-		}
 		else if(user){
 			if(user.role === "admin" || user.role === "write"){
 				StopTimer_N2();
@@ -91,9 +85,6 @@ router.get('/get_n2_timer',  (req, res, next)=> {
 		if(err){
 			console.log(err);
 			res.status(400).json("Server Error !")
-		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
 		}
 		else if(user){
 			if(user.role === "admin" || user.role === "write"){
@@ -144,9 +135,6 @@ router.post('/start_n2plus150_timer',  (req, res, next)=> {
 			console.log(err);
 			res.status(400).json("Server Error !")
 		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
-		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
 				let vals = req.body.values;
@@ -167,9 +155,6 @@ router.get('/stop_n2plus150_timer',  (req, res, next)=> {
 			console.log(err);
 			res.status(400).json("Server Error !")
 		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
-		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
 				StopTimer_N2_Plus_150();
@@ -188,9 +173,6 @@ router.get('/get_n2plus150_timer',  (req, res, next)=> {
 		if(err){
 			console.log(err);
 			res.status(400).json("Server Error !")
-		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
 		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
@@ -241,9 +223,6 @@ router.post('/start_n2plus50_timer',  (req, res, next)=> {
 			console.log(err);
 			res.status(400).json("Server Error !")
 		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
-		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
 				let vals = req.body.values;
@@ -264,9 +243,6 @@ router.get('/stop_n2plus50_timer',  (req, res, next)=> {
 			console.log(err);
 			res.status(400).json("Server Error !")
 		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
-		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
 				StopTimer_N2_Plus_50();
@@ -285,9 +261,6 @@ router.get('/get_n2plus50_timer',  (req, res, next)=> {
 		if(err){
 			console.log(err);
 			res.status(400).json("Server Error !")
-		}
-		else if(!user){
-			res.status(404).json("Unauthorised !")
 		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){

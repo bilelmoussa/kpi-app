@@ -14,6 +14,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { withSnackbar } from 'notistack';
 import { empty } from '../../../../is-empty';
+import {AddQuotesNumber} from '../../../../actions/authentication'
 
 const styles = theme =>({
   nav_h:{
@@ -59,7 +60,7 @@ class QuotesNumber extends Component {
         this.setState({emptyValue: true});
       }else{
         let value = this.state.QuotesNumberValue;
-        console.log(value)
+        this.props.AddQuotesNumber(value);
       }
   }
 
@@ -128,10 +129,11 @@ QuotesNumber.propTypes = {
 	auth: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired,
+  AddQuotesNumber: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(withSnackbar(QuotesNumber)));
+export default connect(mapStateToProps, {AddQuotesNumber})(withStyles(styles)(withSnackbar(QuotesNumber)));

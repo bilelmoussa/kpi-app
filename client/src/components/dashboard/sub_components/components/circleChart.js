@@ -91,7 +91,7 @@ class CircleChart extends Component {
         }
 
         const TextValue = () =>{
-            if(title === "Filamant Comsumption"){
+            if(title === "Filamant Comsumption" || title === "Quotes Number" || title === "Clients" || title === "Turnover"){
                 return(
                     <text x="18" y="20.35" className={`percentage ${r_color}`}>{`${val}`}</text>
                 )

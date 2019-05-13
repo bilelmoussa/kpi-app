@@ -14,6 +14,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { withSnackbar } from 'notistack';
 import { empty } from '../../../../is-empty';
+import {AddClients} from '../../../../actions/authentication';
+
 
 const styles = theme =>({
   nav_h:{
@@ -59,7 +61,7 @@ class Clients extends Component {
         this.setState({emptyValue: true});
       }else{
         let value = this.state.ClientsValue;
-        console.log(value)
+        this.props.AddClients(value);
       }
   }
 
@@ -68,8 +70,8 @@ class Clients extends Component {
   }
 
   handleClickVariant = variant => () => {
-    if(!validate_cell(this.state.QuotesNumberValue)){
-      this.props.enqueueSnackbar('New Cleints Values has Added !', { variant });
+    if(!validate_cell(this.state.ClientsValue)){
+      this.props.enqueueSnackbar('New Clients Values has Added !', { variant });
     }  
   };
 
@@ -83,7 +85,7 @@ class Clients extends Component {
     return (
       <div className="CR_Container">
 
-             <Typography variant="h6" className={classes.nav_h}>Add Clients Values </Typography>
+             <Typography variant="h6" className={classes.nav_h}>Add Clients Value </Typography>
                     <form autoComplete="off" onSubmit={this.handleCleintsSubmit}>
                         <FormControl className={classes.formControl} >
                             <NumberFormat
@@ -127,10 +129,11 @@ Clients.propTypes = {
 	auth: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired,
+  AddClients: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(withSnackbar(Clients)));
+export default connect(mapStateToProps, {AddClients})(withStyles(styles)(withSnackbar(Clients)));
