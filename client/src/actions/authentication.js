@@ -30,9 +30,9 @@ import {
 	QUOTES_NUMBER,
 	CLIENTS,
 	TURNOVER,
-	QUOTES_NUMBER_ERROR,
-	CLIENTS_ERROR,
-	TURNOVER_ERROR,
+	NOTIFICATION_ERROR,
+	NOTIFICATION_SUCCESS,
+	NOTIFICATION_WARNING
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -95,35 +95,37 @@ export const delete_Error = () => dispatch =>{
 }
 
 
+export const ErrorsMessage = (err, dispatch) =>{
+	console.log(err)
+	let message = "There is a Server Error  Please Relaod The Page !"
+	dispatch({
+		type: NOTIFICATION_ERROR,
+		payload: {message: message}
+	})
+	setTimeout(() => {
+		CloseNotification("error")
+	}, 6000);
+}
 
- 
+
 export const post_N2 = (Part) => dispatch =>{
 	axios.post('/api/N2/saveparts', Part)
 			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+				ErrorsMessage(err, dispatch);
 			})
 }
 
 export const post_N2_plus_150 = (Part) => dispatch =>{
 	axios.post('/api/N2_plus_150/saveparts', Part)
 			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+				ErrorsMessage(err, dispatch);
 			})
 }
 
 export const post_N2_plus_50 = (Part) => dispatch =>{
 	axios.post('/api/N2_plus_50/saveparts', Part)
 			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+				ErrorsMessage(err, dispatch);
 			})
 }
 
@@ -164,60 +166,42 @@ function time_hours(value){
 export const put_N2 = (query) => dispatch =>{
 	axios.put('/api/N2/updateparts', query)
 			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+				ErrorsMessage(err, dispatch);
 			})
 }
 
 export const put_N2_plus_150 = (query) => dispatch =>{
 	axios.put('/api/N2_plus_150/updateparts', query)
 			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+				ErrorsMessage(err, dispatch);
 			})
 }
 
 export const put_N2_plus_50 = (query) => dispatch =>{
 	axios.put('/api/N2_plus_50/updateparts', query)
 			.catch(err => {
-				dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+				ErrorsMessage(err, dispatch);
 			})
 }
 
 export const delete_N2 = (id) => dispatch =>{
 	axios.delete('/api/N2/deleteparts', { data: { id } } )
 		.catch(err => {
-			dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+			ErrorsMessage(err, dispatch);
 		})
 }
 
 export const delete_N2_plus_150 = (id) => dispatch =>{
 	axios.delete('/api/N2_plus_150/deleteparts', { data: { id } })
 		.catch(err => {
-			dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+			ErrorsMessage(err, dispatch);
 		})
 }
 
 export const delete_N2_plus_50 = (id) => dispatch =>{
 	axios.delete('/api/N2_plus_50/deleteparts', { data: { id } })
 		.catch(err => {
-			dispatch({
-					type: GET_ERRORS,
-					payload: err
-				})
+			ErrorsMessage(err, dispatch);
 		})
 }
 
@@ -232,7 +216,9 @@ export const get_n2_years = () => dispatch =>{
 				payload: res.data.years
 			})
 		})
-		.catch(err =>{console.log(err)})
+		.catch(err =>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const get_n2_plus_150_years = () => dispatch =>{
@@ -243,7 +229,9 @@ export const get_n2_plus_150_years = () => dispatch =>{
 			   payload: res.data.years
 		   })
 	   })
-	   .catch(err =>{console.log(err)})
+	   .catch(err =>{
+			ErrorsMessage(err, dispatch);
+	   })
 }
 
 export const get_n2_plus_50_years = () => dispatch =>{
@@ -254,7 +242,9 @@ export const get_n2_plus_50_years = () => dispatch =>{
 			   payload: res.data.years
 		   })
 	   })
-	   .catch(err =>{console.log(err)})
+	   .catch(err =>{
+			ErrorsMessage(err, dispatch);
+	   })
 }
 
 export const get_n2_months = (year) => dispatch =>{
@@ -265,7 +255,9 @@ export const get_n2_months = (year) => dispatch =>{
 			   payload: res.data.months
 		   })
 	   })
-	   .catch(err =>{console.log(err)})
+	   .catch(err =>{
+			ErrorsMessage(err, dispatch);
+	   })
 }
 
 export const get_n2_plus_150_months = (year) => dispatch =>{
@@ -276,7 +268,9 @@ export const get_n2_plus_150_months = (year) => dispatch =>{
 			   payload: res.data.months
 		   })
 	   })
-	   .catch(err =>{console.log(err)})
+	   .catch(err =>{
+			ErrorsMessage(err, dispatch);
+	   })
 }
 
 export const get_n2_plus_50_months = (year) => dispatch =>{
@@ -287,7 +281,9 @@ export const get_n2_plus_50_months = (year) => dispatch =>{
 			   payload: res.data.months
 		   })
 	   })
-	   .catch(err =>{console.log(err)})
+	   .catch(err =>{
+			ErrorsMessage(err, dispatch);
+	   })
 }
 
 export const get_n2_weeks = (year, month) => dispatch =>{
@@ -298,7 +294,9 @@ export const get_n2_weeks = (year, month) => dispatch =>{
 				payload: res.data.weeks
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const get_n2_plus_150_weeks = (year, month) => dispatch =>{
@@ -309,7 +307,9 @@ export const get_n2_plus_150_weeks = (year, month) => dispatch =>{
 				payload: res.data.weeks
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const get_n2_plus_50_weeks = (year, month) => dispatch =>{
@@ -320,7 +320,9 @@ export const get_n2_plus_50_weeks = (year, month) => dispatch =>{
 				payload: res.data.weeks
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 
@@ -335,7 +337,9 @@ export const N2WeekChartData = (year, month, week) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const N2PLUS150WeekChartData = (year, month, week) => dispatch =>{
@@ -346,7 +350,9 @@ export const N2PLUS150WeekChartData = (year, month, week) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const N2PLUS50WeekChartData = (year, month, week) => dispatch =>{
@@ -357,7 +363,9 @@ export const N2PLUS50WeekChartData = (year, month, week) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 //MONTH CHART
@@ -369,7 +377,9 @@ export const N2MonthChartData = (year, month) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const N2Plus150MonthChartData = (year, month) => dispatch =>{
@@ -380,7 +390,9 @@ export const N2Plus150MonthChartData = (year, month) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const N2Plus50MonthChartData = (year, month) => dispatch =>{
@@ -391,7 +403,9 @@ export const N2Plus50MonthChartData = (year, month) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 
@@ -404,7 +418,9 @@ export const N2YearChartData = (year) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const N2Plus150YearChartData = (year) => dispatch =>{
@@ -415,7 +431,9 @@ export const N2Plus150YearChartData = (year) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const N2Plus50YearChartData = (year) => dispatch =>{
@@ -426,7 +444,9 @@ export const N2Plus50YearChartData = (year) => dispatch =>{
 				payload: res.data.data
 			})
 		})
-		.catch(err=>{console.log(err)})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const ClearChartData = (machine, target) => dispatch =>{
@@ -512,6 +532,9 @@ export const N2WeekTableData = (year, month, week) => dispatch =>{
 				payload: new_rows
 			})
 		})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 } 
 
 export const N2Plus150WeekTableData = (year, month, week) => dispatch =>{
@@ -537,6 +560,9 @@ export const N2Plus150WeekTableData = (year, month, week) => dispatch =>{
 				payload: new_rows
 			})
 		})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
+		})
 }
 
 export const N2Plus50WeekTableData = (year, month, week) => dispatch =>{
@@ -561,6 +587,9 @@ export const N2Plus50WeekTableData = (year, month, week) => dispatch =>{
 				type: N2_PLUS_50_WEEK_TABLE_DATA,
 				payload: new_rows
 			})
+		})
+		.catch(err=>{
+			ErrorsMessage(err, dispatch);
 		})
 }  
 
@@ -634,6 +663,9 @@ export const getAllMachineRatio = (year) => dispatch =>{
 			payload: res.data
 		})
 	})
+	.catch(err=>{
+		ErrorsMessage(err, dispatch);
+	})
 }
 
 
@@ -642,11 +674,9 @@ let Timer_N2_Plus_150 = 0;
 let Timer_N2_Plus_50 = 0;
 
 
-
 export const AddClientTimer = (machine, values) => dispatch =>{
 	if(machine === "N2"){
 		let  seconds = values * 3600;
-
 
 			clearInterval(Timer_N2);
 			dispatch({
@@ -695,7 +725,7 @@ export const AddClientTimer = (machine, values) => dispatch =>{
 	}
 	else if(machine === "N2Plus50"){
 		let  seconds = values * 3600;
-	
+
 			clearInterval(Timer_N2_Plus_50);
 			dispatch({
 				type: N2_PLUS_50_SELECT_DATE,
@@ -717,17 +747,30 @@ export const AddClientTimer = (machine, values) => dispatch =>{
 	}
 }
 
-export const AddServerTimer = (machine, values) => () => {
+export const AddServerTimer = (machine, values) => dispatch => {
 
 	if(machine === "N2"){
-
 		let seconds = values * 3600;
 
 		axios.post('/api/timer/start_n2_timer', {values: seconds})
 			.then(res=>{
+				let message = "N2 Timer has Started !";
+				dispatch({
+					type: NOTIFICATION_SUCCESS,
+					payload: {message: message}
+				})
+				setTimeout(() => {
+					CloseNotification("success")
+				}, 6000);
 			})
 			.catch(err=>{
-				console.log(err)
+				console.log(err);
+				clearInterval(Timer_N2);
+				dispatch({
+					type: N2_SELECT_DATE,
+					payload: 0
+				})
+				ErrorsMessage(err, dispatch);
 		})
 
 	}else if(machine === "N2Plus150"){
@@ -735,9 +778,23 @@ export const AddServerTimer = (machine, values) => () => {
 
 		axios.post('/api/timer/start_n2plus150_timer', {values: seconds})
 			.then(res=>{
+				let message = "N2 Plus 150 Timer has Started !";
+				dispatch({
+					type: NOTIFICATION_SUCCESS,
+					payload: {message: message}
+				})
+				setTimeout(() => {
+					CloseNotification("success")
+				}, 6000);
 			})
 			.catch(err=>{
-				console.log(err)
+				console.log(err);
+				clearInterval(Timer_N2_Plus_150);
+				dispatch({
+					type: N2_PLUS_150_SELECT_DATE,
+					payload: 0
+				})
+				ErrorsMessage(err, dispatch);
 		})
 
 	}else if(machine === "N2Plus50"){
@@ -745,9 +802,23 @@ export const AddServerTimer = (machine, values) => () => {
 
 		axios.post('/api/timer/start_n2plus50_timer', {values: seconds})
 			.then(res=>{
+				let message = "N2 Plus 50 Timer has Started !";
+				dispatch({
+					type: NOTIFICATION_SUCCESS,
+					payload: {message: message}
+				})
+				setTimeout(() => {
+					CloseNotification("success")
+				}, 6000);
 			})
 			.catch(err=>{
-				console.log(err)
+				console.log(err);
+				clearInterval(Timer_N2_Plus_50);
+				dispatch({
+					type: N2_PLUS_50_SELECT_DATE,
+					payload: 0
+				})
+				ErrorsMessage(err, dispatch);
 		})
 	}
 
@@ -759,15 +830,23 @@ export const AddServerTimer = (machine, values) => () => {
 export const  StopTimer_N2 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2_timer')
 	.then(res=>{
+		let message = "N2  Timer has Stoped !";
+		clearInterval(Timer_N2);
+		dispatch({
+			type: N2_SELECT_DATE,
+			payload: 0
+		});
+		dispatch({
+			type: NOTIFICATION_WARNING,
+			payload: {message: message}
+		})
+		setTimeout(() => {
+			CloseNotification("warning")
+		}, 6000);
 	})
 	.catch(err=>{
-		console.log(err)
+		ErrorsMessage(err, dispatch);
 	})
-	clearInterval(Timer_N2);
-	dispatch({
-		type: N2_SELECT_DATE,
-		payload: 0
-	});
 }
 
 
@@ -796,7 +875,7 @@ export const Get_N2_Timer  = () => dispatch =>{
 
 		})
 		.catch(err=>{
-			console.log(err)
+			ErrorsMessage(err, dispatch);
 		})
 	}
 }
@@ -804,15 +883,23 @@ export const Get_N2_Timer  = () => dispatch =>{
 export const  StopTimer_N2_Plus_150 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2plus150_timer')
 	.then(res=>{
+		let message = "N2 Plus 150 Timer has Stoped !";
+		clearInterval(Timer_N2_Plus_150);
+		dispatch({
+			type: N2_PLUS_150_SELECT_DATE,
+			payload: 0
+		});
+		dispatch({
+			type: NOTIFICATION_WARNING,
+			payload: {message: message}
+		})
+		setTimeout(() => {
+			CloseNotification("warning")
+		}, 6000);
 	})
 	.catch(err=>{
-		console.log(err)
+		ErrorsMessage(err, dispatch);
 	})
-	clearInterval(Timer_N2_Plus_150);
-	dispatch({
-		type: N2_PLUS_150_SELECT_DATE,
-		payload: 0
-	});
 }
 
 
@@ -838,7 +925,7 @@ export const Get_N2_Plus_150_Timer  = () => dispatch =>{
 	
 		})
 		.catch(err=>{
-			console.log(err)
+			ErrorsMessage(err, dispatch);
 		})
 	}
 }
@@ -847,15 +934,23 @@ export const Get_N2_Plus_150_Timer  = () => dispatch =>{
 export const  StopTimer_N2_Plus_50 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2plus50_timer')
 	.then(res=>{
+		let message = "N2 Plus 50 Timer has Stoped !";
+		clearInterval(Timer_N2_Plus_50);
+		dispatch({
+			type: N2_PLUS_50_SELECT_DATE,
+			payload: 0
+		});
+		dispatch({
+			type: NOTIFICATION_WARNING,
+			payload: {message: message}
+		})
+		setTimeout(() => {
+			CloseNotification("warning")
+		}, 6000);
 	})
 	.catch(err=>{
-		console.log(err)
+		ErrorsMessage(err, dispatch);
 	})
-	clearInterval(Timer_N2_Plus_50);
-	dispatch({
-		type: N2_PLUS_50_SELECT_DATE,
-		payload: 0
-	});
 }
 
 
@@ -880,7 +975,7 @@ export const Get_N2_Plus_50_Timer  = () => dispatch =>{
 	
 		})
 		.catch(err=>{
-			console.log(err)
+			ErrorsMessage(err, dispatch);
 		})
 	}
 
@@ -891,17 +986,21 @@ export const Get_N2_Plus_50_Timer  = () => dispatch =>{
 export const AddQuotesNumber = (value) => dispatch =>{
 	axios.post('/api/CR/AddQuotesNumber', {QuotesNumber: value})
 	.then(res=>{
+		let message = "New Quotes Number Value has added !"
 		dispatch({
 			type: QUOTES_NUMBER,
 			payload: res.data.value
 		})
+		dispatch({
+			type: NOTIFICATION_SUCCESS,
+			payload: {message: message}
+		})
+		setTimeout(() => {
+			CloseNotification("success")
+		}, 6000);
 	})
 	.catch(err=>{
-		console.log(err);
-		dispatch({
-			type: QUOTES_NUMBER_ERROR,
-			payload: err
-		})
+		ErrorsMessage(err, dispatch);
 	})
 }
 
@@ -914,11 +1013,7 @@ export const GetQuotesNumber = () => dispatch =>{
 		})
 	})
 	.catch(err=>{
-		console.log(err)
-		dispatch({
-			type: QUOTES_NUMBER_ERROR,
-			payload: err
-		})
+		ErrorsMessage(err, dispatch);
 	})
 }
 
@@ -926,16 +1021,21 @@ export const GetQuotesNumber = () => dispatch =>{
 export const AddClients = (value) => dispatch =>{
 	axios.post('/api/CR/AddClients', {Clients: value})
 	.then(res=>{
+		let message = "New Clients Value has added !"
 		dispatch({
 			type: CLIENTS,
 			payload: res.data.value
 		})
+		dispatch({
+			type: NOTIFICATION_SUCCESS,
+			payload: {message: message}
+		})
+		setTimeout(() => {
+			CloseNotification("success")
+		}, 6000);
 	})
 	.catch(err=>{
-		dispatch({
-			type: CLIENTS_ERROR,
-			payload: err
-		})
+		ErrorsMessage(err, dispatch);
 	})
 }
 
@@ -948,11 +1048,7 @@ export const GetClients = () => dispatch =>{
 		})
 	})
 	.catch(err=>{
-		console.log(err)
-		dispatch({
-			type: CLIENTS_ERROR,
-			payload: err
-		})
+		ErrorsMessage(err, dispatch);
 	})
 }
 
@@ -960,17 +1056,21 @@ export const GetClients = () => dispatch =>{
 export const AddTurnover = (value) => dispatch =>{
 	axios.post('/api/CR/AddTurnover', {Turnover: value})
 	.then(res=>{
+		let message = "New Turnover Value has added !"
 		dispatch({
 			type: TURNOVER,
 			payload: res.data.value
 		})
+		dispatch({
+			type: NOTIFICATION_SUCCESS,
+			payload: {message: message}
+		})
+		setTimeout(() => {
+			CloseNotification("success")
+		}, 6000);
 	})
 	.catch(err=>{
-		console.log(err)
-		dispatch({
-			type: TURNOVER_ERROR,
-			payload: err
-		})
+		ErrorsMessage(err, dispatch);
 	})
 }
 
@@ -983,10 +1083,27 @@ export const GetTurnover = () => dispatch =>{
 		})
 	})
 	.catch(err=>{
-		console.log(err);
-		dispatch({
-			type: TURNOVER_ERROR,
-			payload: err
-		})
+		ErrorsMessage(err, dispatch);
 	})
+}
+
+export const CloseNotification = (type) => dispatch =>{
+
+	if(type === "error"){
+		dispatch({
+			type: NOTIFICATION_ERROR,
+			payload: {}
+		})
+	}else if(type === "success"){
+		dispatch({
+			type: NOTIFICATION_SUCCESS,
+			payload: {}
+		})
+	}else if(type === "warning"){
+		dispatch({
+			type: NOTIFICATION_WARNING,
+			payload: {}
+		})
+	}
+
 }

@@ -14,7 +14,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { empty } from '../../../../is-empty';
-import { withSnackbar } from 'notistack';
 
 const styles = theme =>({
     nav_h:{
@@ -129,49 +128,17 @@ class AddTime extends Component {
     }
 
 
-    handleClickVariantStart_N2 = variant => () => {
-        if(!validate_cell(this.state.N2_selectedDate)){
-            this.props.enqueueSnackbar('N2 Count Down Has Started !', { variant });
-        }
-    };
-
-    handleClickVariantStart_N2Plus150 = variant => () => {
-        if(!validate_cell(this.state.N2Plus150_selectedDate)){
-            this.props.enqueueSnackbar('N2 Plus 150 Count Down Has Started !', { variant });
-        }
-    };
-
-    handleClickVariantStart_N2Plus50 = variant => () => {
-        if(!validate_cell(this.state.N2Plus50_selectedDate)){
-            this.props.enqueueSnackbar('N2 Plus 50 Count Down Has Started !', { variant });
-        } 
-    };
-
-    handleClickVariantStop_N2 = variant => {
-        this.props.enqueueSnackbar('N2 Count Down Has Stoped !', { variant });
-    };
-
-    handleClickVariantStop_N2Plus150 = variant => {
-        this.props.enqueueSnackbar('N2 Plus 150 Count Down Has Stoped !', { variant });
-    };
-
-    handleClickVariantStop_N2Plus50 = variant => {
-        this.props.enqueueSnackbar('N2 Plus 50 Count Down Has Stoped !', { variant });
-    };
-
+   
     handleStopButton_N2 = (event) =>{
-        this.handleClickVariantStop_N2('warning');
         this.StopN2Timer(event);
     }
 
     handleStopButton_N2Plus150 = (event) =>{
-        this.handleClickVariantStop_N2Plus150('warning');
-        this.StopN2Timer(event);
+        this.StopN2Plus150Timer(event);
     }
 
     handleStopButton_N2Plus50 = (event) =>{
-        this.handleClickVariantStop_N2Plus50('warning');
-        this.StopN2Timer(event);
+        this.StopN2Plus50Timer(event);
     }
 
 
@@ -196,7 +163,7 @@ class AddTime extends Component {
                                 onChange={this.onN2DateChange}
                             />
                         </FormControl>
-                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton} onClick={this.handleClickVariantStart_N2('success')}>Add</Button>
+                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={ this.handleStopButton_N2 }
                         >Stop</Button>
                     </form>
@@ -215,7 +182,7 @@ class AddTime extends Component {
                                     onChange={this.onN2Plus150DateChange}
                                 />
                         </FormControl>
-                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton} onClick={this.handleClickVariantStart_N2Plus150('success')} >Add</Button>
+                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.handleStopButton_N2Plus150}>Stop</Button>
                     </form>
                           
@@ -233,7 +200,7 @@ class AddTime extends Component {
                                         onChange={this.onN2Plus50DateChange}
                                     />
                         </FormControl>
-                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton} onClick={this.handleClickVariantStart_N2Plus50('success')}>Add</Button>
+                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton}>Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.handleStopButton_N2Plus50}>Stop</Button>
                     </form>   
             </div>
@@ -269,7 +236,6 @@ class AddTime extends Component {
 
 AddTime.propTypes = {
     classes: PropTypes.object.isRequired,
-    enqueueSnackbar: PropTypes.func.isRequired,
     N2: PropTypes.object.isRequired,
     N2_Plus_150: PropTypes.object.isRequired,
     N2_Plus_50: PropTypes.object.isRequired,
@@ -286,5 +252,5 @@ const mapStateToProps = (state) => ({
     N2_Plus_50: state.N2_Plus_50
 });
 
-export default connect(mapStateToProps, { StopTimer_N2, StopTimer_N2_Plus_150, StopTimer_N2_Plus_50, AddClientTimer, AddServerTimer})(withStyles(styles)(withSnackbar(AddTime)));
+export default connect(mapStateToProps, { StopTimer_N2, StopTimer_N2_Plus_150, StopTimer_N2_Plus_50, AddClientTimer, AddServerTimer})(withStyles(styles)(AddTime));
 

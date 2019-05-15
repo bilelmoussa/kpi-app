@@ -12,7 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { withSnackbar } from 'notistack';
+//import { withSnackbar } from 'notistack';
 import { empty } from '../../../../is-empty';
 import { AddTurnover } from '../../../../actions/authentication'
 
@@ -71,7 +71,7 @@ class Turnover extends Component {
 
   handleClickVariant = variant => () => {
     if(!validate_cell(this.state.TurnoverValue)){
-      this.props.enqueueSnackbar('New Turnover Value has Added !', { variant });
+      //this.props.enqueueSnackbar('New Turnover Value has Added !', { variant });
     }  
   };
 
@@ -128,7 +128,6 @@ class Turnover extends Component {
 Turnover.propTypes = {
 	auth: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  enqueueSnackbar: PropTypes.func.isRequired,
   AddTurnover: PropTypes.func.isRequired,
 }
 
@@ -136,4 +135,4 @@ const mapStateToProps = (state) => ({
 	auth: state.auth,
 })
 
-export default connect(mapStateToProps, {AddTurnover})(withStyles(styles)(withSnackbar(Turnover)));
+export default connect(mapStateToProps, {AddTurnover})(withStyles(styles)(Turnover));

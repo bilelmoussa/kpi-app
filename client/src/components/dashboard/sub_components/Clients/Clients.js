@@ -12,7 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { withSnackbar } from 'notistack';
+//import { withSnackbar } from 'notistack';
 import { empty } from '../../../../is-empty';
 import {AddClients} from '../../../../actions/authentication';
 
@@ -71,7 +71,7 @@ class Clients extends Component {
 
   handleClickVariant = variant => () => {
     if(!validate_cell(this.state.ClientsValue)){
-      this.props.enqueueSnackbar('New Clients Values has Added !', { variant });
+      //this.props.enqueueSnackbar('New Clients Values has Added !', { variant });
     }  
   };
 
@@ -128,7 +128,6 @@ class Clients extends Component {
 Clients.propTypes = {
 	auth: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  enqueueSnackbar: PropTypes.func.isRequired,
   AddClients: PropTypes.func.isRequired,
 }
 
@@ -136,4 +135,4 @@ const mapStateToProps = (state) => ({
 	auth: state.auth,
 })
 
-export default connect(mapStateToProps, {AddClients})(withStyles(styles)(withSnackbar(Clients)));
+export default connect(mapStateToProps, {AddClients})(withStyles(styles)(Clients));

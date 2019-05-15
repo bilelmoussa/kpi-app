@@ -10,8 +10,7 @@ import store from './store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authentication';
-import { SnackbarProvider } from 'notistack';
-
+import Notification from './components/Notification/Notification'
 
 
 if(localStorage.jwtToken) {
@@ -39,7 +38,6 @@ export default class App extends Component {
   render() {
     return (
 	<Provider store = { store }>
-      <SnackbarProvider maxSnack={3}>
           <div className="App">
               <Router>
                 <div id="content">
@@ -53,7 +51,7 @@ export default class App extends Component {
                 </div>
               </Router>
           </div>
-      </SnackbarProvider>
+          <Notification />
 	</Provider>  
     );   
 

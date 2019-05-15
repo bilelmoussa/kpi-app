@@ -66,23 +66,29 @@ class CircleChart extends Component {
     render(){
         const { title, val } = this.state;
         let r_color;
+        let newVal = 0;
 
+        if(!empty(val)){
+            newVal = val
+        }else{
+            newVal = 0;
+        }
 
         const  class_name = () =>{
             if(title === "Fail Rate"){
-                if(val < 40){
+                if(newVal < 40){
                     r_color = "green";
                 }
-                else if(val > 40 && val < 60){
+                else if(newVal > 40 && newVal < 60){
                     r_color = "yellow";
                 }else{
                     r_color = "red";
                 }                
             }else{
-                if(val < 40){
+                if(newVal < 40){
                     r_color = "red";
                 }
-                else if(val > 40 && val < 60){
+                else if(newVal > 40 && newVal < 60){
                     r_color = "yellow";
                 }else{
                     r_color = "green";
@@ -93,11 +99,11 @@ class CircleChart extends Component {
         const TextValue = () =>{
             if(title === "Filamant Comsumption" || title === "Quotes Number" || title === "Clients" || title === "Turnover"){
                 return(
-                    <text x="18" y="20.35" className={`percentage ${r_color}`}>{`${val}`}</text>
+                    <text x="18" y="20.35" className={`percentage ${r_color}`}>{`${newVal}`}</text>
                 )
             }else{
                 return(
-                    <text x="18" y="20.35" className={`percentage ${r_color}`}>{`%${val}`}</text>
+                    <text x="18" y="20.35" className={`percentage ${r_color}`}>{`%${newVal}`}</text>
                 )
             }
         }
@@ -113,7 +119,7 @@ class CircleChart extends Component {
                                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                 />
                                 <path className="circle"
-                                    strokeDasharray={`${val}, 100`}
+                                    strokeDasharray={`${newVal}, 100`}
                                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                 />
                               { TextValue()}

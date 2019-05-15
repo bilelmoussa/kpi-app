@@ -8,6 +8,7 @@ import Ratio from './Ratio';
 import QuotesNumberReducer from './QuotesNumberReducer';
 import ClientsReducer from './ClientsReducer';
 import TurnoverReducer from './TurnoverReducer';
+import NotificationReducer from './NotificationReducer';
 
 export default combineReducers({
     errors: errorReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
 	QuotesNumber: QuotesNumberReducer,
 	Clients: ClientsReducer,
 	Turnover: TurnoverReducer,
+	Notification: NotificationReducer,
 });
