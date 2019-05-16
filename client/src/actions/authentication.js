@@ -32,7 +32,8 @@ import {
 	TURNOVER,
 	NOTIFICATION_ERROR,
 	NOTIFICATION_SUCCESS,
-	NOTIFICATION_WARNING
+	NOTIFICATION_WARNING,
+	NOTIFICATION_INFO
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -754,7 +755,7 @@ export const AddServerTimer = (machine, values) => dispatch => {
 
 		axios.post('/api/timer/start_n2_timer', {values: seconds})
 			.then(res=>{
-				let message = "N2 Timer has Started !";
+				let message = "N2 Timer Has Started !";
 				dispatch({
 					type: NOTIFICATION_SUCCESS,
 					payload: {message: message}
@@ -778,7 +779,7 @@ export const AddServerTimer = (machine, values) => dispatch => {
 
 		axios.post('/api/timer/start_n2plus150_timer', {values: seconds})
 			.then(res=>{
-				let message = "N2 Plus 150 Timer has Started !";
+				let message = "N2 Plus 150 Timer Has Started !";
 				dispatch({
 					type: NOTIFICATION_SUCCESS,
 					payload: {message: message}
@@ -802,7 +803,7 @@ export const AddServerTimer = (machine, values) => dispatch => {
 
 		axios.post('/api/timer/start_n2plus50_timer', {values: seconds})
 			.then(res=>{
-				let message = "N2 Plus 50 Timer has Started !";
+				let message = "N2 Plus 50 Timer Has Started !";
 				dispatch({
 					type: NOTIFICATION_SUCCESS,
 					payload: {message: message}
@@ -830,19 +831,32 @@ export const AddServerTimer = (machine, values) => dispatch => {
 export const  StopTimer_N2 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2_timer')
 	.then(res=>{
-		let message = "N2  Timer has Stoped !";
+		let message = "N2  Timer Has Stopped !";
+		let message_2 = "N2 Timer Has Already Stopped !";
+
 		clearInterval(Timer_N2);
 		dispatch({
 			type: N2_SELECT_DATE,
 			payload: 0
 		});
-		dispatch({
-			type: NOTIFICATION_WARNING,
-			payload: {message: message}
-		})
-		setTimeout(() => {
-			CloseNotification("warning")
-		}, 6000);
+		if(res.data.success){
+			dispatch({
+				type: NOTIFICATION_WARNING,
+				payload: {message: message}
+			})
+			setTimeout(() => {
+				CloseNotification("warning")
+			}, 6000);
+		}else{
+			dispatch({
+				type: NOTIFICATION_INFO,
+				payload: {message: message_2}
+			})
+			setTimeout(() => {
+				CloseNotification("info")
+			}, 6000);
+		}
+
 	})
 	.catch(err=>{
 		ErrorsMessage(err, dispatch);
@@ -883,19 +897,33 @@ export const Get_N2_Timer  = () => dispatch =>{
 export const  StopTimer_N2_Plus_150 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2plus150_timer')
 	.then(res=>{
-		let message = "N2 Plus 150 Timer has Stoped !";
+		let message = "N2 Plus 150 Timer Has Stopped !";
+		let message_2 = "N2 Plus 150 Timer Has Already Stopped !";
+
 		clearInterval(Timer_N2_Plus_150);
 		dispatch({
 			type: N2_PLUS_150_SELECT_DATE,
 			payload: 0
 		});
-		dispatch({
-			type: NOTIFICATION_WARNING,
-			payload: {message: message}
-		})
-		setTimeout(() => {
-			CloseNotification("warning")
-		}, 6000);
+
+		if(res.data.success){
+			dispatch({
+				type: NOTIFICATION_WARNING,
+				payload: {message: message}
+			})
+			setTimeout(() => {
+				CloseNotification("warning")
+			}, 6000);
+		}else{
+			dispatch({
+				type: NOTIFICATION_INFO,
+				payload: {message: message_2}
+			})
+			setTimeout(() => {
+				CloseNotification("info")
+			}, 6000);
+		}
+
 	})
 	.catch(err=>{
 		ErrorsMessage(err, dispatch);
@@ -934,19 +962,34 @@ export const Get_N2_Plus_150_Timer  = () => dispatch =>{
 export const  StopTimer_N2_Plus_50 = () => dispatch =>{
 	axios.get('/api/timer/stop_n2plus50_timer')
 	.then(res=>{
-		let message = "N2 Plus 50 Timer has Stoped !";
+		let message = "N2 Plus 50 Timer Has Stopped !";
+		let message_2 = "N2 Plus 50 Timer Has Already Stopped !";
+
 		clearInterval(Timer_N2_Plus_50);
 		dispatch({
 			type: N2_PLUS_50_SELECT_DATE,
 			payload: 0
 		});
-		dispatch({
-			type: NOTIFICATION_WARNING,
-			payload: {message: message}
-		})
-		setTimeout(() => {
-			CloseNotification("warning")
-		}, 6000);
+
+		if(res.data.success){
+			dispatch({
+				type: NOTIFICATION_WARNING,
+				payload: {message: message}
+			})
+			setTimeout(() => {
+				CloseNotification("warning")
+			}, 6000);
+		}else{
+			dispatch({
+				type: NOTIFICATION_INFO,
+				payload: {message: message_2}
+			})
+			setTimeout(() => {
+				CloseNotification("info")
+			}, 6000);
+		}
+
+
 	})
 	.catch(err=>{
 		ErrorsMessage(err, dispatch);
@@ -1102,6 +1145,11 @@ export const CloseNotification = (type) => dispatch =>{
 	}else if(type === "warning"){
 		dispatch({
 			type: NOTIFICATION_WARNING,
+			payload: {}
+		})
+	}else if(type === "info"){
+		dispatch({
+			type: NOTIFICATION_INFO,
 			payload: {}
 		})
 	}

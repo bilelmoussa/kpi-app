@@ -69,8 +69,10 @@ router.get('/stop_n2_timer',  (req, res, next)=> {
 		}
 		else if(user){
 			if(user.role === "admin" || user.role === "write"){
+				let message = N2_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
+				let Stopped = N2_Time > 0 ? true : false;
 				StopTimer_N2();
-				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Time})
+				res.status(200).json({success: Stopped, msg: message, value: N2_Time})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -157,8 +159,10 @@ router.get('/stop_n2plus150_timer',  (req, res, next)=> {
 		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
+				let message = N2_Plus_150_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
+				let Stopped = N2_Plus_150_Time > 0 ? true : false;
 				StopTimer_N2_Plus_150();
-				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Plus_150_Time})
+				res.status(200).json({success: Stopped, msg: message, value: N2_Plus_150_Time})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -177,7 +181,7 @@ router.get('/get_n2plus150_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
 				let msgs = N2_Plus_150_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
-				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Plus_150_Time})
+				res.status(200).json({success: true, msg: msgs, value: N2_Plus_150_Time})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -245,8 +249,10 @@ router.get('/stop_n2plus50_timer',  (req, res, next)=> {
 		}
 		else if(user){
 			if(user.role === "admin" || user.role === "writer"){
+				let message = N2_Plus_50_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
+				let Stopped = N2_Plus_50_Time > 0 ? true : false;
 				StopTimer_N2_Plus_50();
-				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Plus_50_Time})
+				res.status(200).json({success: Stopped, msg: message, value: N2_Plus_50_Time})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}

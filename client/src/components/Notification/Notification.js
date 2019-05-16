@@ -117,7 +117,10 @@ const variantIcon = {
                 return { open: true, variant_type: "success", message: nextProps.Notification.Notification_Success.message }
             }else if(!empty(nextProps.Notification.Notification_Warning)){
                 return { open: true, variant_type: "warning", message: nextProps.Notification.Notification_Warning.message }
-            }else{
+            }else if(!empty(nextProps.Notification.Notification_Info)){
+                return { open: true, variant_type: "info", message: nextProps.Notification.Notification_Info.message }
+            }
+            else{
             return { open: false };
             }
         }else{
@@ -145,7 +148,14 @@ const variantIcon = {
                     variant_type: "warning",
                     message: this.props.Notification.Notification_Warning.message
                 })
-            }else{
+            }else if(!empty(this.props.Notification.Notification_Info)){
+                this.setState({
+                    open: true,
+                    variant_type: "info",
+                    message: this.props.Notification.Notification_Info.message
+                })
+            }
+            else{
                 return {open: false}
             }
         }else{
