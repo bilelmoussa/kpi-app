@@ -9,6 +9,7 @@ import QuotesNumberReducer from './QuotesNumberReducer';
 import ClientsReducer from './ClientsReducer';
 import TurnoverReducer from './TurnoverReducer';
 import NotificationReducer from './NotificationReducer';
+import UsersListReducer from './UsersListReducer';
 
 export default combineReducers({
     errors: errorReducer,
@@ -21,4 +22,5 @@ export default combineReducers({
 	Clients: ClientsReducer,
 	Turnover: TurnoverReducer,
 	Notification: NotificationReducer,
+	UsersList: UsersListReducer
 });

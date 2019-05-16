@@ -16,7 +16,7 @@ router.post('/AddQuotesNumber', (req, res, next)=>{
             res.status(400).json("Server Error !");
         }
         else if(user){
-            if(user.role === 'admin' || user.role === "write"){
+            if(user.role === 'admin' || user.role === "staff"){
                 let val = req.body.QuotesNumber;
 
                 let newQuotesNumber = new QuotesNumber({
@@ -46,7 +46,7 @@ router.get('/GetQuotesNumber', (req, res, next)=>{
             res.status(400).json("Server Error !");
         }
         else if(user){
-            if(user.role === 'admin' || user.role === "write"){
+            if(user.role === 'admin' || user.role === "staff"){
                 QuotesNumber.find()
                 .then(data=>{
                     let QuotesNumberValue = data[data.length -1].QuotesNumberValue;
@@ -72,7 +72,7 @@ router.post('/AddClients', (req, res, next)=>{
             res.status(400).json("Server Error !");
         }
         else if(user){
-            if(user.role === 'admin' || user.role === "write"){
+            if(user.role === 'admin' || user.role === "staff"){
                 let val = req.body.Clients;
 
                 let newClients = new Clients({
@@ -102,7 +102,7 @@ router.get('/GetClients', (req, res, next)=>{
             res.status(400).json("Server Error !");
         }
         else if(user){
-            if(user.role === 'admin' || user.role === "write"){
+            if(user.role === 'admin' || user.role === "staff"){
             
                 Clients.find()
                 .then(data=>{
@@ -129,7 +129,7 @@ router.post('/AddTurnover', (req, res, next)=>{
             res.status(400).json("Server Error !");
         }
         else if(user){
-            if(user.role === 'admin' || user.role === "write"){
+            if(user.role === 'admin' || user.role === "staff"){
                 let val = req.body.Turnover;
 
                 let newTurnover = new Turnover({
@@ -159,7 +159,7 @@ router.get('/GetTurnover', (req, res, next)=>{
             res.status(400).json("Server Error !");
         }
         else if(user){
-            if(user.role === 'admin' || user.role === "write"){
+            if(user.role === 'admin' || user.role === "staff"){
             
                 Turnover.find()
                 .then(data=>{

@@ -48,20 +48,20 @@ class chart extends Component {
 	constructor(){
 		super();
 		this.state = {
-			role: 'read',
+			role: 'user',
 			value: 0
 		}
 	}
 	
 	static getDerivedStateFromProps(nextProps, prevState){
-		if(nextProps.auth.user.role!==prevState.role && (nextProps.auth.user.role === 'read' || nextProps.auth.user.role === 'write' || nextProps.auth.user.role === 'admin')){
+		if(nextProps.auth.user.role!==prevState.role && (nextProps.auth.user.role === 'user' || nextProps.auth.user.role === 'staff' || nextProps.auth.user.role === 'admin')){
 			return { role: nextProps.auth.user.role };
 		}
 			else return null;
 	};
 	
 	componentDidUpdate(prevProps, prevState) {
-		if(prevProps.auth.user.role!==this.props.auth.user.role && (this.props.auth.user.role === 'read' || this.props.auth.user.role === 'write' || this.props.auth.user.role === 'admin')) {
+		if(prevProps.auth.user.role!==this.props.auth.user.role && (this.props.auth.user.role === 'user' || this.props.auth.user.role === 'staff' || this.props.auth.user.role === 'admin')) {
 			this.setState({
 				role: this.props.auth.user.role,
 			});

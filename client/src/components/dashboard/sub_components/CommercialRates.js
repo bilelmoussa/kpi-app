@@ -63,13 +63,13 @@ class CommercialRates extends Component {
 		 this.state = {
 			 value: 0,
 			 writer_auth: false,
-			 role: 'read',
+			 role: 'user',
 		 }
 	 }
 
 	 componentDidMount(){
 		if(!empty(this.props.auth.user)){
-			if(this.props.auth.user.role === "admin" || this.props.auth.user.role === "write"){
+			if(this.props.auth.user.role === "admin" || this.props.auth.user.role === "staff"){
 				this.setState({
 					writer_auth: true,
 					role : 	this.props.auth.user.role
@@ -83,14 +83,14 @@ class CommercialRates extends Component {
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState){
-		if(nextProps.auth.user.role!==prevState.role && (nextProps.auth.user.role === 'write' || nextProps.auth.user.role === 'admin')){
+		if(nextProps.auth.user.role!==prevState.role && (nextProps.auth.user.role === 'staff' || nextProps.auth.user.role === 'admin')){
 			return { role: nextProps.auth.user.role, writer_auth: true };
 		}
 			else return null;
 	};
 	
 	componentDidUpdate(prevProps, prevState) {
-		if(prevProps.auth.user.role!==this.props.auth.user.role && (this.props.auth.user.role === 'write' || this.props.auth.user.role === 'admin')) {
+		if(prevProps.auth.user.role!==this.props.auth.user.role && (this.props.auth.user.role === 'staff' || this.props.auth.user.role === 'admin')) {
 			this.setState({
 				role: this.props.auth.user.role,
 				writer_auth: true

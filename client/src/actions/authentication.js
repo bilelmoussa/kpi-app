@@ -33,7 +33,8 @@ import {
 	NOTIFICATION_ERROR,
 	NOTIFICATION_SUCCESS,
 	NOTIFICATION_WARNING,
-	NOTIFICATION_INFO
+	NOTIFICATION_INFO,
+	USERS_LIST
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -1153,5 +1154,39 @@ export const CloseNotification = (type) => dispatch =>{
 			payload: {}
 		})
 	}
+
+}
+
+export const GetUsersList = () => dispatch =>{
+	axios.get('/api/user/fetch_users')
+	.then(res=>{
+		
+		res.data.users.forEach((user, i)=>{
+			user.id = i + 1;
+		})
+
+		dispatch({
+			type: USERS_LIST,
+			payload: res.data.users
+		})
+	})
+	.catch(err=>{
+		console.log(err);
+		ErrorsMessage(err, dispatch);
+	})
+}
+
+export const ChangeAdminRole = (Users, User) => dispatch =>{
+	axios.put('/api/user/update_user_role', {role: User.role, user_name: User.user_name})
+	.then(res=>{
+		dispatch({
+			type: USERS_LIST,
+			payload: Users
+		})
+	})
+	.catch(err=>{
+		console.log(err);
+		ErrorsMessage(err, dispatch);
+	})
 
 }

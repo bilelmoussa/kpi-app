@@ -48,7 +48,7 @@ router.post('/start_n2_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "write"){
+			if(user.role === "admin" || user.role === "staff"){
 				let vals = req.body.values;
 				Save_N2_Date(vals);
 				res.status(200).json({success: true, msg: "counter has started"})
@@ -68,7 +68,7 @@ router.get('/stop_n2_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "write"){
+			if(user.role === "admin" || user.role === "staff"){
 				let message = N2_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
 				let Stopped = N2_Time > 0 ? true : false;
 				StopTimer_N2();
@@ -89,7 +89,7 @@ router.get('/get_n2_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "write"){
+			if(user.role === "admin" || user.role === "staff"){
 				let msgs = N2_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
 				res.status(200).json({success: true, msg: msgs, value: N2_Time})
 			}else{
@@ -138,7 +138,7 @@ router.post('/start_n2plus150_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "staff"){
 				let vals = req.body.values;
 				Save_N2Plus150_Date(vals);
 				res.status(200).json({success: true, msg: "counter has started"})
@@ -158,7 +158,7 @@ router.get('/stop_n2plus150_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "staff"){
 				let message = N2_Plus_150_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
 				let Stopped = N2_Plus_150_Time > 0 ? true : false;
 				StopTimer_N2_Plus_150();
@@ -179,7 +179,7 @@ router.get('/get_n2plus150_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "staff"){
 				let msgs = N2_Plus_150_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
 				res.status(200).json({success: true, msg: msgs, value: N2_Plus_150_Time})
 			}else{
@@ -228,7 +228,7 @@ router.post('/start_n2plus50_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "staff"){
 				let vals = req.body.values;
 				Save_N2Plus50_Date(vals);
 				res.status(200).json({success: true, msg: "counter has started"})
@@ -248,7 +248,7 @@ router.get('/stop_n2plus50_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "staff"){
 				let message = N2_Plus_50_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
 				let Stopped = N2_Plus_50_Time > 0 ? true : false;
 				StopTimer_N2_Plus_50();
@@ -269,7 +269,7 @@ router.get('/get_n2plus50_timer',  (req, res, next)=> {
 			res.status(400).json("Server Error !")
 		}
 		else if(user){
-			if(user.role === "admin" || user.role === "writer"){
+			if(user.role === "admin" || user.role === "staff"){
 				let msgs = N2_Plus_50_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
 				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Plus_50_Time})
 			}else{

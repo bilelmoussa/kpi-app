@@ -73,18 +73,20 @@ class dash_home extends Component {
 			Clients: 0,
 			Turnover: 0,
 			writer_auth: false,
-			role: 'read'
+			role: 'user'
 		}
 	}
 
 	componentDidMount() {
-		this.props.getAllMachineRatio(2019);
+		let date = new Date();
+		let year = date.getFullYear();
+		this.props.getAllMachineRatio(year);
 		this.props.GetQuotesNumber();
 		this.props.GetClients();
 		this.props.GetTurnover();
 		
 		if(!empty(this.props.auth.user)){
-			if(this.props.auth.user.role === "admin" || this.props.auth.user.role === "write"){
+			if(this.props.auth.user.role === "admin" || this.props.auth.user.role === "staff"){
 				this.setState({
 					writer_auth: true,
 					role : 	this.props.auth.user.role
@@ -96,26 +98,43 @@ class dash_home extends Component {
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState){
-		if(nextProps.Ratios !== prevState.Ratios){
+		if(nextProps !== prevState){
 			if(!empty(nextProps.Ratios.data) &&  empty(nextProps.QuotesNumber) && empty(nextProps.Clients) && empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
 				return { data: nextProps.Ratios.data };
 			}
 			
 			else if(!empty(nextProps.QuotesNumber) && !empty(nextProps.QuotesNumber) && empty(nextProps.Clients) && empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
-				return {data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber}
+				return {
+					data: nextProps.Ratios.data, 
+					QuotesNumber: nextProps.QuotesNumber.QuotesNumber
+				}
 			}
 			else if(!empty(nextProps.Ratios.data) && !empty(nextProps.QuotesNumber) && !empty(nextProps.Clients) && empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
-				return {data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber, Clients: nextProps.Clients.Clients}
+				return {
+					data: nextProps.Ratios.data, 
+					QuotesNumber: nextProps.QuotesNumber.QuotesNumber, 
+					Clients: nextProps.Clients.Clients
+				}
 			}
 			
 			else if(!empty(nextProps.Ratios.data) && !empty(nextProps.QuotesNumber) && !empty(nextProps.Clients) && !empty(nextProps.Turnover) &&  empty(nextProps.auth.user)){
-				return {data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber, Clients: nextProps.Clients.Clients, Turnover: nextProps.Turnover.Turnover}
+				return {
+					data: nextProps.Ratios.data, 
+					QuotesNumber: nextProps.QuotesNumber.QuotesNumber, 
+					Clients: nextProps.Clients.Clients, 
+					Turnover: nextProps.Turnover.Turnover
+				}
 			}
 			
 			else if(!empty(nextProps.Ratios.data) && !empty(nextProps.QuotesNumber) && !empty(nextProps.Clients) && !empty(nextProps.Turnover) &&  !empty(nextProps.auth.user)){
 
-				if(nextProps.auth.user.role === 'write' || nextProps.auth.user.role === 'admin'){
-					return { data: nextProps.Ratios.data, QuotesNumber: nextProps.QuotesNumber.QuotesNumber, Clients: nextProps.Clients.Clients, Turnover: nextProps.Turnover.Turnover, role: nextProps.auth.user.role, writer_auth: true}
+				if(nextProps.auth.user.role === 'staff' || nextProps.auth.user.role === 'admin'){
+					return { 
+						data: nextProps.Ratios.data, 
+						QuotesNumber: nextProps.QuotesNumber.QuotesNumber, 
+						Clients: nextProps.Clients.Clients, 
+						Turnover: nextProps.Turnover.Turnover, 
+						role: nextProps.auth.user.role, writer_auth: true}
 				}else{
 					return null;
 				}
@@ -134,23 +153,37 @@ class dash_home extends Component {
 
 	
 	componentDidUpdate(prevProps, prevState){
-		if(prevProps.Ratios !== this.props.Ratios){
+		if(prevProps !== this.props){
 			if(!empty(this.props.Ratios) && empty(this.props.QuotesNumber) && empty(this.props.Clients) && empty(this.props.Turnover) && empty(this.props.auth.user)){
 				this.setState({data: this.props.Ratios});
 			}
 			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && empty(this.props.Clients) && empty(this.props.Turnover) && empty(this.props.auth.user)){
-				this.setState({data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber})
+				this.setState({
+					data: this.props.Ratios, 
+					QuotesNumber: this.props.QuotesNumber.QuotesNumber
+				})
 			}
 			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && !empty(this.props.Clients) && empty(this.props.Turnover) && empty(this.props.auth.user)){
-				this.setState({ data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients })
+				this.setState({ 
+					data: this.props.Ratios, 
+					QuotesNumber: this.props.QuotesNumber.QuotesNumber, 
+					Clients: this.props.Clients.Clients 
+				})
 			}
 			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && !empty(this.props.Clients) && !empty(this.props.Turnover) && empty(this.props.auth.user)){
-				this.setState({ data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients, Turnover: this.props.Turnover.Turnover })
+				this.setState({ 
+					data: this.props.Ratios, 
+					QuotesNumber: this.props.QuotesNumber.QuotesNumber, 
+					Clients: this.props.Clients.Clients, 
+					Turnover: this.props.Turnover.Turnover 
+				})
 			}
 			else if(!empty(this.props.Ratios)  && !empty(this.props.QuotesNumber) && !empty(this.props.Clients) && !empty(this.props.Turnover) && !empty(this.props.auth.user)){
-				if(this.props.auth.user.role === 'write' || this.props.auth.user.role === 'admin'){
+				if(this.props.auth.user.role === 'staff' || this.props.auth.user.role === 'admin'){
 					this.setState({
-						data: this.props.Ratios, QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients, Turnover: this.props.Turnover.Turnover,
+						data: this.props.Ratios, 
+						QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients, 
+						Turnover: this.props.Turnover.Turnover,
 						role: this.props.auth.user.role,
 						writer_auth: true,
 					})
@@ -173,7 +206,7 @@ class dash_home extends Component {
 	};
 
 	protectCounter(classes, value){
-		if(this.state.writer_auth && (this.state.role === 'admin' || this.state.role === 'write')){
+		if(this.state.writer_auth && (this.state.role === 'admin' || this.state.role === 'staff')){
 			return(
 				<div className="countDown">
 					<AppBar className={classes.app_nav}  position="static">
@@ -201,24 +234,38 @@ class dash_home extends Component {
 		const { data, QuotesNumber, Clients, Turnover } = this.state;
 		const { value } = this.state;
 
+
+		if(empty(data.TimeEfficiency)){
+			data.TimeEfficiency = 0;
+		}else if(empty(data.FailRate)){
+			data.FailRate = 0;
+		}else if(empty(data.TemplateEfficiency)){
+			data.TemplateEfficiency = 0;
+		}else if(empty(data.FilamantComsumption)){
+			data.FilamantComsumption = 0;
+		}
+		
+
+
 		const time_data = {
 			title: "Time Efficiency",
-			val: (data.TimeEfficiency * 100).toFixed(0)
+			val: (Number(data.TimeEfficiency) * 100).toFixed(0) || 0
 		}
+
 
 		const fail_data = {
 			title: "Fail Rate",
-			val: (data.FailRate * 100).toFixed(0)
+			val: (Number(data.FailRate) * 100).toFixed(0) || 0
 		}
 
 		const Template_data = {
 			title: 'Template Efficiency',
-			val: (data.TemplateEfficiency * 100).toFixed(0)
+			val: (Number(data.TemplateEfficiency) * 100).toFixed(0) || 0
 		}
 
 		const Filamant_data = {
 			title: 'Filamant Comsumption',
-			val: (data.FilamantComsumption).toFixed(0) 
+			val: Number(data.FilamantComsumption).toFixed(0)  || 0
 		}
 
 		const quotes_number = {

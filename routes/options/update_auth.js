@@ -4,7 +4,7 @@ const valRemarks = require('../../validations/valRemarks')
 const update_auth = function(req, res, next,err,user,model,query){
     if (err) { return next(err); }
     if (!user) { return res.json('Unauthorised'); }
-    if(user.role == "admin" || user.role == "write"){
+    if(user.role == "admin" || user.role == "staff"){
 		let option = {upsert: true, 'new': true,};
         let id = req.body.id;
 		

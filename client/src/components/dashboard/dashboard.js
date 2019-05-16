@@ -103,7 +103,7 @@ class dashboard extends Component {
 		this.state = {
 		 left: false,
 		 writer_auth: false,
-		 role: 'read'
+		 role: 'user'
 		}
 	}
 	 
@@ -115,14 +115,14 @@ class dashboard extends Component {
 	};
 	
 	static getDerivedStateFromProps(nextProps, prevState){
-		if(nextProps.auth.user.role!==prevState.role && (nextProps.auth.user.role === 'write' || nextProps.auth.user.role === 'admin')){
+		if(nextProps.auth.user.role!==prevState.role && (nextProps.auth.user.role === 'staff' || nextProps.auth.user.role === 'admin')){
 			return { role: nextProps.auth.user.role, writer_auth: true };
 		}
 			else return null;
 	};
     
 	componentDidUpdate(prevProps, prevState) {
-		if(prevProps.auth.user.role!==this.props.auth.user.role && (this.props.auth.user.role === 'write' || this.props.auth.user.role === 'admin')) {
+		if(prevProps.auth.user.role!==this.props.auth.user.role && (this.props.auth.user.role === 'staff' || this.props.auth.user.role === 'admin')) {
 			this.setState({
 				role: this.props.auth.user.role,
 				writer_auth: true

@@ -124,12 +124,27 @@ router.get('/fetch_users', (req, res, next)=>{
         if (err) { return next(err); }
         if (!user) { return res.json('Unauthorised'); }
         if(user.role == 'admin'){
-            User.find().then(users =>{res.json({users: users})}).catch(err =>{console.log('Error', err); res.json({errors: err})});
+            User.find()
+            .then(users =>{
+                let new_users = [];
+                users.forEach((user, i)=>{
+                    if(user.role === "staff" || user.role === "user"){
+                        let send_user = {
+                            name: user.name,
+                            role: user.role,
+                            user_name: user.user_name
+                        }
+                        new_users.push(send_user)
+                    }
+                })
+                res.json({users: new_users})
+            })
+            .catch(err =>{console.log('Error', err); res.json({errors: err})});
         }
         else{
             return res.json('Unauthorised')  
         } 
-    })
+    })(req, res, next)
 })
 
 
@@ -137,14 +152,13 @@ router.put('/update_user', (req, res, next)=>{
     let query = req.body.query;
     passport.authenticate('jwt', {session: false}, function(err, user){
         update_user_auth(req,res,next,err,user,query,User);
-    })
+    })(req, res, next)
 })
 
 router.put('/update_user_role',(req, res, next)=>{
-    let query = {role: req.role};
     passport.authenticate('jwt', {session: false}, function(err, user){
-        update_user_role(req,res,next,err,user,query,User);
-    })
+        update_user_role(req,res,next,err,user,User);
+    })(req, res, next)
 })
 
 router.delete('/delete_user', (req,res,next)=>{
