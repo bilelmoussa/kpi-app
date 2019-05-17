@@ -111,6 +111,7 @@ router.get('/stat/:year/', (req, res, next)=>{
                     TemplateEfficiency: Number(finalData.reduce(getTemplateSum, 0)) / 3 || 0,
                }
 
+                
                 res.status(200).json(res_data);    
             })
             . catch(err => res.status(400).json({errors: err}))

@@ -134,9 +134,18 @@ class dash_home extends Component {
 						QuotesNumber: nextProps.QuotesNumber.QuotesNumber, 
 						Clients: nextProps.Clients.Clients, 
 						Turnover: nextProps.Turnover.Turnover, 
-						role: nextProps.auth.user.role, writer_auth: true}
+						role: nextProps.auth.user.role,
+						writer_auth: true
+					}
 				}else{
-					return null;
+					return {
+						data: nextProps.Ratios.data, 
+						QuotesNumber: nextProps.QuotesNumber.QuotesNumber, 
+						Clients: nextProps.Clients.Clients, 
+						Turnover: nextProps.Turnover.Turnover, 
+						role: nextProps.auth.user.role,
+						writer_auth: false
+					};
 				}
 				
 			}
@@ -188,7 +197,13 @@ class dash_home extends Component {
 						writer_auth: true,
 					})
 				}else{
-					return null;
+					this.setState({
+						data: this.props.Ratios, 
+						QuotesNumber: this.props.QuotesNumber.QuotesNumber, Clients: this.props.Clients.Clients, 
+						Turnover: this.props.Turnover.Turnover,
+						role: this.props.auth.user.role,
+						writer_auth: false,
+					})
 				}
 			}
 			else{

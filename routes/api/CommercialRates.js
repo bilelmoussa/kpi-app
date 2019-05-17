@@ -46,17 +46,12 @@ router.get('/GetQuotesNumber', (req, res, next)=>{
             res.status(400).json("Server Error !");
         }
         else if(user){
-            if(user.role === 'admin' || user.role === "staff"){
                 QuotesNumber.find()
                 .then(data=>{
                     let QuotesNumberValue = data[data.length -1].QuotesNumberValue;
                     res.status(200).json({success: true, value: QuotesNumberValue})
                 })
                 .catch(err=>{console.log(err)})
-
-            }else{
-				res.status(404).json("Unauthorised !")
-			}
         }else{
 			res.status(404).json("Unauthorised !")
 		}
@@ -101,19 +96,13 @@ router.get('/GetClients', (req, res, next)=>{
             console.log(err);
             res.status(400).json("Server Error !");
         }
-        else if(user){
-            if(user.role === 'admin' || user.role === "staff"){
-            
+        else if(user){            
                 Clients.find()
                 .then(data=>{
                     let ClientsValue = data[data.length -1].ClientsValue;
                     res.status(200).json({success: true, value: ClientsValue})
                 })
                 .catch(err=>{console.log(err)})
-
-            }else{
-				res.status(404).json("Unauthorised !")
-			}
         }else{
 			res.status(404).json("Unauthorised !")
 		}
@@ -158,19 +147,13 @@ router.get('/GetTurnover', (req, res, next)=>{
             console.log(err);
             res.status(400).json("Server Error !");
         }
-        else if(user){
-            if(user.role === 'admin' || user.role === "staff"){
-            
+        else if(user){            
                 Turnover.find()
                 .then(data=>{
                     let TurnoverValue = data[data.length -1].TurnoverValue;
                     res.status(200).json({success: true, value: TurnoverValue})
                 })
                 .catch(err=>{console.log(err)})
-
-            }else{
-				res.status(404).json("Unauthorised !")
-			}
         }else{
 			res.status(404).json("Unauthorised !")
 		}
