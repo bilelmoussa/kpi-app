@@ -75,7 +75,7 @@ export const registerUser = (user, history) => dispatch => {
     axios.post('/api/user/register', user)
             .then(res =>{ 
 				history.push('/login');
-				AddOrRemoveLoading(false)
+				AddOrRemoveLoading(false, dispatch)
 			})
             .catch(err => {
 				console.log(err)
