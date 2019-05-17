@@ -66,3 +66,6 @@ export const NOTIFICATION_INFO = "NOTIFICATION_INFO";
 //USERS LIST
 export const USERS_LIST = "USERS_LIST";
 
+//LOADING
+export const LOADING = "LOADING";
+

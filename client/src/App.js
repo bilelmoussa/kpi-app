@@ -10,8 +10,8 @@ import store from './store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authentication';
-import Notification from './components/Notification/Notification'
-
+import Notification from './components/Notification/Notification';
+import Loading from './components/Loading/Loading';
 
 if(localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -52,6 +52,7 @@ export default class App extends Component {
               </Router>
           </div>
           <Notification />
+          <Loading />
 	</Provider>  
     );   
 

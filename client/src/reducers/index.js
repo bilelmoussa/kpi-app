@@ -10,6 +10,7 @@ import ClientsReducer from './ClientsReducer';
 import TurnoverReducer from './TurnoverReducer';
 import NotificationReducer from './NotificationReducer';
 import UsersListReducer from './UsersListReducer';
+import LoadingReducer from './LoadingReducer';
 
 export default combineReducers({
     errors: errorReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
 	Clients: ClientsReducer,
 	Turnover: TurnoverReducer,
 	Notification: NotificationReducer,
-	UsersList: UsersListReducer
+	UsersList: UsersListReducer,
+	Loading: LoadingReducer,
 });
