@@ -42,7 +42,7 @@ const styles = theme => ({
 	},
 })
 
-class table extends Component {
+class DataSheet extends Component {
 	constructor(){
 		super();
 		this.state = {
@@ -104,7 +104,7 @@ class table extends Component {
 	}
 }
 
-table.propTypes = {
+DataSheet.propTypes = {
 	auth: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 };
@@ -113,4 +113,4 @@ const mapStateToProps = (state) => ({
 	auth: state.auth,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(table))
+export default connect(mapStateToProps)(withStyles(styles)(DataSheet))

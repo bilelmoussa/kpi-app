@@ -7,7 +7,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import Assessment from '@material-ui/icons/Assessment';
 import Description from '@material-ui/icons/Description';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
@@ -22,9 +21,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
 import { Route, Switch, Link } from 'react-router-dom';
-import profile from './sub_components/profile';
-import chart from './sub_components/chart';
-import table from './sub_components/table';
+import BarChart from './sub_components/chart';
+import DataSheet from './sub_components/table';
 import dash_home from './sub_components/dash_home';
 import users from './sub_components/users';
 import ExitToApp from '@material-ui/icons/ExitToApp';
@@ -146,11 +144,11 @@ class dashboard extends Component {
 	 ProtectedTable(classes){
 		if(this.state.writer_auth){
 		return(
-		<ListItem component={Link} to={`/dashboard/table`}  button>
+		<ListItem component={Link} to={`/dashboard/DataSheet`}  button>
 				<ListItemIcon>
 					<Description style={styles.account_circle}/>
 					</ListItemIcon>
-				<ListItemText primary={'table'} classes={{ primary: classes.list_text }}/>
+				<ListItemText primary={'Data Sheet'} classes={{ primary: classes.list_text }}/>
 		</ListItem>);
 		}else{
 		 return(null);
@@ -206,20 +204,15 @@ class dashboard extends Component {
 						<ListItemText primary={'dashboard'} classes={{ primary: classes.list_text }}/>
 					</ListItem>
 					
-					<ListItem component={Link} to={`/dashboard/profile`}  button>
-						<ListItemIcon>
-							<AccountCircle style={styles.account_circle} />
-						</ListItemIcon>
-						<ListItemText primary={'profile'} classes={{ primary: classes.list_text }}/>
-					</ListItem>
+				
 					
 					{this.ProtectedTable(classes)}
 					
-					<ListItem component={Link} to={`/dashboard/chart`}  button>
+					<ListItem component={Link} to={`/dashboard/Bar-Chart`}  button>
 						<ListItemIcon>
 							<Assessment style={styles.account_circle}/>
 						</ListItemIcon>
-						<ListItemText primary={'chart'} classes={{ primary: classes.list_text }}/>
+						<ListItemText primary={'Bar-Chart'} classes={{ primary: classes.list_text }}/>
 					</ListItem>
 					
 					{this.ProtectedCommercialRates(classes)}
@@ -271,9 +264,8 @@ class dashboard extends Component {
 			<div id="sub_routes">
 				<Switch>
 						<Route exact path={`/dashboard`} component={dash_home} />
-						<Route exact path={`/dashboard/profile`} component={profile} />
-						<Route exact path={`/dashboard/table`} component={table} auth={this.props.auth} />
-						<Route exact path={`/dashboard/chart`} component={chart} />
+						<Route exact path={`/dashboard/DataSheet`} component={DataSheet} auth={this.props.auth} />
+						<Route exact path={`/dashboard/Bar-Chart`} component={BarChart} />
 						<Route exact path={`/dashboard/CommercialRates`} component={CommercialRates} />
 						<Route exact path={`/dashboard/users`} component={users} />
 						<Route component={pagenotfound}/>

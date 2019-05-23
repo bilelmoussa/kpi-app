@@ -157,6 +157,10 @@ table{
   .circular-chart.yellow .circle {
     stroke: #d9e316;
   }
+
+  .circular-chart.blue .circle {
+    stroke: #2196f3;
+  }
   
   .percentage {
     font-family: sans-serif;
@@ -174,6 +178,10 @@ table{
 
   .percentage.yellow{
     fill: #d9e316;
+  }
+
+  .percentage.blue{
+    fill: #2196f3;
   }
 
   .timer_container{

@@ -84,7 +84,10 @@ class CircleChart extends Component {
                 }else{
                     r_color = "red";
                 }                
-            }else{
+            }else if(title === "Quotes Number" || title === "Clients" || title === "Turnover" || title === "Filamant Comsumption"){
+                r_color = "blue"
+            }
+            else{
                 if(newVal < 40){
                     r_color = "red";
                 }

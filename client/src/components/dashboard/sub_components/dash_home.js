@@ -31,7 +31,7 @@ const styles = theme =>({
 		flexDirection: "row",
 		flexWrap: "Wrap",
 		justifyContent: "space-around",
-		margin: "0"
+		margin: "50px 0"
 	},
 	app_nav: {
 		backgroundColor: '#272727' ,
@@ -310,11 +310,14 @@ class dash_home extends Component {
 						<CircleChart data={time_data}/>
 						<CircleChart data={fail_data}/>
 						<CircleChart data={Template_data}/>
+						
+
+					</Card>
+					<Card className={classes.CardContainer}>
 						<CircleChart data={Filamant_data}/>
 						<CircleChart data={quotes_number}/>
 						<CircleChart data={clients_}/>
 						<CircleChart data={turnover_}/>
-
 					</Card>
 				</div>
 

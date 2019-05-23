@@ -44,7 +44,7 @@ const styles = theme => ({
 })
 
 
-class chart extends Component {
+class BarChart extends Component {
 	constructor(){
 		super();
 		this.state = {
@@ -100,7 +100,7 @@ class chart extends Component {
 	}
 }
 
-chart.propTypes = {
+BarChart.propTypes = {
 	auth: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 };
@@ -109,4 +109,4 @@ const mapStateToProps = (state) => ({
 	auth: state.auth,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(chart))
+export default connect(mapStateToProps)(withStyles(styles)(BarChart))
