@@ -84,18 +84,11 @@ class CircleChart extends Component {
                 }else{
                     r_color = "red";
                 }                
-            }else if(title === "Quotes Number" || title === "Clients" || title === "Turnover" || title === "Filamant Comsumption"){
+            }else if(title === "Quotes Number" || title === "Clients" || title === "Turnover"){
                 r_color = "blue"
             }
             else{
-                if(newVal < 40){
-                    r_color = "red";
-                }
-                else if(newVal > 40 && newVal < 60){
-                    r_color = "yellow";
-                }else{
-                    r_color = "green";
-                }
+                r_color = "blue"
             }  
         }
 
@@ -117,7 +110,7 @@ class CircleChart extends Component {
         <div className="Card_item">
             <Card className="card">
                 <div className="single-chart">
-                        <svg viewBox="0 0 36 36" className={`circular-chart ${r_color}`}>
+                        <svg viewBox="0 0 36 36" className={`circular-chart ${r_color}`} preserveAspectRatio="none">
                                 <path className="circle-bg"
                                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                 />

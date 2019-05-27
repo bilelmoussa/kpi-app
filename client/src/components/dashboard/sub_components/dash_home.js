@@ -310,11 +310,11 @@ class dash_home extends Component {
 						<CircleChart data={time_data}/>
 						<CircleChart data={fail_data}/>
 						<CircleChart data={Template_data}/>
-						
+						<CircleChart data={Filamant_data}/>
 
 					</Card>
 					<Card className={classes.CardContainer}>
-						<CircleChart data={Filamant_data}/>
+						
 						<CircleChart data={quotes_number}/>
 						<CircleChart data={clients_}/>
 						<CircleChart data={turnover_}/>

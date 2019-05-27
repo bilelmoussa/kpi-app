@@ -86,17 +86,17 @@ table{
 }
 
 .card  {
-    margin: 10px;
-    background-color: #161414 !important;
-    color: #ffffff !important;
-    height: 270px;
+  margin: 10px;
+  background-color: #161414 !important;
+  color: #ffffff !important;
+  height: 340px;
 }
 
 .circular-chart {
     display: block;
     margin: 10px auto;
-    max-width: 80%;
-    max-height: 140px;
+    max-width: 85%;
+    max-height: 250px;
     padding: 10px 0;
   }
   
@@ -112,7 +112,16 @@ table{
     stroke-linecap: round;
     animation: progress 4s linear 0.5s ;
   }
-  
+
+  .single-chart{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: space-around;
+  }
+
   .SingleChartTitle{
     color: #fff !important;
     letter-spacing: 4px !important;
@@ -122,9 +131,8 @@ table{
   }
 
   .Card_item{
-    width: 15% !important;
-    min-width: 200px !important;
-    margin : 40px 30px !important;
+    width: 250px !important;
+    margin: 40px 30px !important;
     text-align: center;
   }
 
@@ -164,7 +172,7 @@ table{
   
   .percentage {
     font-family: sans-serif;
-    font-size: 0.5em;
+    font-size: 0.25em;
     text-anchor: middle;
   }
 
