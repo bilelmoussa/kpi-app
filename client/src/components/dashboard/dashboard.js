@@ -148,7 +148,7 @@ class dashboard extends Component {
 				<ListItemIcon>
 					<Description style={styles.account_circle}/>
 					</ListItemIcon>
-				<ListItemText primary={'Data Sheet'} classes={{ primary: classes.list_text }}/>
+				<ListItemText primary={'Data Sheet Record'} classes={{ primary: classes.list_text }}/>
 		</ListItem>);
 		}else{
 		 return(null);

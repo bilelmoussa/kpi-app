@@ -127,6 +127,7 @@ export default class CHART extends Component {
                 valueField={'workingHours'}
                 name={'KPI'}
                 type={'bar'}
+                barWidth={'150'}
                 />
               <ValueAxis position={'left'} >
                 {TitleChartYAxis()}

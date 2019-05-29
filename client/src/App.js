@@ -13,9 +13,22 @@ import { setCurrentUser, logoutUser } from './actions/authentication';
 import Notification from './components/Notification/Notification';
 import Loading from './components/Loading/Loading';
 
+function decodeToken(token) {
+  let decoded = {};
+  try {
+    decoded = jwt_decode(token);
+  } catch (err) {
+    console.log(err)
+    store.dispatch(logoutUser());
+  }
+  return decoded;
+};
+
+
+
 if(localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
-  const decoded = jwt_decode(localStorage.jwtToken);
+  const decoded = decodeToken(localStorage.jwtToken);
   store.dispatch(setCurrentUser(decoded));
   const currentTime = Date.now() / 1000;
   if(decoded.exp < currentTime) {

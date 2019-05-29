@@ -86,6 +86,15 @@ class CircleChart extends Component {
                 }                
             }else if(title === "Quotes Number" || title === "Clients" || title === "Turnover"){
                 r_color = "blue"
+            }else if(title === "Time Efficiency" || title === "Template Efficiency"){
+                if(newVal < 40){
+                    r_color = "red";
+                }
+                else if(newVal > 40 && newVal < 60){
+                    r_color = "yellow";
+                }else{
+                    r_color = "green";
+                }
             }
             else{
                 r_color = "blue"
