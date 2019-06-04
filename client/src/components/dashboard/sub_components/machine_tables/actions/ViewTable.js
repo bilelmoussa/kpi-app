@@ -217,9 +217,9 @@ class ViewTable extends Component{
 					{ name: 'TimeEfficiency', title: 'Time Efficiency %' },
 					{ name: 'FailRate', title: 'Fail Rate %' },
 					{ name: 'TemplateEfficiency', title: 'Template Efficiency %' },
-					{ name: 'FilamantComsumption', title: 'Filamant Comsumption Per Week' },
+					{ name: 'FilamentComsumption', title: 'Filament Comsumption Per Week' },
 				],
-				smallTableColumnsOrder: ['TimeEfficiency', 'FailRate', 'TemplateEfficiency', 'FilamantComsumption'],
+				smallTableColumnsOrder: ['TimeEfficiency', 'FailRate', 'TemplateEfficiency', 'FilamentComsumption'],
 				columns:[
 				  { name: 'printedPart', title: 'Printed Part' },
 				  { name: 'workingHours', title: 'Working Hours' },

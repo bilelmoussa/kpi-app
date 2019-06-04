@@ -8,7 +8,7 @@ let options = Joi.object({
     finishingTime: Joi.date().required(),
     failureCoef: Joi.number().required(),
     actualWh: Joi.number().required(),
-    weight: Joi.string().required(),
+    weight: Joi.number().required(),
     template: Joi.number().required(),
     Remarks: Joi.string().allow(''),
     created_at: Joi.date().default(Date.now()).required(),

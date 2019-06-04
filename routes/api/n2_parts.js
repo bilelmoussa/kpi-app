@@ -257,6 +257,7 @@ router.get('/week_table/:year/:month/:week', (req, res, next)=>{
 					let NewCount = 0;					
 					data.forEach((d)=>{
 
+
 						if(d.Template_Total === 0){
 							d.Template_Total = d.workingHours_Total;
 						}
