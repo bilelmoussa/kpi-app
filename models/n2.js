@@ -26,6 +26,10 @@ module.exports.get_years = function(callback){
 	n2_part.aggregate(options, callback);
 }
 
+
+
+
+
 module.exports.get_months = function(year, callback){
 	let options = [
 		{
@@ -130,7 +134,7 @@ module.exports.getWeekTableValues = function(year, month, week, callback){
 	let options = [
 		{
 			$group : {
-			   _id : { year: { $year: "$timeAndDate" }, month: { $month: "$timeAndDate" }, week: { $isoWeek: "$timeAndDate" } },
+			   _id : { year: { $year: "$timeAndDate" }, month: { $month: "$timeAndDate" }, week: { $isoWeek: "$timeAndDate" },  },
 			   rows : { 
 				   $push:{
 					   _id: "$_id",
@@ -154,7 +158,7 @@ module.exports.getWeekTableValues = function(year, month, week, callback){
 			   count: { $sum: 1 }
 			}
 		  },
-		  { $project: { _id: 1, rows: 1, workingHours_Total: 1, Template_Total: 1,  actualWh_Total: 1, Faillure_Total: 1,  count: 1,  TimeEfficiency: { $divide: [ "$actualWh_Total", 168 ] },  FailRate: { $subtract: [ 1, {$divide: ["$Faillure_Total", "$count"] } ] },  FilamantComsumption: 1 }  },
+		  { $project: { _id: 1, rows: 1, workingHours_tot: 1, workingHours_Total: 1, Template_Total: 1,  actualWh_Total: 1, Faillure_Total: 1,  count: 1,  TimeEfficiency: { $divide: [ "$actualWh_Total", 168 ] },  FailRate: { $subtract: [ 1, {$divide: ["$Faillure_Total", "$count"] } ] },  FilamantComsumption: 1 }  },
 		  { $match: { $and: [{"_id.week": week}, {"_id.month": month}, {"_id.year": year} ] } },
 		  { $sort : { "_id.year": -1, "_id.month": -1,  "_id.week" : -1,   } }
 	]

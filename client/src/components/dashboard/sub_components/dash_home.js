@@ -31,7 +31,7 @@ const styles = theme =>({
 		flexDirection: "row",
 		flexWrap: "Wrap",
 		justifyContent: "space-around",
-		margin: "50px 0"
+		margin: "0 0 50px 0"
 	},
 	app_nav: {
 		backgroundColor: '#272727' ,
@@ -279,7 +279,7 @@ class dash_home extends Component {
 		}
 
 		const Filamant_data = {
-			title: 'Filamant Comsumption',
+			title: 'Filament Comsumption',
 			val: Number(data.FilamantComsumption).toFixed(0)  || 0
 		}
 
@@ -303,7 +303,7 @@ class dash_home extends Component {
 			<div className="dash_page">
 				<div className="ratios">
 					<AppBar className={classes.app_nav}  position="static">
-					<Typography variant="h5" className={classes.nav_h}>statistics</Typography>
+					<Typography variant="h5" className={classes.nav_h}>productive kpi</Typography>
 					</AppBar>
 					<Card className={classes.CardContainer}>
 					
@@ -313,6 +313,9 @@ class dash_home extends Component {
 						<CircleChart data={Filamant_data}/>
 
 					</Card>
+					<AppBar className={classes.app_nav}  position="static">
+					<Typography variant="h5" className={classes.nav_h}>economical kpi</Typography>
+					</AppBar>
 					<Card className={classes.CardContainer}>
 						
 						<CircleChart data={quotes_number}/>

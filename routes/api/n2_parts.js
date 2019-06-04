@@ -50,7 +50,7 @@ router.get('/years', (req, res, next)=>{
 					res.status(400).json({errors: err});
 				}
 				if(years){
-					let YEARS_ = []
+					let YEARS_ = [];
 					years.forEach((year, i)=>{
 						YEARS_.push(year._id.year)
 					});
@@ -253,19 +253,33 @@ router.get('/week_table/:year/:month/:week', (req, res, next)=>{
 				if(err){
 					res.status(400).json({errors: err});
 				}
-				if(data){					
+				if(data){
+					let NewCount = 0;					
 					data.forEach((d)=>{
+
 						if(d.Template_Total === 0){
 							d.Template_Total = d.workingHours_Total;
 						}
+
 						d.TemplateEfficiency = 1 - (d.workingHours_Total/d.Template_Total);
+
 						d.rows.forEach((row, i)=>{
+
 							if(row.template === null || row.template === undefined || row.template === 0){
 								row.template = row.workingHours
 							}
+
+							if(row.workingHours === 0){
+								NewCount++;
+							}
+
 						})
+
+						let failRate = 1 - (d.Faillure_Total / (d.count - NewCount));
+
+						d.FailRate = failRate;
+
 					})
-				
 			
 					
 					res.json({success: true, data: data})

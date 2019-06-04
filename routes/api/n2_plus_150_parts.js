@@ -256,6 +256,7 @@ router.get('/week_table/:year/:month/:week', (req, res, next)=>{
 					res.status(400).json({errors: err});
 				}
 				if(data){
+					let NewCount = 0;					
 					data.forEach((d)=>{
 						if(d.Template_Total === 0){
 							d.Template_Total = d.workingHours_Total;
@@ -265,7 +266,13 @@ router.get('/week_table/:year/:month/:week', (req, res, next)=>{
 							if(row.template === null || row.template === undefined || row.template === 0){
 								row.template = row.workingHours
 							}
+							if(row.workingHours === 0){
+								NewCount++;
+							}
 						})
+						let failRate = 1 - (d.Faillure_Total / (d.count - NewCount));
+
+						d.FailRate = failRate;
 					})
 					
 					

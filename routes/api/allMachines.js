@@ -73,8 +73,8 @@ router.get('/stat/:year/', (req, res, next)=>{
             .then(data => {
                 data.forEach((d)=>{
                    if(!d.length < 1){
-
-                       const data_ =  d[1] || d[0];
+                        let NewCount = 0;					
+                        const data_ =  d[1] || d[0];
 
                        
                        if(data_.Template_Total === 0){
@@ -83,13 +83,22 @@ router.get('/stat/:year/', (req, res, next)=>{
             
                         data_.TemplateEfficiency = 1 - (data_.workingHours_Total/data_.Template_Total);
 
+
+
                         data_.rows.forEach((row, i)=>{
                             if(row.template === null || row.template === undefined || row.template === 0){
                                 row.template = row.workingHours
                             }
+
+                            if(row.workingHours === 0){
+								NewCount++;
+                            }
+                            
                         })
                         
-                        
+                        let failRate = 1 - (data_.Faillure_Total / (data_.count - NewCount));
+
+						data_.FailRate = failRate;
 
                         let new_data = {
                             TimeEfficiency: data_.TimeEfficiency || 0,
@@ -101,6 +110,7 @@ router.get('/stat/:year/', (req, res, next)=>{
 
                         finalData.push(new_data);   
                    }
+
                 })
 
 

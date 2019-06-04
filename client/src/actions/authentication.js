@@ -274,6 +274,7 @@ export const get_n2_years = () => dispatch =>{
 	AddOrRemoveLoading(true, dispatch)
 	 axios.get('/api/N2/years')
 		.then(res => {
+			console.log(res)
 			dispatch({
 				type: N2_YEARS,
 				payload: res.data.years

@@ -12,7 +12,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-//import { withSnackbar } from 'notistack';
 import { empty } from '../../../../is-empty';
 import {AddQuotesNumber} from '../../../../actions/authentication'
 
@@ -21,19 +20,19 @@ const styles = theme =>({
 		padding: "15px 0",
 		letterSpacing: "5px",
 		textTransform: "uppercase"
-    },
-    formControl: {
+  },
+  formControl: {
         margin: theme.spacing.unit,
         minWidth: 120,
-      },
-    FormButton:{
+  },
+  FormButton:{
         display: "flex",
         margin: "30px auto",
         minWidth: 100,
-    },
-    dialog: {
+  },
+  dialog: {
         width: 'calc(100% - 16px)',
-      },
+  },
 })
 
 function validate_cell(data){
