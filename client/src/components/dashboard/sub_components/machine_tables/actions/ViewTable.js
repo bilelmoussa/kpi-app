@@ -166,7 +166,13 @@ const Time = ({ value, onValueChange }) => (
 />
 )
 
-
+const Weight = ({ value, onValueChange }) => (
+<NumberFormat
+	customInput={TextField}
+	value={value}
+	onChange={event => onValueChange(event.target.value)}
+/>
+)
 
 
 const DateTime = ({ value, onValueChange }) => (
@@ -182,7 +188,12 @@ const DateTime = ({ value, onValueChange }) => (
 )
 
 
-
+const WeightProvider = props =>(
+	<DataTypeProvider
+		editorComponent={Weight}
+	{...props}
+/>
+)
 
 const DateTimeTypeProvider = props => (
 	<DataTypeProvider
@@ -248,6 +259,7 @@ class ViewTable extends Component{
 				],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
 				TimeColumns: ['workingHours', 'actualWh', 'template'],
+				WeightColumn: ['weight'],
 				editingRowIds: [],
 				addedRows: [],
 				rowChanges: {},
@@ -531,6 +543,7 @@ class ViewTable extends Component{
 			sortingStateColumnExtensions,
 			TimeColumns,
 			smallTableColumns,
+			WeightColumn
 		} = this.state;
 
 		const small_table = [
@@ -570,6 +583,10 @@ class ViewTable extends Component{
 			
 			<IntegratedSorting />
 			
+			<WeightProvider 
+				for={WeightColumn}
+			/>
+
 			<TimeProvider 
 				for={TimeColumns}
 			/>

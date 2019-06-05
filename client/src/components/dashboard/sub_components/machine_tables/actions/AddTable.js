@@ -188,7 +188,20 @@ const Time = ({ value, onValueChange }) => (
 )
 
 
+const Weight = ({ value, onValueChange }) => (
+	<NumberFormat
+		customInput={TextField}
+		value={value}
+		onChange={event => onValueChange(event.target.value)}
+	/>
+)
 
+const WeightProvider = props =>(
+	<DataTypeProvider
+		editorComponent={Weight}
+	{...props}
+/>
+)
 
 const TimeProvider = props =>(
 	  <DataTypeProvider
@@ -241,6 +254,7 @@ class AddTable extends Component{
 				],
 				dateTimeColumns: ['timeAndDate','finishingTime'],
 				TimeColumns: ['workingHours', "actualWh", "template"],
+				WeightColumn: ['weight'],
 				editingRowIds: [],
 				addedRows: [],
 				rowChanges: {},
@@ -471,6 +485,7 @@ class AddTable extends Component{
 			empty_row,
 			dateTimeColumns,
 			TimeColumns,
+			WeightColumn
 		} = this.state;
 		
 	return(
@@ -489,6 +504,10 @@ class AddTable extends Component{
 					addedRows={addedRows}
 					onAddedRowsChange={this.changeAddedRows}
 					onCommitChanges={this.commitChanges}
+			/>
+			
+			<WeightProvider 
+				for={WeightColumn}
 			/>
 			
 			<TimeProvider 
