@@ -79,7 +79,7 @@ class MachineTimer extends Component {
 
 
     render(){
-        const { classes } = this.props;
+        const { classes, PartName } = this.props;
         const { MachineName } = this.state;
 
         let time = this.secondsToTime(this.state.seconds);
@@ -130,43 +130,46 @@ class MachineTimer extends Component {
     
         return(
             <div className="machines_timer">  
-                    <Typography variant="h4" className={classes.nav_h}>{MachineName}</Typography>            
-                    <div className="container">
-                        <Timer data={hours}/>
-                        <ul className="flip secondPlay">
-                            <li >
-                                <div className="a_tag">
-                                    <div className="up">
-                                        <div className="shadow"></div>
-                                        <div className="inn">:</div>
+                    <Typography variant="h4" className={classes.nav_h}>{MachineName}</Typography>
+                    <div className="Timer_container">           
+                        <div className="container">
+                            <Timer data={hours}/>
+                            <ul className="flip secondPlay">
+                                <li >
+                                    <div className="a_tag">
+                                        <div className="up">
+                                            <div className="shadow"></div>
+                                            <div className="inn">:</div>
+                                        </div>
+                                        
+                                        <div className="down">
+                                            <div className="shadow"></div>
+                                            <div className="inn">:</div>
+                                        </div>
                                     </div>
-                                    
-                                    <div className="down">
-                                        <div className="shadow"></div>
-                                        <div className="inn">:</div>
+                                </li>
+                            </ul>
+                            <Timer data={minutes}/>
+                            <ul className="flip secondPlay">
+                                <li >
+                                    <div className="a_tag">
+                                        <div className="up">
+                                            <div className="shadow"></div>
+                                            <div className="inn">:</div>
+                                        </div>
+                                        
+                                        <div className="down">
+                                            <div className="shadow"></div>
+                                            <div className="inn">:</div>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <Timer data={minutes}/>
-                        <ul className="flip secondPlay">
-                            <li >
-                                <div className="a_tag">
-                                    <div className="up">
-                                        <div className="shadow"></div>
-                                        <div className="inn">:</div>
-                                    </div>
-                                    
-                                    <div className="down">
-                                        <div className="shadow"></div>
-                                        <div className="inn">:</div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <Timer data={seconds}/>
-                    </div>
-                </div>
+                                </li>
+                            </ul>
+                            <Timer data={seconds}/>
+                        </div>
+                        <div className="TimerPartName">{PartName}</div>
+                    </div> 
+            </div>
         )
     }
 }

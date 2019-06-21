@@ -225,8 +225,7 @@ table{
     flex-direction: row;
     text-align: center;
     position: relative;
-    height: 90px;
-    margin: 0 20px;
+    min-height: 90px;
     flex-wrap: wrap;
 
     ul {
@@ -324,6 +323,23 @@ table{
   ul.flip li .a_tag div.down div.inn {
       bottom: 0;
   }
+}
+
+.Timer_container{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+}
+
+.TimerPartName{
+  font-size: 24px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-align: left;
+  margin: 10px 0;
+  font-family: monospace;
 }
 
 

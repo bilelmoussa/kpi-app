@@ -96,8 +96,8 @@ app.get('*', (req,res) =>{
 // Port    
 const port = process.env.port || 5000;
 app.get('/server', function(req, res) {
-    res.json('yaaaaaaa');
-  });
+    res.json('Server Side Work Just Fine !');
+});
 
 
 app.listen(port, ()=>{console.log('\x1b[36m%s\x1b[0m', 'Server Started on:')

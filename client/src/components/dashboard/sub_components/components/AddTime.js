@@ -63,6 +63,9 @@ class AddTime extends Component {
             N2_selectedDate: "",
             N2Plus150_selectedDate: "",
             N2Plus50_selectedDate: "",
+            N2PartName: "",
+            N2Plus150PartName: "",
+            N2Plus50PartName: "",
             emptyDate: false,
         }
     }
@@ -79,36 +82,40 @@ class AddTime extends Component {
         this.setState({ N2Plus50_selectedDate: event.target.value });
     }
 
+    handleChange = (name) => (event) =>{
+        this.setState({[name]: event.target.value})
+    }
+
     handleN2Submit = (event) =>{
         event.preventDefault();
-        if(validate_cell(this.state.N2_selectedDate)){
+        if(validate_cell(this.state.N2_selectedDate) || this.state.N2PartName === ""){
             this.setState({emptyDate: true});
         }else{
             let value = time_to_numb(this.state.N2_selectedDate);
-            this.props.AddClientTimer("N2", value);
-            this.props.AddServerTimer("N2", value);
+            this.props.AddClientTimer("N2", value, this.state.N2PartName);
+            this.props.AddServerTimer("N2", value, this.state.N2PartName);
         }
     }
 
     handleN2Plus150Submit = (event) =>{
         event.preventDefault();
-        if(validate_cell(this.state.N2Plus150_selectedDate)){
+        if(validate_cell(this.state.N2Plus150_selectedDate) || this.state.N2Plus150PartName === ""){
             this.setState({emptyDate: true});
         }else{
             let value = time_to_numb(this.state.N2Plus150_selectedDate);
-            this.props.AddClientTimer("N2Plus150", value);
-            this.props.AddServerTimer("N2Plus150", value);
+            this.props.AddClientTimer("N2Plus150", value, this.state.N2Plus150PartName);
+            this.props.AddServerTimer("N2Plus150", value, this.state.N2Plus150PartName);
         }
     }
 
     handleN2Plus50Submit = (event) =>{
         event.preventDefault();
-        if(validate_cell(this.state.N2Plus50_selectedDate)){
+        if(validate_cell(this.state.N2Plus50_selectedDate) || this.state.N2Plus50PartName === ""){
             this.setState({emptyDate: true});
         }else{
             let value = time_to_numb(this.state.N2Plus50_selectedDate);
-            this.props.AddClientTimer("N2Plus50", value);
-            this.props.AddServerTimer("N2Plus50", value);
+            this.props.AddClientTimer("N2Plus50", value, this.state.N2Plus50PartName);
+            this.props.AddServerTimer("N2Plus50", value, this.state.N2Plus50PartName);
         }
     }
 
@@ -162,6 +169,13 @@ class AddTime extends Component {
                                 value={N2_selectedDate}
                                 onChange={this.onN2DateChange}
                             />
+                            <TextField 
+                                label="Part Name"
+                                className={classes.textField}
+                                value={this.state.N2PartName}
+                                onChange={this.handleChange('N2PartName')}
+                                margin="normal"
+                            />
                         </FormControl>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={ this.handleStopButton_N2 }
@@ -181,6 +195,13 @@ class AddTime extends Component {
                                     value={N2Plus150_selectedDate}
                                     onChange={this.onN2Plus150DateChange}
                                 />
+                                <TextField 
+                                    label="Part Name"
+                                    className={classes.textField}
+                                    value={this.state.N2Plus150PartName}
+                                    onChange={this.handleChange('N2Plus150PartName')}
+                                    margin="normal"
+                                />
                         </FormControl>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.handleStopButton_N2Plus150}>Stop</Button>
@@ -198,6 +219,13 @@ class AddTime extends Component {
                                         mask={['-', '-', '-', '-']}
                                         value={N2Plus50_selectedDate}
                                         onChange={this.onN2Plus50DateChange}
+                                    />
+                                     <TextField 
+                                        label="Part Name"
+                                        className={classes.textField}
+                                        value={this.state.N2Plus50PartName}
+                                        onChange={this.handleChange('N2Plus50PartName')}
+                                        margin="normal"
                                     />
                         </FormControl>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton}>Add</Button>

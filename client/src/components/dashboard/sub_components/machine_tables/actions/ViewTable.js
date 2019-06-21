@@ -547,13 +547,13 @@ class ViewTable extends Component{
 		} = this.state;
 
 		const small_table = [
-		{
-			TimeEfficiency: empty(data) ? "" : (data[0].TimeEfficiency * 100).toFixed(2),
-			FailRate: empty(data) ? "" : data[0].FailRate * 100,
-			TemplateEfficiency: empty(data) ? "" : data[0].TemplateEfficiency * 100,
-			FilamantComsumption: empty(data) ? "" : data[0].FilamantComsumption,
-		}
-	]
+			{
+				TimeEfficiency: empty(data) ? "" : (data[0].TimeEfficiency * 100).toFixed(2),
+				FailRate: empty(data) ? "" : data[0].FailRate * 100,
+				TemplateEfficiency: empty(data) ? "" : data[0].TemplateEfficiency * 100,
+				FilamentComsumption: empty(data) ? "" : data[0].FilamantComsumption,
+			}
+		]
 
 		return(
 		<div>

@@ -35,7 +35,10 @@ import {
 	NOTIFICATION_WARNING,
 	NOTIFICATION_INFO,
 	USERS_LIST,
-	LOADING
+	LOADING,
+	N2_PART_NAME,
+	N2_PLUS_150_PART_NAME,
+	N2_PLUS_50_PART_NAME
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -802,7 +805,7 @@ let Timer_N2_Plus_150 = 0;
 let Timer_N2_Plus_50 = 0;
 
 
-export const AddClientTimer = (machine, values) => dispatch =>{
+export const AddClientTimer = (machine, values, PartName) => dispatch =>{
 	if(machine === "N2"){
 		let  seconds = values * 3600;
 
@@ -822,6 +825,11 @@ export const AddClientTimer = (machine, values) => dispatch =>{
 				dispatch({
 					type: N2_SELECT_DATE,
 					payload: nextSeconds
+				});
+
+				dispatch({
+					type: N2_PART_NAME,
+					payload: PartName
 				});
 		
 			}, 1000);
@@ -846,6 +854,10 @@ export const AddClientTimer = (machine, values) => dispatch =>{
 					type: N2_PLUS_150_SELECT_DATE,
 					payload: nextSeconds
 				})
+				dispatch({
+					type: N2_PLUS_150_PART_NAME,
+					payload: PartName
+				});
 			}, 1000);
 		
 		
@@ -870,17 +882,21 @@ export const AddClientTimer = (machine, values) => dispatch =>{
 					type: N2_PLUS_50_SELECT_DATE,
 					payload: nextSeconds
 				})
+				dispatch({
+					type: N2_PLUS_50_PART_NAME,
+					payload: PartName
+				});
 			}, 1000);
 	
 	}
 }
 
-export const AddServerTimer = (machine, values) => dispatch => {
+export const AddServerTimer = (machine, values, PartName) => dispatch => {
 
 	if(machine === "N2"){
 		let seconds = values * 3600;
 		AddOrRemoveLoading(true, dispatch);
-		axios.post('/api/timer/start_n2_timer', {values: seconds})
+		axios.post('/api/timer/start_n2_timer', {values: seconds, PartName: PartName})
 			.then(res=>{
 				let message = "N2 Timer Has Started !";
 				dispatch({
@@ -899,6 +915,10 @@ export const AddServerTimer = (machine, values) => dispatch => {
 					type: N2_SELECT_DATE,
 					payload: 0
 				})
+				dispatch({
+					type: N2_PART_NAME,
+					payload: "",
+				})
 				AddOrRemoveLoading(false, dispatch);
 				ErrorsMessage(err, dispatch);
 		})
@@ -906,7 +926,7 @@ export const AddServerTimer = (machine, values) => dispatch => {
 	}else if(machine === "N2Plus150"){
 		let seconds = values * 3600;
 		AddOrRemoveLoading(true, dispatch)
-		axios.post('/api/timer/start_n2plus150_timer', {values: seconds})
+		axios.post('/api/timer/start_n2plus150_timer', {values: seconds, PartName: PartName})
 			.then(res=>{
 				let message = "N2 Plus 150 Timer Has Started !";
 				dispatch({
@@ -925,6 +945,10 @@ export const AddServerTimer = (machine, values) => dispatch => {
 					type: N2_PLUS_150_SELECT_DATE,
 					payload: 0
 				})
+				dispatch({
+					type: N2_PLUS_150_PART_NAME,
+					payload: "",
+				})
 				AddOrRemoveLoading(false, dispatch)
 				ErrorsMessage(err, dispatch);
 		})
@@ -932,7 +956,7 @@ export const AddServerTimer = (machine, values) => dispatch => {
 	}else if(machine === "N2Plus50"){
 		let seconds = values * 3600;
 		AddOrRemoveLoading(true, dispatch)
-		axios.post('/api/timer/start_n2plus50_timer', {values: seconds})
+		axios.post('/api/timer/start_n2plus50_timer', {values: seconds, PartName: PartName})
 			.then(res=>{
 				let message = "N2 Plus 50 Timer Has Started !";
 				dispatch({
@@ -950,6 +974,10 @@ export const AddServerTimer = (machine, values) => dispatch => {
 				dispatch({
 					type: N2_PLUS_50_SELECT_DATE,
 					payload: 0
+				})
+				dispatch({
+					type: N2_PLUS_150_PART_NAME,
+					payload: "",
 				})
 				AddOrRemoveLoading(false, dispatch)
 				ErrorsMessage(err, dispatch);
@@ -972,6 +1000,10 @@ export const  StopTimer_N2 = () => dispatch =>{
 		dispatch({
 			type: N2_SELECT_DATE,
 			payload: 0
+		});
+		dispatch({
+			type: N2_PART_NAME,
+			payload: ""
 		});
 		AddOrRemoveLoading(false, dispatch)
 		if(res.data.success){
@@ -1011,7 +1043,10 @@ export const Get_N2_Timer  = () => dispatch =>{
 				type: N2_SELECT_DATE,
 				payload: 0
 			});
-
+			dispatch({
+				type: N2_PART_NAME,
+				payload: res.data.PartName
+			});
 			AddOrRemoveLoading(false, dispatch);
 
 			Timer_N2 = setInterval(function(){
@@ -1046,7 +1081,10 @@ export const  StopTimer_N2_Plus_150 = () => dispatch =>{
 			type: N2_PLUS_150_SELECT_DATE,
 			payload: 0
 		});
-
+		dispatch({
+			type: N2_PLUS_150_PART_NAME,
+			payload: ""
+		});
 		AddOrRemoveLoading(false, dispatch)
 
 		if(res.data.success){
@@ -1083,7 +1121,15 @@ export const Get_N2_Plus_150_Timer  = () => dispatch =>{
 		axios.get('/api/timer/get_n2plus150_timer')
 		.then(res=>{
 			let seconds = res.data.value;
-
+			clearInterval(Timer_N2_Plus_150);
+			dispatch({
+				type: N2_PLUS_150_SELECT_DATE,
+				payload: 0
+			});
+			dispatch({
+				type: N2_PLUS_150_PART_NAME,
+				payload: res.data.PartName
+			});
 			Timer_N2_Plus_150 = setInterval(function(){
 				let nextSeconds = seconds--;
 				if(nextSeconds === 0 ){
@@ -1121,6 +1167,10 @@ export const  StopTimer_N2_Plus_50 = () => dispatch =>{
 			type: N2_PLUS_50_SELECT_DATE,
 			payload: 0
 		});
+		dispatch({
+			type: N2_PLUS_50_PART_NAME,
+			payload: ""
+		});
 		AddOrRemoveLoading(false, dispatch)
 
 		if(res.data.success){
@@ -1156,7 +1206,15 @@ export const Get_N2_Plus_50_Timer  = () => dispatch =>{
 		axios.get('/api/timer/get_n2plus50_timer')
 		.then(res=>{
 			let seconds = res.data.value;
-
+			clearInterval(Timer_N2_Plus_50);
+			dispatch({
+				type: N2_PLUS_50_SELECT_DATE,
+				payload: 0
+			});
+			dispatch({
+				type: N2_PLUS_50_PART_NAME,
+				payload: res.data.PartName
+			});
 			Timer_N2_Plus_50 = setInterval(function(){
 				let nextSeconds = seconds--;
 				if(nextSeconds === 0 ){

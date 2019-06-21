@@ -11,6 +11,9 @@ let N2_Time = 0;
 let N2_Plus_150_Time = 0;
 let N2_Plus_50_Time = 0;
 
+let N2_PartName = "";
+let N2_Plus_150_PartName = "";
+let N2_Plus_50_PartName = "";
 
 
 //N2 Timer
@@ -50,8 +53,10 @@ router.post('/start_n2_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "staff"){
 				let vals = req.body.values;
+				let PartName = req.body.PartName;
+				N2_PartName = PartName;
 				Save_N2_Date(vals);
-				res.status(200).json({success: true, msg: "counter has started"})
+				res.status(200).json({success: true, msg: "counter has started", PartName: N2_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -72,7 +77,8 @@ router.get('/stop_n2_timer',  (req, res, next)=> {
 				let message = N2_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
 				let Stopped = N2_Time > 0 ? true : false;
 				StopTimer_N2();
-				res.status(200).json({success: Stopped, msg: message, value: N2_Time})
+				N2_PartName = "";
+				res.status(200).json({success: Stopped, msg: message, value: N2_Time, PartName: N2_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -91,7 +97,7 @@ router.get('/get_n2_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "staff"){
 				let msgs = N2_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
-				res.status(200).json({success: true, msg: msgs, value: N2_Time})
+				res.status(200).json({success: true, msg: msgs, value: N2_Time, PartName: N2_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -140,8 +146,10 @@ router.post('/start_n2plus150_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "staff"){
 				let vals = req.body.values;
+				let PartName = req.body.PartName;
+				N2_Plus_150_PartName = PartName;
 				Save_N2Plus150_Date(vals);
-				res.status(200).json({success: true, msg: "counter has started"})
+				res.status(200).json({success: true, msg: "counter has started", PartName: N2_Plus_150_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -162,7 +170,8 @@ router.get('/stop_n2plus150_timer',  (req, res, next)=> {
 				let message = N2_Plus_150_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
 				let Stopped = N2_Plus_150_Time > 0 ? true : false;
 				StopTimer_N2_Plus_150();
-				res.status(200).json({success: Stopped, msg: message, value: N2_Plus_150_Time})
+				N2_Plus_150_PartName = "";
+				res.status(200).json({success: Stopped, msg: message, value: N2_Plus_150_Time, PartName: N2_Plus_150_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -181,7 +190,7 @@ router.get('/get_n2plus150_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "staff"){
 				let msgs = N2_Plus_150_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
-				res.status(200).json({success: true, msg: msgs, value: N2_Plus_150_Time})
+				res.status(200).json({success: true, msg: msgs, value: N2_Plus_150_Time, PartName: N2_Plus_150_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -230,8 +239,10 @@ router.post('/start_n2plus50_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "staff"){
 				let vals = req.body.values;
+				let PartName = req.body.PartName;
+				N2_Plus_50_PartName = PartName;
 				Save_N2Plus50_Date(vals);
-				res.status(200).json({success: true, msg: "counter has started"})
+				res.status(200).json({success: true, msg: "counter has started", PartName: N2_Plus_50_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -252,7 +263,8 @@ router.get('/stop_n2plus50_timer',  (req, res, next)=> {
 				let message = N2_Plus_50_Time > 0 ? "Timer Stopped with success" : "Timer already stopped";
 				let Stopped = N2_Plus_50_Time > 0 ? true : false;
 				StopTimer_N2_Plus_50();
-				res.status(200).json({success: Stopped, msg: message, value: N2_Plus_50_Time})
+				N2_Plus_50_PartName = "";
+				res.status(200).json({success: Stopped, msg: message, value: N2_Plus_50_Time, PartName: N2_Plus_50_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}
@@ -271,7 +283,7 @@ router.get('/get_n2plus50_timer',  (req, res, next)=> {
 		else if(user){
 			if(user.role === "admin" || user.role === "staff"){
 				let msgs = N2_Plus_50_Time > 0 ? "Timer is still on !" : "Timer has Stopped !";
-				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Plus_50_Time})
+				res.status(200).json({success: true, msg: "counter has stopped", value: N2_Plus_50_Time, PartName: N2_Plus_50_PartName})
 			}else{
 				res.status(404).json("Unauthorised !")
 			}

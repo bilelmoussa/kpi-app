@@ -6,7 +6,8 @@ import {
 	N2_MONTH_CHART_DATA,
 	N2_YEAR_CHART_DATA,
 	N2_WEEK_TABLE_DATA, 
-	N2_SELECT_DATE
+	N2_SELECT_DATE,
+	N2_PART_NAME
 } from '../actions/types';
 
 const initialState = {
@@ -17,7 +18,8 @@ const initialState = {
 	MonthChartData: {},
 	YearChartData: {},
 	WeekTableData: {},
-	N2_selectedDate: {}
+	N2_selectedDate: {},
+	N2_PartName: {},
 };
 
 export default function(state = initialState, action ) {
@@ -37,7 +39,9 @@ export default function(state = initialState, action ) {
 		case N2_WEEK_TABLE_DATA:
 			return { ...state, WeekTableData: action.payload};
 		case N2_SELECT_DATE:
-			return { ...state, N2_selectedDate: action.payload}					
+			return { ...state, N2_selectedDate: action.payload};
+		case N2_PART_NAME:
+			return { ...state, N2_PartName: action.payload};				
         default: 
             return state;
     }

@@ -46,6 +46,11 @@ export const N2_SELECT_DATE = "N2_SELECT_DATE";
 export const N2_PLUS_150_SELECT_DATE = "N2_PLUS_150_SELECT_DATE";
 export const N2_PLUS_50_SELECT_DATE = "N2_PLUS_50_SELECT_DATE";
 
+//TIMES PARTS NAME
+export const N2_PART_NAME = "N2_PART_NAME";
+export const N2_PLUS_150_PART_NAME = "N2_PLUS_150_PART_NAME";
+export const N2_PLUS_50_PART_NAME = "N2_PLUS_50_PART_NAME";
+
 // Commercial Rates Values
 export const QUOTES_NUMBER = "QUOTES_NUMBER";
 export const CLIENTS = "CLIENTS";
