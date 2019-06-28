@@ -38,7 +38,10 @@ import {
 	LOADING,
 	N2_PART_NAME,
 	N2_PLUS_150_PART_NAME,
-	N2_PLUS_50_PART_NAME
+	N2_PLUS_50_PART_NAME,
+	N2PLUS150COMMENT,
+	N2PLUS50COMMENT,
+	N2COMMENT,
 } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -1326,7 +1329,7 @@ export const AddTurnover = (value) => dispatch =>{
 	AddOrRemoveLoading(true, dispatch)
 	axios.post('/api/CR/AddTurnover', {Turnover: value})
 	.then(res=>{
-		let message = "New Turnover Value has added !"
+		let message = "New Quotes Amount Value has added !"
 		dispatch({
 			type: TURNOVER,
 			payload: res.data.value
@@ -1426,4 +1429,107 @@ export const ChangeAdminRole = (Users, User) => dispatch =>{
 		AddOrRemoveLoading(false, dispatch)
 	})
 
+}
+
+
+export const deleteUser = (user, userList) => dispatch =>{
+	AddOrRemoveLoading(true, dispatch)
+	axios.post('/api/user/delete_user', {user_name: user.user_name})
+	.then(res=>{
+		const userDelete = userList.indexOf(user);
+		userList.splice(userDelete, 1);
+		dispatch({
+			type: USERS_LIST,
+			payload: userList
+		})
+		AddOrRemoveLoading(false, dispatch)
+	})
+	.catch(err=>{
+		console.log(err);
+		ErrorsMessage(err, dispatch);
+		AddOrRemoveLoading(false, dispatch)
+	})
+}
+
+//Commnet
+export const AddComment = (value, categorie) => dispatch =>{
+	AddOrRemoveLoading(true, dispatch)
+	axios.post('/api/Comment/AddComment', {CommentValue: value, CommentCategorie: categorie})
+	.then(res=>{
+		let message = "A new comment has added !"
+		if(categorie === "N2"){
+			dispatch({
+				type: N2COMMENT,
+				payload: value
+			})
+		}else if(categorie === "N2Plus150"){
+			dispatch({
+				type: N2PLUS150COMMENT,
+				payload: value
+			})
+		}else if(categorie === "N2Plus50"){
+			dispatch({
+				type: N2PLUS50COMMENT,
+				payload: value
+			})
+		}
+		dispatch({
+			type: NOTIFICATION_SUCCESS,
+			payload: {message: message}
+		})
+		setTimeout(() => {
+			CloseNotification("success")
+		}, 6000);
+		AddOrRemoveLoading(false, dispatch)
+	})
+	.catch(err=>{
+		console.log(err);
+		ErrorsMessage(err, dispatch);
+		AddOrRemoveLoading(false, dispatch)
+	})
+}
+
+
+export const GetComment  = () => (dispatch)=>{
+	AddOrRemoveLoading(true, dispatch)
+	axios.get('/api/Comment/GetComment')
+	.then(res=>{
+		dispatch({
+			type: N2COMMENT,
+			payload: res.data.N2Comment.CommentValue
+		})
+		dispatch({
+			type: N2PLUS150COMMENT,
+			payload: res.data.N2Plus150Comment.CommentValue
+		})
+		dispatch({
+			type: N2PLUS50COMMENT,
+			payload: res.data.N2Plus50Comment.CommentValue
+		})
+		AddOrRemoveLoading(false, dispatch)
+	})
+	.catch(err=>{
+		console.log(err)
+		ErrorsMessage(err, dispatch);
+		AddOrRemoveLoading(false, dispatch)
+	})
+}
+
+export const handleCommentChange = (value, cat) => (dispatch)=>{
+	if(cat === "N2"){
+		dispatch({
+			type: N2COMMENT,
+			payload: value
+		})	
+	}else if(cat === "N2Plus150"){
+		dispatch({
+			type: N2PLUS150COMMENT,
+			payload: value
+		})	
+	}else if(cat === "N2Plus50"){
+		dispatch({
+			type: N2PLUS50COMMENT,
+			payload: value
+		})
+	}
 }

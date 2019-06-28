@@ -84,7 +84,7 @@ class Clients extends Component {
     return (
       <div className="CR_Container">
 
-             <Typography variant="h6" className={classes.nav_h}>Add Clients Value </Typography>
+             <Typography variant="h6" className={classes.nav_h}>Add new Clients Value </Typography>
                     <form autoComplete="off" onSubmit={this.handleCleintsSubmit}>
                         <FormControl className={classes.formControl} >
                             <NumberFormat

@@ -161,15 +161,25 @@ router.put('/update_user_role',(req, res, next)=>{
     })(req, res, next)
 })
 
-router.delete('/delete_user', (req,res,next)=>{
+router.post('/delete_user', (req,res,next)=>{
     passport.authenticate('jwt', {session: false}, function(err, user){
-        if (err) { return next(err); }
+        if (err){ console.log(err) }
         if (!user) { return res.json('Unauthorised'); }
-        if(user == 'admin'){
-        let id = {id: req.body.id};
-        User.findOneAndDelete(id).then(user=>{res.json({user: user})}).catch(err=>{res.status(404).json({errors: err})})
+        if(user.role == 'admin'){
+        let username = {user_name: req.body.user_name};
+        User.findOneAndDelete(username)
+        .then(user=>{
+            res.json({success: true, user: user})
+        })
+        .catch(err=>{
+            console.log(err);
+            res.status(404).json({success: false, errors: "Server Error"})
+        })
+
+        }else{
+            res.status(404).json('Unauthorised');
         }
-    })
+    })(req, res, next)
 })
 
 module.exports = router;

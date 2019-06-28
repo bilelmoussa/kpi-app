@@ -28,6 +28,7 @@ const N2_plus_150 = require('./routes/api/n2_plus_150_parts');
 const All_Machines = require('./routes/api/allMachines');
 const Timer = require('./routes/api/timer');
 const CR = require('./routes/api/CommercialRates');
+const Comment = require('./routes/api/Comments');
 
 //user api 
 const user = require('./routes/api/users');
@@ -85,6 +86,7 @@ app.use('/api/All_Machines', All_Machines);
 app.use('/api/timer', Timer);
 app.use('/api/CR', CR);
 app.use('/api/user', user);
+app.use('/api/comment', Comment);
 
 /*
 app.get('*', (req,res) =>{

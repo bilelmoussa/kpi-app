@@ -24,6 +24,8 @@ const styles = theme =>({
     },
     formControl: {
         margin: theme.spacing.unit,
+        width: "50%",
+        maxWidth: 350,
         minWidth: 120,
       },
     FormButton:{
@@ -60,7 +62,10 @@ class Turnover extends Component {
         this.setState({emptyValue: true});
       }else{
         let value = this.state.TurnoverValue;
-        this.props.AddTurnover(value)
+        let val_1 = Number(value.replace(/(\d{3})\/(\d{3})/, '$1'));
+        let val_2 = Number(value.replace(/(\d{3})\/(\d{3})/, '$2'));
+        let final_val = `${val_1}/${val_2}`;
+        this.props.AddTurnover(final_val);
       }
   }
 
@@ -84,16 +89,18 @@ class Turnover extends Component {
     return (
       <div className="CR_Container">
 
-             <Typography variant="h6" className={classes.nav_h}>Add Turnover Value</Typography>
+             <Typography variant="h6" className={classes.nav_h}>Add Quotes Amount</Typography>
                     <form autoComplete="off" onSubmit={this.handleTurnoverSubmit}>
                         <FormControl className={classes.formControl} >
                             <NumberFormat
+                                format="###/###"
+                                placeholder="Actual Quotes Amount / Quotes Amount Target"
                                 customInput={TextField}
                                 value={TurnoverValue}
                                 onChange={this.onTurnoverValue}
                             />
                         </FormControl>
-                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton} onClick={this.handleClickVariant('success')}>Add</Button>
+                        <Button variant="contained" color="primary" type="submit" className={classes.FormButton}>Add</Button>
                     </form>
 
             <Dialog

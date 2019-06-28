@@ -201,7 +201,9 @@ table{
 
   .machine_timer{
     display: block;
-    margin: 40px 20px;
+    margin: 40px auto;
+    width: 30%;
+    min-width: 250px;
   }
 
  

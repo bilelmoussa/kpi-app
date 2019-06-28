@@ -59,9 +59,6 @@ class CircleChart extends Component {
       
 
  
-
-
-   
 	
     render(){
         const { title, val } = this.state;
@@ -74,6 +71,7 @@ class CircleChart extends Component {
             newVal = 0;
         }
 
+
         const  class_name = () =>{
             if(title === "Fail Rate"){
                 if(newVal < 40){
@@ -84,7 +82,7 @@ class CircleChart extends Component {
                 }else{
                     r_color = "red";
                 }                
-            }else if(title === "Quotes Number" || title === "Clients" || title === "Turnover"){
+            }else if(title === "Quotes Number" || title === "New Clients"){
                 r_color = "blue"
             }else if(title === "Time Efficiency" || title === "Template Efficiency"){
                 if(newVal < 40){
@@ -95,6 +93,14 @@ class CircleChart extends Component {
                 }else{
                     r_color = "green";
                 }
+            }else if(title === "Quotes Amount"){
+                if(newVal < "1/3"){
+                    r_color = "red"
+                }else if(newVal < "2/3"){
+                    r_color = "yellow"
+                }else{
+                    r_color = "green"
+                }
             }
             else{
                 r_color = "blue"
@@ -102,7 +108,7 @@ class CircleChart extends Component {
         }
 
         const TextValue = () =>{
-            if(title === "Filament Comsumption" || title === "Quotes Number" || title === "Clients" || title === "Turnover"){
+            if(title === "Filament Comsumption" || title === "Quotes Number" || title === "New Clients" || title === "Quotes Amount"){
                 return(
                     <text x="18" y="20.35" className={`percentage ${r_color}`}>{`${newVal}`}</text>
                 )

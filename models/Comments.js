@@ -5,11 +5,12 @@ const Joi = require('joi');
 const schema = mongoose.Schema;
 
 let options = Joi.object({
-    TurnoverValue: Joi.string().required(),
+    CommentValue: Joi.string().required(),
+    CommentCategorie:  Joi.string().valid("N2", "N2Plus150", "N2Plus50").required(),
     created_at: Joi.date().default(Date.now()).required(),
     update_at: Joi.date().default(Date.now()).required()
 });
 
-const TurnoverSchema = new schema(Joigoose.convert(options));
+const CommentSchema = new schema(Joigoose.convert(options));
 
-module.exports = Turnover = mongoose.model('Turnover', TurnoverSchema);
+module.exports = Comment = mongoose.model('Comment', CommentSchema);

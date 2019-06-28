@@ -117,8 +117,8 @@ class CommercialRates extends Component {
 					<AppBar className={classes.app_nav}  position="static">
 						<Tabs value={value} onChange={this.handleChange}>
 							<Tab label="Quotes Number" />
-							<Tab label="Clients" />
-							<Tab label="Turnover" />
+							<Tab label="new Clients" />
+							<Tab label="Quotes Amount" />
 						</Tabs>
 					</AppBar>
 					{value === 0 && <TabContainer><QuotesNumber /></TabContainer>}

@@ -280,7 +280,7 @@ class dash_home extends Component {
 
 		const Filamant_data = {
 			title: 'Filament Comsumption',
-			val: Number(data.FilamantComsumption).toFixed(0)  || 0
+			val: (Number(data.FilamantComsumption)).toFixed(0)  || 0
 		}
 
 		const quotes_number = {
@@ -289,12 +289,12 @@ class dash_home extends Component {
 		}
 
 		const clients_ = {
-			title: 'Clients',
+			title: 'New Clients',
 			val: Clients
 		}
 
 		const turnover_ = {
-			title: 'Turnover',
+			title: 'Quotes Amount',
 			val: Turnover
 		}
 

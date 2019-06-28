@@ -6,7 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { GetUsersList, ChangeAdminRole } from '../../../actions/authentication';
+import { GetUsersList, ChangeAdminRole, deleteUser } from '../../../actions/authentication';
 import { empty } from '../../../is-empty';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,7 +14,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow'
 import Switch from '@material-ui/core/Switch';
-
+import Button from '@material-ui/core/Button';
 
 const theme = createMuiTheme({
 	palette: {
@@ -44,7 +44,10 @@ const styles = theme =>({
 	},
 	table: {
 		minWidth: 700,
-	  },
+	},
+	btn:{
+		fontSize: 12
+	}
 
 });
 
@@ -148,8 +151,17 @@ class users extends Component {
 
 		this.props.ChangeAdminRole(NewUserList, User);
 	};
+
+	handleRemove = (id) => event =>{
+		this.state.UsersList.forEach((user, i)=>{
+			if(user.id === id){
+				this.props.deleteUser(user, this.state.UsersList)
+			}
+		})
+		
+	}
 	
-	renderUserRows(UsersList){
+	renderUserRows(UsersList, classes){
 		if(!empty(UsersList)){
 			return(
 				UsersList.map(row => {
@@ -172,6 +184,16 @@ class users extends Component {
 							value="Staff"
 							color="primary"
 						/>
+					</TableCell>
+					<TableCell>
+						<Button 
+							variant="contained" 
+							color="secondary"
+							className={classes.btn}
+							onClick={this.handleRemove(row.id)}
+						>
+							Remove
+						</Button>
 					</TableCell>
 					</TableRow>
 				)})
@@ -198,11 +220,12 @@ class users extends Component {
 								<TableCell className="tableCell">Name</TableCell>
 								<TableCell className="tableCell">UserName</TableCell>
 								<TableCell className="tableCell">Role <p>(User/Staff)</p></TableCell>
+								<TableCell className="tableCell">Remove</TableCell>
 							</TableRow>
 							</TableHead>
 							<TableBody>
 
-							{this.renderUserRows(UsersList)}
+							{this.renderUserRows(UsersList, classes)}
 
 							</TableBody>
 						</Table>
@@ -219,6 +242,7 @@ users.propTypes = {
 	GetUsersList: PropTypes.func.isRequired,
 	UsersList: PropTypes.object.isRequired,
 	ChangeAdminRole: PropTypes.func.isRequired,
+	deleteUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -226,4 +250,4 @@ const mapStateToProps = (state) => ({
 	UsersList: state.UsersList
 });
 
-export default connect(mapStateToProps, { GetUsersList, ChangeAdminRole })(withStyles(styles)(users))
+export default connect(mapStateToProps, { GetUsersList, ChangeAdminRole, deleteUser })(withStyles(styles)(users))

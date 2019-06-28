@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
-import { StopTimer_N2,StopTimer_N2_Plus_150, StopTimer_N2_Plus_50, AddClientTimer, AddServerTimer  } from '../../../../actions/authentication';
+import { StopTimer_N2,StopTimer_N2_Plus_150, StopTimer_N2_Plus_50, AddClientTimer, AddServerTimer, AddComment, GetComment, handleCommentChange } from '../../../../actions/authentication';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -19,11 +19,15 @@ const styles = theme =>({
     nav_h:{
 		padding: "15px 0",
 		letterSpacing: "5px",
-		textTransform: "uppercase"
+        textTransform: "uppercase",
+        textAlign: "center"
     },
     formControl: {
-        margin: theme.spacing.unit,
+        display: "flex",
+        margin:`${theme.spacing.unit}px auto`,
+        width: "100%",
         minWidth: 120,
+        maxWidth: 300,
       },
     FormButton:{
         display: "flex",
@@ -32,7 +36,20 @@ const styles = theme =>({
     },
     dialog: {
         width: 'calc(100% - 16px)',
-      },
+    },
+    textField:{
+        margin: "20px 0"
+    },
+    btnContainer:{
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        width: "100%",
+        minWidth: 120,
+        maxWidth: 300,
+        margin: "10px auto",
+        justifyContent: "space-evenly"
+    }
 })
 
 function validate_cell(data){
@@ -67,9 +84,53 @@ class AddTime extends Component {
             N2Plus150PartName: "",
             N2Plus50PartName: "",
             emptyDate: false,
+            N2Comment: "",
+            N2Plus150Comment: "",
+            N2Plus50Comment: ""
         }
     }
 
+
+	componentDidMount(){
+        this.props.GetComment();
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        if(nextProps !== prevState){
+            if(empty(nextProps.N2.N2Comment)){
+                return {N2Comment: "", N2Plus150Comment: nextProps.N2_Plus_150.N2Plus150Comment, N2Plus50Comment: nextProps.N2_Plus_50.N2Plus50Comment}
+            }else if(empty(nextProps.N2_Plus_150.N2Plus150Comment)){
+                return {N2Comment: nextProps.N2.N2Comment, N2Plus150Comment: "", N2Plus50Comment: nextProps.N2_Plus_50.N2Plus50Comment}
+            }else if(empty(nextProps.N2_Plus_50.N2Plus50Comment)){
+                return {N2Comment: nextProps.N2.N2Comment, N2Plus150Comment: nextProps.N2_Plus_150.N2Plus150Comment, N2Plus50Comment: ""}
+            }
+            else{
+                return {N2Comment: nextProps.N2.N2Comment, N2Plus150Comment: nextProps.N2_Plus_150.N2Plus150Comment, N2Plus50Comment: nextProps.N2_Plus_50.N2Plus50Comment}
+            }
+        }else{
+            return null;
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if(prevProps !== this.props){
+            if(empty(this.props.N2.N2Comment)){
+                 this.setState({N2Comment: "", N2Plus150Comment: this.props.N2_Plus_150.N2Plus150Comment, N2Plus50Comment: this.props.N2_Plus_50.N2Plus50Comment})
+            }else if(empty(this.props.N2_Plus_150.N2Plus150Comment)){
+                this.setState({N2Comment: this.props.N2.N2Comment, N2Plus150Comment: "", N2Plus50Comment: this.props.N2_Plus_50.N2Plus50Comment})
+            }else if(empty(this.props.N2_Plus_50.N2Plus50Comment)){
+                 this.setState({N2Comment: this.props.N2.N2Comment, N2Plus150Comment: this.props.N2_Plus_150.N2Plus150Comment, N2Plus50Comment: ""})
+            }
+            else{
+                 this.setState({N2Comment: this.props.N2.N2Comment, N2Plus150Comment: this.props.N2_Plus_150.N2Plus150Comment, N2Plus50Comment: this.props.N2_Plus_50.N2Plus50Comment})
+            }
+        }else{
+            return null;
+        }
+    }
+    
+
+	
     onN2DateChange = (event) =>{
         this.setState({ N2_selectedDate: event.target.value });
     }
@@ -83,12 +144,23 @@ class AddTime extends Component {
     }
 
     handleChange = (name) => (event) =>{
-        this.setState({[name]: event.target.value})
+        if(name === "N2Comment"){
+            this.props.handleCommentChange(event.target.value, "N2");
+            //this.setState({[name]: event.target.value});
+        }else if(name === "N2Plus150Comment"){
+            this.props.handleCommentChange(event.target.value, "N2Plus150");
+            //this.setState({[name]: event.target.value});
+        }else if(name === "N2Plus50Comment"){
+            this.props.handleCommentChange(event.target.value, "N2Plus50");
+            //this.setState({[name]: event.target.value})
+        }else{
+            this.setState({[name]: event.target.value})
+        }
     }
 
     handleN2Submit = (event) =>{
         event.preventDefault();
-        if(validate_cell(this.state.N2_selectedDate) || this.state.N2PartName === ""){
+        if(validate_cell(this.state.N2_selectedDate) || empty(this.state.N2PartName)){
             this.setState({emptyDate: true});
         }else{
             let value = time_to_numb(this.state.N2_selectedDate);
@@ -97,9 +169,18 @@ class AddTime extends Component {
         }
     }
 
+    handleN2SubmitCM = (event) =>{
+        event.preventDefault();
+        if(empty(this.state.N2Comment)){
+            this.setState({emptyDate: true});
+        }else{
+            this.props.AddComment(this.state.N2Comment, "N2");
+        }
+    }
+
     handleN2Plus150Submit = (event) =>{
         event.preventDefault();
-        if(validate_cell(this.state.N2Plus150_selectedDate) || this.state.N2Plus150PartName === ""){
+        if(validate_cell(this.state.N2Plus150_selectedDate) || empty(this.state.N2Plus150PartName)){
             this.setState({emptyDate: true});
         }else{
             let value = time_to_numb(this.state.N2Plus150_selectedDate);
@@ -108,14 +189,33 @@ class AddTime extends Component {
         }
     }
 
+    handleN2Plus150SubmitCM = (event) =>{
+        event.preventDefault();
+        if(empty(this.state.N2Plus150Comment)){
+            this.setState({emptyDate: true});
+        }else{
+            this.props.AddComment(this.state.N2Plus150Comment, "N2Plus150");
+        }
+    }
+
     handleN2Plus50Submit = (event) =>{
         event.preventDefault();
-        if(validate_cell(this.state.N2Plus50_selectedDate) || this.state.N2Plus50PartName === ""){
+        if(validate_cell(this.state.N2Plus50_selectedDate) || empty(this.state.N2Plus50PartName) || empty(this.state.N2Plus50Comment)){
             this.setState({emptyDate: true});
         }else{
             let value = time_to_numb(this.state.N2Plus50_selectedDate);
             this.props.AddClientTimer("N2Plus50", value, this.state.N2Plus50PartName);
             this.props.AddServerTimer("N2Plus50", value, this.state.N2Plus50PartName);
+            this.props.AddComment(this.state.N2Plus50Comment, "N2Plus50");
+        }
+    }
+
+    handleN2Plus50SubmitCM = (event) =>{
+        event.preventDefault();
+        if(empty(this.state.N2Plus50Comment)){
+            this.setState({emptyDate: true});
+        }else{
+            this.props.AddComment(this.state.N2Plus50Comment, "N2Plus50");
         }
     }
 
@@ -134,8 +234,6 @@ class AddTime extends Component {
         this.props.StopTimer_N2_Plus_50()
     }
 
-
-   
     handleStopButton_N2 = (event) =>{
         this.StopN2Timer(event);
     }
@@ -177,9 +275,26 @@ class AddTime extends Component {
                                 margin="normal"
                             />
                         </FormControl>
+                        <div className={classes.btnContainer}>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={ this.handleStopButton_N2 }
                         >Stop</Button>
+                        </div>
+                    </form>
+                    <form autoComplete="off" onSubmit={this.handleN2SubmitCM}>
+                    <FormControl className={classes.formControl} >
+                    <TextField
+                                        variant='filled'
+                                        multiline={true}
+                                        rows={4}	 
+                                        label="Comment"
+                                        className={classes.textField}
+                                        value={this.state.N2Comment}
+                                        onChange={this.handleChange('N2Comment')}
+                                        margin="normal"
+                                    />
+                    </FormControl>
+                    <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add Comment</Button>
                     </form>
             </div>
 
@@ -203,8 +318,25 @@ class AddTime extends Component {
                                     margin="normal"
                                 />
                         </FormControl>
+                        <div className={classes.btnContainer}>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.handleStopButton_N2Plus150}>Stop</Button>
+                        </div>
+                    </form>
+                    <form autoComplete="off" onSubmit={this.handleN2Plus150SubmitCM}>
+                    <FormControl className={classes.formControl} >
+                                    <TextField
+                                        variant='filled'
+                                        multiline={true}
+                                        rows={4}	 
+                                        label="Comment"
+                                        className={classes.textField}
+                                        value={this.state.N2Plus150Comment}
+                                        onChange={this.handleChange('N2Plus150Comment')}
+                                        margin="normal"
+                                    />
+                    </FormControl>
+                    <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add Comment</Button>
                     </form>
                           
             </div>
@@ -228,8 +360,25 @@ class AddTime extends Component {
                                         margin="normal"
                                     />
                         </FormControl>
+                        <div className={classes.btnContainer}>
                         <Button variant="contained" color="primary" type="submit" className={classes.FormButton}>Add</Button>
                         <Button variant="contained" color="primary" type="button" className={classes.FormButton} onClick={this.handleStopButton_N2Plus50}>Stop</Button>
+                        </div>
+                    </form>
+                    <form autoComplete="off" onSubmit={this.handleN2Plus50SubmitCM}>
+                    <FormControl className={classes.formControl} >
+                                    <TextField
+                                        variant='filled'
+                                        multiline={true}
+                                        rows={4}	 
+                                        label="Comment"
+                                        className={classes.textField}
+                                        value={this.state.N2Plus50Comment}
+                                        onChange={this.handleChange('N2Plus50Comment')}
+                                        margin="normal"
+                                    />
+                    </FormControl>
+                    <Button variant="contained" color="primary" type="submit" className={classes.FormButton} >Add Comment</Button>
                     </form>   
             </div>
             
@@ -272,6 +421,9 @@ AddTime.propTypes = {
     StopTimer_N2_Plus_50: PropTypes.func.isRequired,
     AddClientTimer: PropTypes.func.isRequired,
     AddServerTimer: PropTypes.func.isRequired,
+    AddComment: PropTypes.func.isRequired,
+    GetComment: PropTypes.func.isRequired,
+    handleCommentChange: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -280,5 +432,5 @@ const mapStateToProps = (state) => ({
     N2_Plus_50: state.N2_Plus_50
 });
 
-export default connect(mapStateToProps, { StopTimer_N2, StopTimer_N2_Plus_150, StopTimer_N2_Plus_50, AddClientTimer, AddServerTimer})(withStyles(styles)(AddTime));
+export default connect(mapStateToProps, { StopTimer_N2, StopTimer_N2_Plus_150, StopTimer_N2_Plus_50, AddClientTimer, AddServerTimer, AddComment, GetComment, handleCommentChange})(withStyles(styles)(AddTime));
 
