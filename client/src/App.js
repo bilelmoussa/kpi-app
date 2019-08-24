@@ -25,7 +25,6 @@ function decodeToken(token) {
 };
 
 
-
 if(localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
   const decoded = decodeToken(localStorage.jwtToken);
@@ -35,8 +34,6 @@ if(localStorage.jwtToken) {
     store.dispatch(logoutUser());
   }
 }
-
-
 
 
 const pagenotfound = ({ location }) => (

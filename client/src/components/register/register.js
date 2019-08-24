@@ -227,7 +227,7 @@ export  class register extends Component {
 
 							<CardMedia
 								  className={classes.media}
-								  image={require("../../static/download.jpg")}
+								  image={require("../../static/download.png")}
 								  title="logo"
 							/>
 							

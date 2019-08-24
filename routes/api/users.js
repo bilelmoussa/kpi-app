@@ -56,7 +56,6 @@ router.post("/login", (req, res, next)=>{
     const user_name = req.body.user_name;
     const password = req.body.password;
 
-
     User.getUserByUsername(user_name, (err, user)=>{
         if(err){
             console.log(`Error: `, err);

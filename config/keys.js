@@ -3,6 +3,6 @@ let secret = process.env.SECRET || "SECRET";
 
 
 module.exports = {
-    database: "mongodb+srv://bilel123:Azertyub1_@3dwave-xwprz.mongodb.net/test?retryWrites=true",
+    database: "MongoDB_url",
     secret: secret,   
 }

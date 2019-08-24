@@ -52,11 +52,10 @@ const styles = {
 		display: "flex",
 		flexDirection: 'row',
 		letterSpacing: '7px',
-		fontFamily: 'monospace',
+		fontFamily: "sans-serif",
     fontWeight: 'bold',
     fontSize: 27,
     textTransform: 'uppercase',
-		textShadow: "1px 1px 1px #f9f9f9",
 		width: 230,
 		justifyContent: "start"
   },
@@ -191,7 +190,7 @@ class dashboard extends Component {
 	 const sideList = (
 			<div className={classes.list}>
 				<Avatar 
-					src={require('../../static/download.jpg')} 
+					src={require('../../static/download.png')} 
 					className={classes.bigAvatar}
 				/>
 				<Divider />
@@ -233,12 +232,12 @@ class dashboard extends Component {
 					<div className={classes.TitleContainer}>
 					<ButtonBase className={classes.grow} component={Link} to={`/dashboard`}  >
 					<Avatar
-								src={require('../../static/download.jpg')}
+								src={require('../../static/download.png')}
 								className={classes.smlAvatar}
 					>
 					
 					</Avatar>
-						3dWave
+						KPI app
 					</ButtonBase>
 					</div>
 					

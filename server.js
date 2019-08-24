@@ -71,7 +71,7 @@ mongoose
 
 
 
-//app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 //passport auth
 app.use(passport.initialize());
@@ -88,11 +88,11 @@ app.use('/api/CR', CR);
 app.use('/api/user', user);
 app.use('/api/comment', Comment);
 
-/*
+
 app.get('*', (req,res) =>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
-*/
+
 
 
 // Port    
