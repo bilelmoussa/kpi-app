@@ -15,7 +15,7 @@
     "devextreme": "^18.2.7",
     "devextreme-react": "^18.2.6",
     "jwt-decode": "^2.2.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
